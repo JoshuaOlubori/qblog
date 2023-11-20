@@ -4,7 +4,7 @@ subtitle: "Fourth part of a series of SQL case studies... more CTEs!"
 author: "Edun Joshua"
 date: "2023-11-19"
 categories: [sql]
-image: "image.jpg"
+image: "image.PNG"
 ---
 
 ::: {style="color: #25D366;"}

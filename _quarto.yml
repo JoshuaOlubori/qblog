@@ -50,4 +50,8 @@ format:
     css: styles.css
 
 execute:
-  freeze: true
+  freeze: auto
+
+comments:
+  giscus:
+    repo: JoshuaOlubori/qblog
