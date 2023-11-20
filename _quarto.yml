@@ -1,0 +1,53 @@
+project:
+  type: website
+
+website:
+  title: "Edun Joshua"
+  page-footer:
+    left: "Blog made with 💚 and [Quarto](https://quarto.org/), 
+    by Edun Joshua. 
+    License: [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/)."
+    right:
+      - about.qmd
+      - icon: github
+        href: https://github.com/JoshuaOlubori
+      - icon: instagram
+        href: https://joshua_olubori.com
+      - icon: twitter
+        href: https://twitter.com
+      - icon: envelope
+        href: mailto:joshuaolubori@gmail.com
+  navbar:
+    right:
+      - about.qmd
+      - text: Posts
+        href: ./index.qmd
+      - text: Portfolio
+        menu:
+          - text: SQL
+            href: posts/#category=sql
+          - text: Statistics
+            href: posts/#category=stats
+          - text: Data Viz
+            href: posts/#category=viz
+          - text: Data Engineering
+            href: posts/#category=da
+          - text: Business Intelligence
+            href: posts/#category=BI
+
+format:
+  html:
+    smooth-scroll: true
+    theme:
+      light: journal
+      dark: darkly
+    link-external-icon: false
+    link-external-newwindow: true
+    citations-hover: true
+    footnotes-hover: true
+    toc: true
+    code-link: true
+    css: styles.css
+
+execute:
+  freeze: true

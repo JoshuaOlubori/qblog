@@ -1,0 +1,23 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/posts/index.html",
+      "/posts/2023-11-19-8weeks-sql-challenge-2/index.html",
+      "/posts/2023-11-19-8weeks-sql-challenge-3/index.html",
+      "/posts/2023-11-19-8weeks-sql-challenge-4/index.html",
+      "/posts/2023-11-18-8weeks-sql-challenge-1/index.html",
+      "/posts/2023-11-18-sleep-disorders/index.html"
+    ]
+  },
+  {
+    "listing": "/posts/index.html",
+    "items": [
+      "/posts/2023-11-19-8weeks-sql-challenge-2/index.html",
+      "/posts/2023-11-19-8weeks-sql-challenge-3/index.html",
+      "/posts/2023-11-19-8weeks-sql-challenge-4/index.html",
+      "/posts/2023-11-18-8weeks-sql-challenge-1/index.html",
+      "/posts/2023-11-18-sleep-disorders/index.html"
+    ]
+  }
+]

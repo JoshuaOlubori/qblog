@@ -1,0 +1,472 @@
+---
+title: "Pizza Runner"
+subtitle: "Second part of a series of SQL case studies where I use Postgres SQL to answer a bunch of business questions"
+author: "Edun Joshua"
+date: "2023-11-19"
+categories: [sql]
+image: "image.PNG"
+---
+
+## Introduction
+
+Monitoring KPIs of a pizza delivery business
+
+## Entity Relationship Diagram
+
+![](images/pizza.jpg)
+
+## Database Connection
+
+First, I'll create a connection to my local `postgres` database thanks to the **`RPostgres`** package.
+
+```{r,echo=FALSE}
+my_password <- "pluto"
+
+```
+
+```{r}
+# | warning: false
+# Creating a connection to my local postgres database
+library(RPostgres)
+con <-
+  dbConnect(Postgres(),
+            dbname = "pizza_runner",
+            user = "postgres",
+            password = my_password)
+```
+
+## Queries
+
+### A. Pizza Metrics
+
+#### 1. How many runners signed up for each 1 week period? (i.e. week starts 2021-01-01)
+
+```{sql connection=con}
+select count(pizza_id)
+from customer_orders;
+
+```
+
+#### 2. How many unique customer orders were made?
+
+```{sql connection=con}
+
+SELECT count(DISTINCT order_id) from customer_orders;
+
+```
+
+#### 3. How many successful orders were delivered by each runner?
+
+```{sql connection=con}
+
+select runner_id,
+    count(order_id) as count_of_successful_orders
+from runner_orders
+WHERE cancellation is NULL
+    or cancellation not IN (
+        'Restaurant Cancellation',
+        'Customer Cancellation'
+    )
+GROUP BY runner_id;
+```
+
+#### 4. How many of each type of pizza was delivered?
+
+```{sql connection=con}
+
+select pn.pizza_name as pizza,
+    count(co.pizza_id) as count_of_pizza_delivered
+from customer_orders co
+    INNER JOIN runner_orders ro on co.order_id = ro.order_id
+    INNER JOIN pizza_names pn on pn.pizza_id = co.pizza_id
+WHERE cancellation is NULL
+    or cancellation not IN (
+        'Restaurant Cancellation',
+        'Customer Cancellation'
+    )
+GROUP by pn.pizza_name;
+
+```
+
+#### 5. How many Vegetarian and Meatlovers were ordered by each customer?
+
+```{sql connection=con}
+
+select co.customer_id as customers, count(co.pizza_id) as count_of_pizza_ordered from customer_orders co INNER JOIN pizza_names pn on pn.pizza_id = co.pizza_id group by 1;
+```
+
+#### 6. What was the maximum number of pizzas delivered in a single order?
+
+```{sql connection=con}
+
+select ro.order_id as order,
+    count(co.pizza_id) as number_of_pizzas
+from runner_orders ro
+    INNER JOIN customer_orders co ON ro.order_id = co.order_id
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 1;
+```
+
+#### 7. For each customer, how many delivered pizzas had at least 1 change and how many? and no changes?
+
+```{sql connection=con}
+-- PART 1
+-- delivered orders
+with cte1 as (
+    select *
+    from runner_orders
+    where cancellation is null
+        or cancellation in ('null', '')
+),
+-- orders with at least 1 changes
+cte2 as (
+    select *
+    from customer_orders
+    where exclusions <> ''
+        and extras <> ''
+        or (
+            exclusions not in ('', 'null')
+            or extras not in ('', 'null', null)
+        )
+)
+select cte2.customer_id,
+    count(pizza_id) delivered_pizzas_with_changes
+from cte1
+    inner join cte2 on cte1.order_id = cte2.order_id
+GROUP BY 1;
+
+```
+
+```{sql connection=con}
+-- PART 2: orders with no changes
+with cte1 as (
+    select *
+    from runner_orders
+    where cancellation is null
+        or cancellation in ('null', '')
+),
+cte2 as (
+    select *
+    from customer_orders
+    where exclusions = ''
+        and extras = ''
+        or (
+            exclusions in ('', 'null')
+            or extras in ('', 'null', null)
+        )
+)
+select cte2.customer_id,
+    count(pizza_id) delivered_pizzas_with_no_changes
+from cte1
+    inner join cte2 on cte1.order_id = cte2.order_id
+GROUP BY 1;
+```
+
+#### 8. How many pizzas were delivered that had both exclusions and extras?
+
+```{sql connection=con}
+
+-- delivered orders
+with cte1 as (
+    select *
+    from runner_orders
+    where cancellation is null
+        or cancellation in ('null', '')
+),
+-- orders with both exclusions and extras
+cte2 as (
+    select *
+    from customer_orders
+    where (
+            exclusions <> 'null'
+            and extras <> 'null'
+        )
+        and exclusions <> ''
+        and extras <> ''
+)
+select *
+from cte1
+    inner join cte2 on cte1.order_id = cte2.order_id;
+
+```
+
+#### 9. What was the total volume of pizzas ordered for each hour of the day?
+
+```{sql connection=con}
+
+select EXTRACT (
+        hour
+        from order_time
+    ) as hour_of_day,
+    count(pizza_id) as pizza_volume
+from customer_orders
+GROUP BY 1;
+```
+
+#### 10. What was the volume of orders for each day of the week?
+
+```{sql connection=con}
+-- select EXTRACT (
+--        dow
+--        from order_time
+--    ) as day_of_week,
+--    count(pizza_id) as pizza_volume
+-- from customer_orders
+-- GROUP BY 1;
+-- or
+select to_char(order_time, 'Day') as day_of_week,
+    count(pizza_id) as pizza_volume
+from customer_orders
+GROUP BY 1;
+
+```
+
+### B. Runner and Customer Experience
+
+#### 1. How many runners signed up for each 1 week period? (i.e. week starts 2021-01-01)
+
+```{sql connection=con}
+
+select EXTRACT(
+        week
+        from registration_date
+    ),
+    count(runner_id)
+from runners
+GROUP BY 1;
+```
+
+#### 2. What was the average time in minutes it took for each runner to arrive at the Pizza -- Runner HQ to pickup the order?
+
+```{sql connection=con}
+select case
+        when ro.pickup_time = 'null' then null
+        else round(
+            EXTRACT(
+                epoch
+                from (
+                        ro.pickup_time::TIMESTAMP - co.order_time::TIMESTAMP
+                    )
+            ) / 60,
+            2
+        )
+    end as duration_till_pickup,
+    ro.pickup_time,
+    co.order_time
+from customer_orders co
+    INNER JOIN runner_orders ro on co.order_id = ro.order_id; 
+```
+
+This query calculates the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pick up the order. It first joins the `customer_orders` and `runner_orders` tables to get the order information and the runner's pickup time. Then, it checks if the `pickup_time` is null, and if so, it sets the corresponding `duration_till_pickup` to null. Otherwise, it calculates the time difference between the `pickup_time` and the `order_time` in seconds using the `EXTRACT()` and `TIMESTAMP()`functions. It then converts the time difference to minutes and rounds it to two decimal places. Finally, it selects the `duration_till_pickup`, `pickup_time`, and `order_time` for each order.
+
+#### 3. What was the average time in minutes it took for each runner to deliver pizzas?
+
+```{sql connection=con}
+
+select runner_id,
+    round(
+        avg(
+            case
+                when left(duration, 2) ~ '^\d+$' THEN cast(left(duration, 2) as integer)
+                else null
+            end
+        ),
+        2
+    ) as extracted_minutes
+from runner_orders
+group by runner_id;
+```
+
+#### 5. What was the difference between the longest and shortest delivery times for all?
+
+```{sql connection=con}
+
+-- If we define delivery times as the duration between ro.pickup_time - co.order_time + ro.duration
+-- then:
+with cte1 as (
+    select case
+            when ro.pickup_time = 'null' then null
+            else round(
+                EXTRACT(
+                    epoch
+                    from (
+                            ro.pickup_time::TIMESTAMP - co.order_time::TIMESTAMP
+                        )
+                ) / 60,
+                2
+            )
+        end as duration_till_pickup,
+        ro.pickup_time,
+        co.order_time,
+        round(
+            case
+                when left(ro.duration, 2) ~ '^\d+$' THEN cast(left(ro.duration, 2) as integer)
+                else null
+            end,
+            2
+        ) as cleaned_duration_minutes
+    from customer_orders co
+        INNER JOIN runner_orders ro on co.order_id = ro.order_id
+)
+select max(duration_till_pickup + cleaned_duration_minutes) as longest_delivery_time,
+    min(duration_till_pickup + cleaned_duration_minutes) as shortest_delivery_time,
+    max(duration_till_pickup + cleaned_duration_minutes) - min(duration_till_pickup + cleaned_duration_minutes) as difference
+from cte1;
+```
+
+Now, this is a monstrous looking one 😅 .
+
+A (CTE) named `cte1` is created, extracting relevant information such as `duration_till_pickup`, `pickup_time`, `order_time`, and `cleaned_duration_minutes` from the `customer_orders` (co) and `runner_orders` (ro) tables. The `duration_till_pickup` is calculated as the time between pickup and order in minutes. The `cleaned_duration_minutes` extracts the duration in minutes from the ro.`duration` field.
+
+The main query then computes the maximum, minimum, and the difference between the sum of `duration_till_pickup` and `cleaned_duration_minutes`. These values represent the longest, shortest, and the time difference between delivery times for all orders.
+
+#### 6. What was the average speed for each runner for each delivery and do you notice -- any trend for these values?
+
+```{sql connection=con}
+
+with cte as (
+    select runner_id,
+        case
+            when distance ~ '.*' THEN cast(substring(distance, '[0-9\-+\.]+') as float)
+            else null
+        end as cleaned_distance_km,
+        case
+            when duration ~ '.*' THEN cast(substring(duration, '[0-9\-+\.]+') as float) / 60
+            else null
+        end as cleaned_duration_hr
+    from runner_orders
+)
+select runner_id,
+    avg(cleaned_distance_km / cleaned_duration_hr) as speed_km_hr
+from cte
+group by 1;
+
+```
+
+This psql query calculates the average speed for each runner for each delivery. It uses a CTE named `cte` to clean and extract relevant information such as `cleaned_distance_km` and `cleaned_duration_hr` from the `runner_orders` table. The main query then computes the average speed (`cleaned_distance_km` / `cleaned_duration_hr`) for each runner and presents the results grouped by runner_id. This allows you to observe trends in the average speed of each runner across their deliveries.
+
+#### 7. What is the successful delivery percentage for each runner?
+
+```{sql connection=con}
+with part as (
+    select cte.runner_id,
+        count(*) as part_cancel
+    from (
+            select runner_id,
+                nullif(cancellation, '') || nullif(cancellation, 'null') as cancel
+            from runner_orders
+        ) cte
+    where cancel is null
+    group by runner_id
+),
+whole as (
+    select runner_id,
+        count(*) as whole_cancel
+    from (
+            select runner_id,
+                nullif(cancellation, '') || nullif(cancellation, 'null') as cancel
+            from runner_orders
+        ) cte
+    group by runner_id
+)
+select p.runner_id,
+    case
+        when w.whole_cancel = 0 then null
+        else round(
+            (p.part_cancel::numeric / w.whole_cancel) * 100,
+            2
+        )
+    end as percent
+from part p
+    inner join whole w on p.runner_id = w.runner_id;
+
+```
+
+### C. Ingredient Optimisation
+
+#### 1. What are the standard ingredients for each pizza?
+
+```{sql connection=con}
+
+select pn.pizza_name, pt.topping_name
+from pizza_names pn inner join new_pizza_recipes np
+on pn.pizza_id = np.pizza_id
+inner join pizza_toppings pt on pt.topping_id::text = ANY (np.toppings)
+
+```
+
+### D. Pricing and Ratings
+
+#### 1. If a Meat Lovers pizza costs \$12 and Vegetarian costs \$10 and there were no charges for changes, how much money has Pizza Runner made so far if there are no delivery fees?
+
+```{sql connection=con}
+-- Creating a view of cleaned data
+CREATE OR REPLACE VIEW clean_runner_orders AS
+select order_id,
+    runner_id,
+    CASE
+        WHEN pickup_time = 'null' THEN NULL
+        ELSE pickup_time::TIMESTAMP
+    END,
+    cast(substring(distance, '[0-9\-+\.]+') as float) as distance,
+    cast(substring(duration, '[0-9\-+\.]+') as float) as duration,
+    nullif(cancellation, '') || nullif(cancellation, 'null') as cancellation
+from runner_orders;
+--
+
+```
+
+```{sql connection=con}
+with cte1 as (
+    select co.pizza_id,
+        count(co.pizza_id) as quantity_sold
+    from clean_runner_orders ro
+        inner join customer_orders co on co.order_id = ro.order_id
+    where cancellation is null
+    GROUP BY 1
+)
+select pizza_id,
+    quantity_sold * price as revenue
+from (
+        select *,
+            CASE
+                WHEN cte1.pizza_id = 1 THEN 12
+                WHEN cte1.pizza_id = 2 THEN 10
+            END AS price
+        from cte1
+    ) sq
+```
+
+```{sql connection=con}
+-- Creating a random integer generator
+create or replace function random_between(low int, high int) returns int as $$ begin return floor(random() * (high - low + 1) + low);
+end;
+$$ language 'plpgsql' STRICT;
+```
+
+#### 2. If a Meat Lovers pizza was \$12 and Vegetarian \$10 fixed prices with no cost for extras and each runner is paid \$0.30 per kilometre travelled, how much money does Pizza Runner have left over after these deliveries?
+
+```{sql connection=con}
+with cte as (
+    select co.pizza_id,
+        ro.distance * 0.3 as runner_cost,
+        CASE
+            WHEN co.pizza_id = 1 THEN 12
+            WHEN co.pizza_id = 2 THEN 10
+        END AS price
+    from clean_runner_orders ro
+        inner join customer_orders co on co.order_id = ro.order_id
+    where cancellation is null
+)
+select sum(price) revenue,
+    round(sum(runner_cost)::numeric, 2) cost,
+    round(sum(price) - sum(runner_cost)::numeric, 2) profit
+from cte
+```
+
+## Closing the connection
+
+```{r}
+dbDisconnect(con)
+```

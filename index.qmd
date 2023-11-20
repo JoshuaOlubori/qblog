@@ -1,0 +1,35 @@
+---
+title: "Edun Joshua"
+listing:
+  - id: posts
+    contents: posts/**/index.qmd
+    type: default
+    fields: [image, date, title, subtitle, categories, author, reading-time]
+    sort: "date desc"
+    categories: true
+    sort-ui: false
+    filter-ui: false
+    page-size: 2   
+  # - id: talks
+  #   contents: talks/{pt,es,en}/*/index.qmd
+  #   type: grid
+  #   fields: [image, date, title, subtitle]
+  #   sort: "date desc"
+  #   #categories: cloud
+  #   sort-ui: true
+  #   filter-ui: false
+  #   page-size: 3      
+page-layout: full
+title-block-banner: false
+comments: false
+toc: true
+---
+
+## Recent posts
+
+::: {#posts}
+:::
+
+<a href="../posts/index.html"> <button type="button" class="btn btn-primary float-end btn-sm">See all</button></a>
+
+<br>

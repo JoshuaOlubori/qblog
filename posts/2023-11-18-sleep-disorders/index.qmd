@@ -1,0 +1,647 @@
+---
+title: "Exploring Relationships of Variables in Sleep Data"
+subtitle: "In this post, I use regression, with an emphasis on understanding the casual relationships between variables"
+author: "Edun Joshua"
+date: "2023-11-18"
+categories: [stats, causal regression modelling]
+image: "image.jpg"
+---
+
+# Introduction
+
+![](images/image.jpg){fig-alt="cover image" fig-align="center"}
+
+The goal is to build a casual model using linear regression that explains quality of sleep, and logistic regression to explain sleep disorders
+
+```{r}
+#| label: load-packages
+#| message: false
+
+library(tidyverse)
+
+# descriptives
+library(datawizard)
+library(kableExtra)
+library(skimr)
+library(qqplotr)
+library(gt)
+
+# os
+library(here)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE, message = FALSE, warning = FALSE)
+```
+
+# Data
+
+We will be using data from a fictitious...
+
+```{r}
+sleep <- here("data/sleep.csv") %>% read_csv(show_col_types = F) %>% janitor::clean_names()
+```
+
+```{r}
+# checking the data
+head(sleep) %>% gt() %>%
+opt_stylize(style=6, color="blue")
+```
+
+```{r}
+# shape of data
+nrow(sleep)
+ncol(sleep)
+names(sleep)
+```
+
+## Data cleaning
+
+I observed the following issues in the data
+
+-   Occupation variable having levels with very few counts. Those with few counts can be consolidated with similar categories.
+
+-   The BMI category variable has both "Normal" and "Normal Weight" as levels. This is most likely as data entry error.
+
+-   The heart rate variable is not in a suitable format to work with. I'll extract the systolic blood pressure from the variable as an integer. I would not need the diastolic blood pressure as I observed strong multicollinearity between both diastolic and systolic blood pressure.
+
+```{r}
+# observe occupations with low frequency counts
+ggplot(sleep, aes(occupation))+geom_bar(fill="#25d366", color="black") + coord_flip()
+```
+
+```{r}
+# observe data entry error in bmi_category variable
+ggplot(sleep, aes(bmi_category))+geom_bar(fill="#25d366", color="black") + coord_flip()
+```
+
+```{r}
+# regrouping occupation variable so that occupations with lower counts are consolidated with other similar occupations. Simultaneously correcting data entry error in bmi_category variable
+sleep <- sleep %>% mutate( 
+  occupation=ifelse(sleep$occupation %in% c("Software Engineer", "Scientist", "Engineer"),"Technical", 
+ifelse(sleep$occupation %in% c("Salesperson", "Sales Representative", "Manager"), "Sales", ifelse(sleep$occupation %in% c("Doctor", "Nurse"), "Medical",
+                                                          as.character(occupation)))),
+bmi_category = ifelse(sleep$bmi_category %in% c("Normal", "Normal Weight"), "Normal", as.character(sleep$bmi_category)))
+```
+
+```{r}
+# extracting systolic blood pressure from the blood_pressure variable as it such a numeric variable is easier to work with. Subsequently dropping hear_rate variable
+
+sleep <- sleep %>% mutate(
+bp_sys= parse_number(str_sub(sleep$blood_pressure, 1, 3)),
+person_id = as.character(person_id)
+) %>% select(!heart_rate)
+```
+
+```{r}
+# confirming changes
+head(sleep)  %>% gt() %>% opt_stylize(style=6, color="blue")
+```
+
+```{r}
+# confirming changes to BMI category variable
+ggplot(sleep, aes(bmi_category))+geom_bar(fill="#25d366", color="black") + coord_flip()
+```
+
+```{r}
+# confirming changes to occupation variable
+ggplot(sleep, aes(occupation))+geom_bar(fill="#25d366", color="black") + coord_flip()
+```
+
+# Summary statistics
+
+We are going to explore summary statistics particularly for our variables of interest
+
+```{r}
+# General statistics
+sleep %>% skim()  %>% gt() %>%
+opt_stylize(style=6, color="gray") %>% fmt_number(decimals=2)
+```
+
+```{r}
+# Measures of spread
+sleep %>% describe_distribution() %>%  as_tibble() %>%  select(Variable, Skewness, SD, Kurtosis)  %>% gt() %>%
+opt_stylize(style=6, color="blue") %>% fmt_number(decimals=2)
+
+```
+
+# Main Analyses
+
+## Associations
+
+### Research Question: "What strong associations exists between quality_of_sleep and other variables in the dataset?
+
+```{r}
+# | warning: false
+# | message: false
+# packages required for associations
+library(correlation)
+library(GGally)
+```
+
+```{r}
+# plotting the grid plot of scatterplots of numeric variables
+ggscatmat(sleep %>% select_if(is.numeric)) + theme_light()
+```
+
+```{r}
+# showing relationships with strong correlations (greater than |+-0.4|)
+correlates_tib <- sleep |> 
+  select(where(is.numeric)) |> 
+  correlation() %>% as.tibble() %>% select(!c(CI:df_error,Method,n_Obs)) %>% filter(abs(r) > 0.4) %>% arrange(r) 
+correlates_tib %>% gt() %>%
+opt_stylize(style=6, color="blue") %>% fmt_number(decimals=3)
+```
+
+```{r}
+# robust correlation analysis since the data are skewed. Results is filtered to include only relationships involving quality_of_sleep. Sorted ascendingly by p-value
+correlates_tib <- sleep |> 
+  select(where(is.numeric)) |> 
+  correlation(method="percentage") %>% as.tibble() %>% select(!c(CI:df_error,Method,n_Obs))  %>% arrange(p)  %>% filter( Parameter1 == "quality_of_sleep" | Parameter2 == "quality_of_sleep") %>% arrange(p) %>% filter(p < 0.05)
+correlates_tib %>% gt() %>%
+opt_stylize(style=6, color="blue") %>% fmt_number(decimals=3)
+```
+
+#### Results
+
+The most significant relationships (at alpha = .05) are the relationships between:
+
+1.  quality of sleep and stress level, *r*(372) =-0.91, *p* \< 0.0001
+2.  quality of sleep and sleep duration, *r*(372) = 0.89, *p* \< 0.0001
+3.  quality of sleep and age, *r*(372) =0.43, *p* \< 0.0001
+4.  quality of sleep and physical activity level, *r*(372) =0.18, *p* = 0.0054
+
+These are the variables we would fit to our linear regression model.
+
+# Fitting a GLM
+
+### Research Question: "Which GLM model best explains quality of sleep"
+
+```{r}
+#| label: importing glm packages
+#| warning: false
+#| message: false
+# importing needed packages
+library(BayesFactor)
+library(ggfortify)
+library(parameters)
+library(robust)
+library(broom)
+```
+
+![GLM Workflow](images/glm_process.png){fig-align="center"}
+
+### Initial Checks (Linearity)
+
+```{r}
+ggscatmat(sleep, columns=c("stress_level", "sleep_duration","age", "physical_activity_level","quality_of_sleep"))
+```
+
+#### **Interpretation**
+
+Looking at the bottom row of the plots, we see the scatterplot of all the variables against quality_of_sleep on the y_axis.
+
+The four predictors have reasonably linear relationships with the sleep quality and there are no obvious outliers (except maybe in the bottom left of the scatterplot with band image). Across the diagonal, we see the distributions of scores. None of the variables have a normal distribution, exhibiting various degrees of modality.
+
+If we look only at the predictors, then the highest correlation is between sleep duration and stress level which is significant at the 0.0001 level (*r* = -0.81). Focussing on the outcome variable, of all of the predictors, stress level and sleep duration correlate best with the outcome (*r*s = -0.9 and 0.88 respectively).
+
+### One predictor model
+
+```{r}
+qs_lm_01 <- lm(data=sleep, formula = quality_of_sleep ~ stress_level)
+
+# checking model fit
+glance(qs_lm_01) %>% gt() %>%
+opt_stylize(style=6, color="blue") %>% fmt_number(decimals=3)
+```
+
+Stress level accounts for 80.8% of the variation in quality of sleep.
+
+Therefore, we can say that adding the predictor of **stress_level** significantly improved the fit of the model to the data compared to having no predictors in the model, *F*(1, 372) = 1563.03, *p* \< .001
+
+#### Model parameters
+
+```{r}
+tidy(qs_lm_01, conf.int = T) %>% gt() %>%
+opt_stylize(style=6, color="blue") %>% fmt_number(decimals=3)
+
+```
+
+If stress level increases by 1 point, quality_of_sleep reduces by more than half a point. This estimate is significant (p \< 0.0000001). With the chance of being wrong 5% of the time, our estimate is going to be somewhere in the range \[-0.636, -0.576\]. This confidence interval does not cross zero, so we can be sure that a real effect exists.
+
+```{r}
+# summary of the model parameters and fit
+summary(qs_lm_01)
+```
+
+### Multiple predictors
+
+```{r}
+qs_lm_02 <- lm(quality_of_sleep ~ stress_level+sleep_duration+age+physical_activity_level, data=sleep)
+# fit statistics
+glance(qs_lm_02) %>% gt() %>%
+opt_stylize(style=6, color="blue") %>% fmt_number(decimals=3)
+```
+
+The % of variance explained by the predictors increased to 89% from our previous value of 81%.
+
+In other words, sleep duration, age and physical activity level account for an additional 89% - 80.8% = 8.2% of the variance in quality of sleep. The difference between the $R^2$ and the adjusted $R^2$ is 0.8921-0.8909= 0.0012. Which means if the model were derived from the population rather than a sample we'd conclude that it accounted for approximately 0.12% less variance in the outcome.
+
+#### Model parameter estimates
+
+```{r}
+tidy(qs_lm_02, conf.int=T) %>% gt() %>%
+opt_stylize(style=6, color="blue") %>% fmt_number(decimals=3)
+```
+
+::: callout-tip
+-   Stress level : For every unit increase in stress level, quality of sleep reduces by 0.35 points. This interpretation is true only if the other variables are held constant.
+
+-   Sleep duration: For every unit increase in sleep duration, quality of sleep increases by 0.62 points. This interpretation is true only if the other variables are held constant.
+
+-   Age: For one year difference in the age of respondents, quality of sleep increases by 0.01 points. This interpretation is true only if the other variables are held constant.
+
+-   Physical activity level: For every unit increase in sleep duration, quality of sleep increases by 0.004 points. This interpretation is true only if the other variables are held constant.
+:::
+
+```{r}
+# standardized betas
+model_parameters(qs_lm_02, standardize="refit") %>% gt() %>%
+opt_stylize(style=6, color="blue") %>% fmt_number(decimals=3)
+```
+
+```{r}
+# generating standard deviations to interpret standardised betas
+sleep %>% select(stress_level, age, sleep_duration, physical_activity_level, quality_of_sleep) %>% skim() %>% as_tibble() %>% select(skim_variable, numeric.sd) %>% gt() %>%
+opt_stylize(style=6, color="blue") %>% fmt_number(decimals=3)
+```
+
+::: callout-tip
+-   Stress level : As the stress level increases by 1 standard deviation (1.77 points), quality of sleep reduces by 0.52 standard deviations (0.52 × 1.197) = 0.622 points. This estimate is significant at alpha = .001 level. This interpretation is true only if the effects of airplay and advertising are held constant.
+
+-   Sleep duration: As the sleep duration increases by 1 standard deviation (0.8 points), quality of sleep increases by 0.41 standard deviations (0.41 × 1.197) = 0.491 points. This estimate is significant at alpha = .001 level. This interpretation is true only if the effects of airplay and advertising are held constant.
+
+-   Age: As age increases by 1 standard deviation (8.67 years), quality of sleep increases by 0.10 standard deviations (0.10 × 1.197) = 0.12 points. This estimate is significant at alpha = .001 level. This interpretation is true only if the effects of airplay and advertising are held constant.
+
+-   Physical activity level: As the physical activity level increases by 1 standard deviation (20.83 points), quality of sleep increases by 0.07 standard deviations (0.07 × 1.197) = 0.08 points. This estimate is significant at alpha = .001 level. This interpretation is true only if the effects of airplay and advertising are held constant.
+:::
+
+### Comparing models
+
+```{r}
+anova(qs_lm_01, qs_lm_02) %>% tidy() %>% gt() %>%
+opt_stylize(style=6, color="blue") %>% fmt_number(decimals=3)
+```
+
+::: callout-tip
+We can say that ***qs_lm_02*** significantly improved the fit of the model to the data compared to ***qs_lm_01***, *F*(3, 369) = 96.16, *p* \< .001.
+:::
+
+### Model diagnostics
+
+#### Linearity and homoscedasticity
+
+```{r}
+autoplot(qs_lm_02, which = c(1, 3),
+                  colour = "#25d366",
+                  smooth.colour = "#ef4836",
+                  size = 1.5) + theme_minimal()
+```
+
+Linearity assumption is violated
+
+#### Normality assumption
+
+```{r}
+
+autoplot(qs_lm_02,
+                  which = 2,
+                  colour = "#25d366",
+                  smooth.colour = "#ef4836",
+      
+                  size = 1.5) + 
+  theme_minimal()
+
+```
+
+Normality assumption is violated
+
+#### Outliers and Influential cases
+
+```{r}
+# outlier cases
+autoplot(qs_lm_02, which =  c(4:6), colour = "#25d366",
+                  smooth.colour = "#ef4836")
+```
+
+There seems to be outliers in the data. Let's identify them in our dataset
+
+```{r}
+qs_outliers <- qs_lm_02 |> 
+  augment() |> 
+  rowid_to_column(var = "case_no") |> 
+  mutate(case_no = as.character(case_no)) %>% 
+ filter(abs(.std.resid) >= 3)|> 
+ arrange(.std.resid)
+qs_outliers %>% gt() %>%
+opt_stylize(style=6, color="blue") %>% fmt_number(decimals=3)
+```
+
+```{r}
+# outlier cases
+qs_outliers %>% inner_join(sleep, by = join_by(case_no == person_id)) %>% select(c(1,7:24))
+
+```
+
+```{r}
+# influential cases
+qs_outliers <- qs_lm_02 |> 
+  augment() |> 
+  rowid_to_column(var = "case_no") |> 
+  mutate(case_no = as.character(case_no)) %>% 
+ filter(abs(.cooksd) > 1)|> 
+ arrange(.std.resid)
+qs_outliers
+```
+
+There are no influential cases
+
+#### Assumption of Independence
+
+```{r}
+car::durbinWatsonTest(qs_lm_02)
+```
+
+Since the D-W statistic is not less than 1 or greater than 3, we can be fairly confident that this assumption is met.
+
+#### Assumptions of Multicollinearity
+
+```{r}
+car::vif(qs_lm_02)
+```
+
+```{r}
+mean(car::vif(qs_lm_02))
+```
+
+```{r}
+# tolerance
+1/car::vif(qs_lm_02)
+```
+
+::: callout-warning
+If the largest VIF is greater than 10 then there is cause for concern (Bowerman & O'Connell, 1990; Myers, 1990). If the average VIF is substantially greater than 1 then the regression may be biased (Bowerman & O'Connell, 1990). Tolerance below 0.1 indicates a serious problem. Tolerance below 0.2 indicates a potential problem (Menard, 1995).
+:::
+
+Since our average VIF is greater than 1, our model may be biased
+
+### Robust linear methods
+
+Our model appears to be accurate for the sample and but not necessarily generalizable to the population because of some GLM assumption violations. Time to use robust methods!
+
+#### Robust parameter estimates
+
+Now we check for the significance of the test of bias and we compare their corresponding coefficients.
+
+```{r}
+qs_lm_rob <- lmRob(quality_of_sleep ~ stress_level+sleep_duration+age+physical_activity_level, data = sleep, na.action = na.exclude)
+summary(qs_lm_rob)
+```
+
+```{r}
+qs_lm_rob <- lmRob(quality_of_sleep ~ stress_level+sleep_duration+age+physical_activity_level, data = sleep, na.action = na.exclude)
+qs_lm_rob %>% tidy(conf.int=TRUE)
+```
+
+```{r}
+summary(qs_lm_02)
+```
+
+There is reason to believe that our original model, qs_lm_02, is biased. First, the M-estimate is significant
+
+### Bayesian approaches
+
+```{r}
+qs_bf <- BayesFactor::regressionBF(quality_of_sleep ~ stress_level + sleep_duration + age + physical_activity_level, rscaleCont = "medium", data = sleep)
+summary(qs_bf)
+```
+
+The best model is model 15 since it has largest Bayes Factor of 8.47 \times 10\^42
+
+::: callout-note
+### Results
+
+The model that included stress level, sleep duration, age and physical activity level performed better than the model that only included stress level. The final model explained 44.8% of the variance in sleep quality. Stress level significantly predicted sleep quality \beta = -0.59, t(369) = 67.1, p \< 0.001, as did sleep duration \beta = 0.1, t(369) = 38.6, p \< 0.001.
+:::
+
+# Moderation and mediation analysis
+
+## Research questions:
+
+1.  *Is the relationship between sleep duration and quality of sleep moderated by sleep disorder?*
+
+2.  *Is the relationship between stress level and quality of sleep moderated by occupation?*
+
+3.  *Is the relationship between physical activity and quality of sleep mediated by daily steps?*
+
+### Is the relationship between sleep duration and quality of sleep moderated by sleep disorder?
+
+```{r}
+# Visualizing the relationship of the three variables
+ggplot(sleep, aes(x = sleep_duration, y = quality_of_sleep, color = sleep_disorder)) +
+geom_jitter(size=1, alpha=0.8) +
+labs(x = "Sleep duration", y = "Quality of sleep", color = "Sleep disorder") +
+geom_smooth(method = "lm", se = FALSE, linewidth=0.9) + theme_bw()
+
+
+```
+
+The plot shows that there might be some moderation effects.
+
+```{r}
+# making sleep_disorder a factor variable and setting the base level to "None"
+sleep <- sleep %>% mutate(
+  sleep_disorder = as_factor(sleep_disorder) %>% fct_relevel("None")
+)
+```
+
+```{r}
+qs_lm_03 <- lm(quality_of_sleep ~ sleep_duration * sleep_disorder, data=sleep)
+qs_lm_03 %>% tidy() %>% gt() %>%
+opt_stylize(style=6, color="blue")
+```
+
+#### Interpretation
+
+::: callout-tip
+The effect of increasing sleep duration in someone with no sleep disorder on sleep quality is 1.11
+
+The effect of sleep apnea on sleep quality compared to someone with no disorders is -3.43
+
+The effect of Insomnia on sleep quality compared to someone with no disorders is -3.20
+
+The effect of increasing sleep duration in someone with sleep anea on sleep quality compared to someone with no disorders is 0.48
+
+The effect of increasing sleep duration in someone with insomnia on sleep quality compared to someone with no disorders is 0.45
+:::
+
+```{r}
+interactions::sim_slopes(
+  qs_lm_03,
+  pred = sleep_duration,
+  modx = sleep_disorder,
+  jnplot = TRUE,
+  robust = TRUE,
+  confint = TRUE
+  )
+```
+
+The slopes for the three regressions are not significantly different
+
+```{r}
+interactions::interact_plot(
+  qs_lm_03,
+  pred = sleep_duration,
+  modx = sleep_disorder,
+  interval = TRUE,
+  robust = TRUE,
+  legend.main = "Sleep disorder"
+  )
+```
+
+Looking at the slope, we can that the moderation effect is not significant.
+
+#### Conclusion
+
+Sleep disorder is not a moderator of the relationship between sleep duration and quality of sleep
+
+### Is the relationship between stress level and quality of sleep moderated by occupation?
+
+```{r}
+qs_lm_04 <- lm(quality_of_sleep ~ stress_level * occupation, data=sleep)
+qs_lm_04 %>% tidy() %>% gt() %>%
+opt_stylize(style=6, color="blue")
+```
+
+```{r}
+interactions::sim_slopes(
+  qs_lm_04,
+  pred = stress_level,
+  modx = occupation,
+  jnplot = TRUE,
+  robust = TRUE,
+  confint = TRUE
+  )
+```
+
+```{r}
+interactions::interact_plot(
+  qs_lm_04,
+  pred = stress_level,
+  modx = occupation,
+  interval = TRUE,
+  robust = TRUE,
+  legend.main = "Occupation"
+  )
+```
+
+Again, we do not observe a significant moderation effect of occupation on the relationship between stress level and quality of sleep
+
+### Is the relationship between physical activity and quality of sleep mediated by daily steps?
+
+To test this, we are going to run 3 regressions:
+
+-   The **total effect** of *`physical_activity_level`* on *`quality_of_sleep`.*
+
+-   The effect of *`physical_activity_level`* on *`quality_of_sleep`* that is mediated by *`daily_steps`*, a.k.a. the **indirect effect**
+
+-   The effect of *`physical_activity_level`* on *`quality_of_sleep`* that is not mediated by *`daily_steps`*, a.k.a. the **direct effect**
+
+#### Total effect
+
+We first determine the total effect by running a regression of *physical_activity_level* on *quality_of_sleep* (without including *daily_steps*):
+
+```{r}
+lm(quality_of_sleep ~ physical_activity_level, sleep) %>% tidy() %>% gt() %>%
+opt_stylize(style=6, color="blue") %>% fmt_number(decimals=3)
+```
+
+The total effect is approximately 0.011, meaning that an increase of one unit in physical activity increases sleep quality by 0.001 units on average, not holding daily steps constant.
+
+#### Mediated/Indirect Effect
+
+The effect of *`physical_activity_level`* on *`quality_of_sleep`* mediated by *`daily_steps`* can be obtained by multiplying together the effect of *`physical_activity_level`* on *`daily_steps`* and the effect of *`daily_steps`* on *`quality_of_sleep`*.
+
+##### *1. physical_activity_level* on *daily_steps (a)*
+
+```{r}
+lm(daily_steps ~ physical_activity_level, sleep) %>% tidy() %>% gt() %>%
+opt_stylize(style=6, color="blue")
+```
+
+One unit increase in *physical_activity_level* increases *daily_steps* by an average of 60 steps
+
+##### *2. daily_steps* on *quality_of_sleep*
+
+```{r}
+lm(quality_of_sleep ~ daily_steps + physical_activity_level, sleep) %>% tidy() %>% gt() %>%
+opt_stylize(style=6, color="blue")
+```
+
+(a \* b) = 60.07 \* -0.00024 = -0.0144
+
+#### Direct Effect
+
+This is simply the coefficient of physical_activity_level in the above regression = 0.0257
+
+According to Zhao *et al.,* what we have here isCompetitive Mediation (Regularly Partial Mediation)
+
+In the competitive partial mediation hypothesis, it is assumed that the intermediate variable (*daily_steps*) could sometimes increase and at times decrease the relationship between the independent and dependent variables. i.e an "inconsistent" model.
+
+![Decision tree for determining mediation](images/Zhao%20et%20al.PNG){fig-align="center"}
+
+# Difference in means
+
+## Research question: are significant differences in the mean sleep quality of both male and female participants
+
+```{r}
+# summary statistics of quality_of_sleep by gender
+
+by(cbind(data=sleep$quality_of_sleep), sleep$gender, psych::describe)
+```
+
+The mean of female participants is one point higher than males. But is this difference significant?
+
+```{r}
+# plotting a violin-errorbar plot to visualise the relationship
+ggplot(sleep, aes(gender,quality_of_sleep))+
+geom_violin() +
+stat_summary(fun.data="mean_cl_normal") + 
+theme_minimal()
+```
+
+Since the errorbars do not overlap, we can be fairly confident that the difference is significant. Lets confirm this hunch with a Welsh's t-test.
+
+```{r}
+ t.test(quality_of_sleep ~ gender,
+                    data = sleep,
+                    paired = FALSE,
+                    var.equal = FALSE,
+                    conf.level = 0.95,
+                    na.action = na.exclude)
+
+```
+
+Because the *p*-value = 1.078e-08 is less than our alpha of .05, we can conclude that the difference between both genders is significant. Also, since the confidence interval expressing the true difference in means does not cross zero, we can be confident that there exists a true difference, with a chance of us being wrong 5% of the time.
+
+```{r}
+effectsize::cohens_d(quality_of_sleep ~ gender, data = sleep) %>% gt() %>%
+opt_stylize(style=6, color="blue") %>% fmt_number(decimals=3)
+```
+
+::: callout-tip
+On average, female participants have better sleep quality (*M* = 7.66, *SE* = 0.09), than those not given a cloak (*M* = 6.97, *SE* = 0.07). Sleep quality is significantly different for both genders: the mean difference, *M* = 0.69, 95% CI \[0.46, 0.93\], was significantly different from 0, *t*(347.96) = 5.85, *p* = 01.078e-08. This effect was quite large, d= 0.61\[0.4, 0.82\]
+:::
+
+## Conclusion
+I created this post as a way of solidifying my understanding of these concepts. I find that documenting the material helps it to stick iwth me better. I hope that you find this helpful. My deepest gratitude goes to Andy Field for his exceptional book on statistical analysis with R.

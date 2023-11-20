@@ -1,0 +1,25 @@
+---
+title: "About"
+image: profile.JPEG
+about:
+  template: jolla
+  links:
+    - icon: instagram
+      text: instagram
+      href: https://instagram.com/joshua_olubori
+    - icon: github
+      text: Github
+      href: https://github.com/JoshuaOlubori
+    - icon: linkedin
+      text: LinkedIn
+      href: https://linkedin.com/in/joshua-edun
+---
+
+Edun Joshua is a data enthusiast and an environmental engineering student. Data science is a reprieve from the existential crises that haunt him.
+
+
+## Education
+
+Federal University of Agriculture, Abeokuta \| Alabata, Ogun State
+
+B.Eng. in Environmental Engineering \| March 2017 - March 2023

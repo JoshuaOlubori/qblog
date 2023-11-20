@@ -1,0 +1,35 @@
+{
+  "index.qmd": {
+    "index.html": "12f9bf07"
+  },
+  "about.qmd": {
+    "about.html": "bcfa7ed0"
+  },
+  "posts/post-with-code/index.qmd": {
+    "index.html": "075dda20"
+  },
+  "posts/welcome/index.qmd": {
+    "index.html": "ff66f832"
+  },
+  "posts/2023-11-18-sleep-disorders/sleep-disorders.qmd": {
+    "sleep-disorders.html": "6fdc4f29"
+  },
+  "posts/2023-11-18-sleep-disorders/index.qmd": {
+    "index.html": "4a998fe2"
+  },
+  "posts/index.qmd": {
+    "index.html": "f604c8d5"
+  },
+  "posts/2023-11-18-8weeks-sql-challenge-1/index.qmd": {
+    "index.html": "b66d6cc1"
+  },
+  "posts/2023-11-19-8weeks-sql-challenge-2/index.qmd": {
+    "index.html": "d6afd75e"
+  },
+  "posts/2023-11-19-8weeks-sql-challenge-4/index.qmd": {
+    "index.html": "a41b98a9"
+  },
+  "posts/2023-11-19-8weeks-sql-challenge-3/index.qmd": {
+    "index.html": "18c36604"
+  }
+}
