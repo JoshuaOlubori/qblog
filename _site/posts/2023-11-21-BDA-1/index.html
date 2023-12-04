@@ -1,0 +1,3593 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Edun Joshua">
+<meta name="dcterms.date" content="2023-11-21">
+
+<title>Musings of a data mage - Chapter 1: The Causal-Behavioral Framework for Data Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../posts/index.html" rel="" target="">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-portfolio" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Portfolio</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-portfolio">    
+        <li>
+    <a class="dropdown-item" href="../../posts/#category=sql" rel="" target="">
+ <span class="dropdown-text">SQL</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../posts/#category=stats" rel="" target="">
+ <span class="dropdown-text">Statistics</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../posts/#category=viz" rel="" target="">
+ <span class="dropdown-text">Data Viz</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../posts/#category=da" rel="" target="">
+ <span class="dropdown-text">Data Engineering</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../posts/#category=BI" rel="" target="">
+ <span class="dropdown-text">Business Intelligence</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Chapter 1: The Causal-Behavioral Framework for Data Analysis</h1>
+            <p class="subtitle lead">Understanding data using a causal-behavioural framework</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">R</div>
+                <div class="quarto-category">Casual Data Modelling</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Edun Joshua </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 21, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#variable-description" id="toc-variable-description" class="nav-link active" data-scroll-target="#variable-description">Variable description</a></li>
+  <li><a href="#why-correlation-is-not-causation-a-confounder-in-action" id="toc-why-correlation-is-not-causation-a-confounder-in-action" class="nav-link" data-scroll-target="#why-correlation-is-not-causation-a-confounder-in-action">Why Correlation Is Not Causation: A Confounder in Action</a></li>
+  <li><a href="#second-example" id="toc-second-example" class="nav-link" data-scroll-target="#second-example">Second Example</a></li>
+  <li><a href="#queries" id="toc-queries" class="nav-link" data-scroll-target="#queries">Queries</a>
+  <ul class="collapse">
+  <li><a href="#a.-pizza-metrics" id="toc-a.-pizza-metrics" class="nav-link" data-scroll-target="#a.-pizza-metrics">A. Pizza Metrics</a></li>
+  <li><a href="#b.-runner-and-customer-experience" id="toc-b.-runner-and-customer-experience" class="nav-link" data-scroll-target="#b.-runner-and-customer-experience">B. Runner and Customer Experience</a></li>
+  <li><a href="#c.-ingredient-optimisation" id="toc-c.-ingredient-optimisation" class="nav-link" data-scroll-target="#c.-ingredient-optimisation">C. Ingredient Optimisation</a></li>
+  <li><a href="#d.-pricing-and-ratings" id="toc-d.-pricing-and-ratings" class="nav-link" data-scroll-target="#d.-pricing-and-ratings">D. Pricing and Ratings</a></li>
+  </ul></li>
+  <li><a href="#closing-the-connection" id="toc-closing-the-connection" class="nav-link" data-scroll-target="#closing-the-connection">Closing the connection</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#|message: false</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#|wwarning: false</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.3.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.3     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(boot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'boot' was built under R version 4.3.2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'gt' was built under R version 4.3.2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># library(boot) #Required for Bootstrap simulations</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># library(rstudioapi)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="variable-description" class="level2">
+<h2 class="anchored" data-anchor-id="variable-description">Variable description</h2>
+</section>
+<section id="why-correlation-is-not-causation-a-confounder-in-action" class="level2">
+<h2 class="anchored" data-anchor-id="why-correlation-is-not-causation-a-confounder-in-action">Why Correlation Is Not Causation: A Confounder in Action</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Reading the data</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>stand_tib <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"chap1-stand_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 2400 Columns: 4
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+dbl (4): icecream_sales, malt_sales, summer_months, temps
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(stand_tib) <span class="sc">%&gt;%</span> <span class="fu">gt</span>() <span class="sc">%&gt;%</span> <span class="fu">opt_stylize</span>(<span class="at">style =</span> <span class="dv">6</span>, <span class="at">color=</span><span class="st">"cyan"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="mcxsqbpnab" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mcxsqbpnab table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#mcxsqbpnab thead, #mcxsqbpnab tbody, #mcxsqbpnab tfoot, #mcxsqbpnab tr, #mcxsqbpnab td, #mcxsqbpnab th {
+  border-style: none;
+}
+
+#mcxsqbpnab p {
+  margin: 0;
+  padding: 0;
+}
+
+#mcxsqbpnab .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#mcxsqbpnab .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#mcxsqbpnab .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#mcxsqbpnab .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#mcxsqbpnab .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mcxsqbpnab .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#mcxsqbpnab .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mcxsqbpnab .gt_col_heading {
+  color: #FFFFFF;
+  background-color: #01837B;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#mcxsqbpnab .gt_column_spanner_outer {
+  color: #FFFFFF;
+  background-color: #01837B;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#mcxsqbpnab .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#mcxsqbpnab .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#mcxsqbpnab .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#mcxsqbpnab .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#mcxsqbpnab .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#mcxsqbpnab .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  vertical-align: middle;
+}
+
+#mcxsqbpnab .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#mcxsqbpnab .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#mcxsqbpnab .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: none;
+  border-top-width: 1px;
+  border-top-color: #D5D5D5;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D5D5D5;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D5D5D5;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#mcxsqbpnab .gt_stub {
+  color: #333333;
+  background-color: #A5FEF2;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D5D5D5;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mcxsqbpnab .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#mcxsqbpnab .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#mcxsqbpnab .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#mcxsqbpnab .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mcxsqbpnab .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #5F5F5F;
+}
+
+#mcxsqbpnab .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#mcxsqbpnab .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#mcxsqbpnab .gt_grand_summary_row {
+  color: #333333;
+  background-color: #D5D5D5;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mcxsqbpnab .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #5F5F5F;
+}
+
+#mcxsqbpnab .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #5F5F5F;
+}
+
+#mcxsqbpnab .gt_striped {
+  background-color: #EBFBF9;
+}
+
+#mcxsqbpnab .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#mcxsqbpnab .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mcxsqbpnab .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mcxsqbpnab .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mcxsqbpnab .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mcxsqbpnab .gt_left {
+  text-align: left;
+}
+
+#mcxsqbpnab .gt_center {
+  text-align: center;
+}
+
+#mcxsqbpnab .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#mcxsqbpnab .gt_font_normal {
+  font-weight: normal;
+}
+
+#mcxsqbpnab .gt_font_bold {
+  font-weight: bold;
+}
+
+#mcxsqbpnab .gt_font_italic {
+  font-style: italic;
+}
+
+#mcxsqbpnab .gt_super {
+  font-size: 65%;
+}
+
+#mcxsqbpnab .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#mcxsqbpnab .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#mcxsqbpnab .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#mcxsqbpnab .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#mcxsqbpnab .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#mcxsqbpnab .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#mcxsqbpnab .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="icecream_sales">icecream_sales</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="malt_sales">malt_sales</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="summer_months">summer_months</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="temps">temps</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="icecream_sales" class="gt_row gt_right">25649.78</td>
+<td headers="malt_sales" class="gt_row gt_right">28592.18</td>
+<td headers="summer_months" class="gt_row gt_right">0</td>
+<td headers="temps" class="gt_row gt_right">28.59314</td></tr>
+    <tr><td headers="icecream_sales" class="gt_row gt_right gt_striped">32694.93</td>
+<td headers="malt_sales" class="gt_row gt_right gt_striped">37152.84</td>
+<td headers="summer_months" class="gt_row gt_right gt_striped">0</td>
+<td headers="temps" class="gt_row gt_right gt_striped">37.13064</td></tr>
+    <tr><td headers="icecream_sales" class="gt_row gt_right">26467.80</td>
+<td headers="malt_sales" class="gt_row gt_right">24074.19</td>
+<td headers="summer_months" class="gt_row gt_right">0</td>
+<td headers="temps" class="gt_row gt_right">24.11190</td></tr>
+    <tr><td headers="icecream_sales" class="gt_row gt_right gt_striped">43438.79</td>
+<td headers="malt_sales" class="gt_row gt_right gt_striped">49169.47</td>
+<td headers="summer_months" class="gt_row gt_right gt_striped">0</td>
+<td headers="temps" class="gt_row gt_right gt_striped">49.21807</td></tr>
+    <tr><td headers="icecream_sales" class="gt_row gt_right">52452.63</td>
+<td headers="malt_sales" class="gt_row gt_right">47249.40</td>
+<td headers="summer_months" class="gt_row gt_right">0</td>
+<td headers="temps" class="gt_row gt_right">47.25766</td></tr>
+    <tr><td headers="icecream_sales" class="gt_row gt_right gt_striped">34130.66</td>
+<td headers="malt_sales" class="gt_row gt_right gt_striped">34228.50</td>
+<td headers="summer_months" class="gt_row gt_right gt_striped">0</td>
+<td headers="temps" class="gt_row gt_right gt_striped">34.25746</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Running linear regressions </span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Biased model (coeff should be 1,000)</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(icecream_sales <span class="sc">~</span> temps, <span class="at">data =</span> stand_tib) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span> <span class="fu">opt_stylize</span>(<span class="at">style =</span> <span class="dv">6</span>, <span class="at">color =</span><span class="st">"cyan"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="okjfyywdxq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#okjfyywdxq table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#okjfyywdxq thead, #okjfyywdxq tbody, #okjfyywdxq tfoot, #okjfyywdxq tr, #okjfyywdxq td, #okjfyywdxq th {
+  border-style: none;
+}
+
+#okjfyywdxq p {
+  margin: 0;
+  padding: 0;
+}
+
+#okjfyywdxq .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#okjfyywdxq .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#okjfyywdxq .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#okjfyywdxq .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#okjfyywdxq .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#okjfyywdxq .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#okjfyywdxq .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#okjfyywdxq .gt_col_heading {
+  color: #FFFFFF;
+  background-color: #01837B;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#okjfyywdxq .gt_column_spanner_outer {
+  color: #FFFFFF;
+  background-color: #01837B;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#okjfyywdxq .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#okjfyywdxq .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#okjfyywdxq .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#okjfyywdxq .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#okjfyywdxq .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#okjfyywdxq .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  vertical-align: middle;
+}
+
+#okjfyywdxq .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#okjfyywdxq .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#okjfyywdxq .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: none;
+  border-top-width: 1px;
+  border-top-color: #D5D5D5;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D5D5D5;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D5D5D5;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#okjfyywdxq .gt_stub {
+  color: #333333;
+  background-color: #A5FEF2;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D5D5D5;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#okjfyywdxq .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#okjfyywdxq .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#okjfyywdxq .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#okjfyywdxq .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#okjfyywdxq .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #5F5F5F;
+}
+
+#okjfyywdxq .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#okjfyywdxq .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#okjfyywdxq .gt_grand_summary_row {
+  color: #333333;
+  background-color: #D5D5D5;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#okjfyywdxq .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #5F5F5F;
+}
+
+#okjfyywdxq .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #5F5F5F;
+}
+
+#okjfyywdxq .gt_striped {
+  background-color: #EBFBF9;
+}
+
+#okjfyywdxq .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#okjfyywdxq .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#okjfyywdxq .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#okjfyywdxq .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#okjfyywdxq .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#okjfyywdxq .gt_left {
+  text-align: left;
+}
+
+#okjfyywdxq .gt_center {
+  text-align: center;
+}
+
+#okjfyywdxq .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#okjfyywdxq .gt_font_normal {
+  font-weight: normal;
+}
+
+#okjfyywdxq .gt_font_bold {
+  font-weight: bold;
+}
+
+#okjfyywdxq .gt_font_italic {
+  font-style: italic;
+}
+
+#okjfyywdxq .gt_super {
+  font-size: 65%;
+}
+
+#okjfyywdxq .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#okjfyywdxq .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#okjfyywdxq .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#okjfyywdxq .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#okjfyywdxq .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#okjfyywdxq .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#okjfyywdxq .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="term">term</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="estimate">estimate</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="std.error">std.error</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="statistic">statistic</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="p.value">p.value</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="term" class="gt_row gt_left">(Intercept)</td>
+<td headers="estimate" class="gt_row gt_right">-6169.844</td>
+<td headers="std.error" class="gt_row gt_right">531.5062</td>
+<td headers="statistic" class="gt_row gt_right">-11.60823</td>
+<td headers="p.value" class="gt_row gt_right">2.385706e-30</td></tr>
+    <tr><td headers="term" class="gt_row gt_left gt_striped">temps</td>
+<td headers="estimate" class="gt_row gt_right gt_striped">1171.335</td>
+<td headers="std.error" class="gt_row gt_right gt_striped">9.0268</td>
+<td headers="statistic" class="gt_row gt_right gt_striped">129.76197</td>
+<td headers="p.value" class="gt_row gt_right gt_striped">0.000000e+00</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#correct model for icecream (coeffs should be 1,000 and 20,000)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(icecream_sales <span class="sc">~</span> temps <span class="sc">+</span> summer_months, <span class="at">data=</span>stand_tib)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span> <span class="fu">opt_stylize</span>(<span class="at">style =</span> <span class="dv">6</span>, <span class="at">color =</span><span class="st">"cyan"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="xwmxrejcbs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#xwmxrejcbs table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#xwmxrejcbs thead, #xwmxrejcbs tbody, #xwmxrejcbs tfoot, #xwmxrejcbs tr, #xwmxrejcbs td, #xwmxrejcbs th {
+  border-style: none;
+}
+
+#xwmxrejcbs p {
+  margin: 0;
+  padding: 0;
+}
+
+#xwmxrejcbs .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#xwmxrejcbs .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#xwmxrejcbs .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#xwmxrejcbs .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#xwmxrejcbs .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#xwmxrejcbs .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#xwmxrejcbs .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#xwmxrejcbs .gt_col_heading {
+  color: #FFFFFF;
+  background-color: #01837B;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#xwmxrejcbs .gt_column_spanner_outer {
+  color: #FFFFFF;
+  background-color: #01837B;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#xwmxrejcbs .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#xwmxrejcbs .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#xwmxrejcbs .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#xwmxrejcbs .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#xwmxrejcbs .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#xwmxrejcbs .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  vertical-align: middle;
+}
+
+#xwmxrejcbs .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#xwmxrejcbs .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#xwmxrejcbs .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: none;
+  border-top-width: 1px;
+  border-top-color: #D5D5D5;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D5D5D5;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D5D5D5;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#xwmxrejcbs .gt_stub {
+  color: #333333;
+  background-color: #A5FEF2;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D5D5D5;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xwmxrejcbs .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#xwmxrejcbs .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#xwmxrejcbs .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#xwmxrejcbs .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xwmxrejcbs .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #5F5F5F;
+}
+
+#xwmxrejcbs .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#xwmxrejcbs .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#xwmxrejcbs .gt_grand_summary_row {
+  color: #333333;
+  background-color: #D5D5D5;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xwmxrejcbs .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #5F5F5F;
+}
+
+#xwmxrejcbs .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #5F5F5F;
+}
+
+#xwmxrejcbs .gt_striped {
+  background-color: #EBFBF9;
+}
+
+#xwmxrejcbs .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#xwmxrejcbs .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#xwmxrejcbs .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xwmxrejcbs .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#xwmxrejcbs .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xwmxrejcbs .gt_left {
+  text-align: left;
+}
+
+#xwmxrejcbs .gt_center {
+  text-align: center;
+}
+
+#xwmxrejcbs .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#xwmxrejcbs .gt_font_normal {
+  font-weight: normal;
+}
+
+#xwmxrejcbs .gt_font_bold {
+  font-weight: bold;
+}
+
+#xwmxrejcbs .gt_font_italic {
+  font-style: italic;
+}
+
+#xwmxrejcbs .gt_super {
+  font-size: 65%;
+}
+
+#xwmxrejcbs .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#xwmxrejcbs .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#xwmxrejcbs .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#xwmxrejcbs .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#xwmxrejcbs .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#xwmxrejcbs .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#xwmxrejcbs .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="term">term</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="estimate">estimate</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="std.error">std.error</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="statistic">statistic</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="p.value">p.value</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="term" class="gt_row gt_left">(Intercept)</td>
+<td headers="estimate" class="gt_row gt_right">-7.068995</td>
+<td headers="std.error" class="gt_row gt_right">374.401378</td>
+<td headers="statistic" class="gt_row gt_right">-0.01888079</td>
+<td headers="p.value" class="gt_row gt_right">0.9849378</td></tr>
+    <tr><td headers="term" class="gt_row gt_left gt_striped">temps</td>
+<td headers="estimate" class="gt_row gt_right gt_striped">1001.481846</td>
+<td headers="std.error" class="gt_row gt_right gt_striped">6.822242</td>
+<td headers="statistic" class="gt_row gt_right gt_striped">146.79657789</td>
+<td headers="p.value" class="gt_row gt_right gt_striped">0.0000000</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">summer_months</td>
+<td headers="estimate" class="gt_row gt_right">19556.774716</td>
+<td headers="std.error" class="gt_row gt_right">361.393093</td>
+<td headers="statistic" class="gt_row gt_right">54.11496531</td>
+<td headers="p.value" class="gt_row gt_right">0.0000000</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Model biased by extra controlling</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#note how the standard error of the estimate of temp increases a lot</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#note how the p-values for </span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(icecream_sales <span class="sc">~</span> malt_sales <span class="sc">+</span> temps <span class="sc">+</span> summer_months, </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> stand_tib)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span> <span class="fu">opt_stylize</span>(<span class="at">style =</span> <span class="dv">6</span>, <span class="at">color =</span><span class="st">"cyan"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="msqhyplxdf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#msqhyplxdf table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#msqhyplxdf thead, #msqhyplxdf tbody, #msqhyplxdf tfoot, #msqhyplxdf tr, #msqhyplxdf td, #msqhyplxdf th {
+  border-style: none;
+}
+
+#msqhyplxdf p {
+  margin: 0;
+  padding: 0;
+}
+
+#msqhyplxdf .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#msqhyplxdf .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#msqhyplxdf .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#msqhyplxdf .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#msqhyplxdf .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#msqhyplxdf .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#msqhyplxdf .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#msqhyplxdf .gt_col_heading {
+  color: #FFFFFF;
+  background-color: #01837B;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#msqhyplxdf .gt_column_spanner_outer {
+  color: #FFFFFF;
+  background-color: #01837B;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#msqhyplxdf .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#msqhyplxdf .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#msqhyplxdf .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#msqhyplxdf .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#msqhyplxdf .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#msqhyplxdf .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  vertical-align: middle;
+}
+
+#msqhyplxdf .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#msqhyplxdf .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#msqhyplxdf .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: none;
+  border-top-width: 1px;
+  border-top-color: #D5D5D5;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D5D5D5;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D5D5D5;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#msqhyplxdf .gt_stub {
+  color: #333333;
+  background-color: #A5FEF2;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D5D5D5;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#msqhyplxdf .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#msqhyplxdf .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#msqhyplxdf .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#msqhyplxdf .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#msqhyplxdf .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #5F5F5F;
+}
+
+#msqhyplxdf .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#msqhyplxdf .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#msqhyplxdf .gt_grand_summary_row {
+  color: #333333;
+  background-color: #D5D5D5;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#msqhyplxdf .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #5F5F5F;
+}
+
+#msqhyplxdf .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #5F5F5F;
+}
+
+#msqhyplxdf .gt_striped {
+  background-color: #EBFBF9;
+}
+
+#msqhyplxdf .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#msqhyplxdf .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#msqhyplxdf .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#msqhyplxdf .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#msqhyplxdf .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#msqhyplxdf .gt_left {
+  text-align: left;
+}
+
+#msqhyplxdf .gt_center {
+  text-align: center;
+}
+
+#msqhyplxdf .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#msqhyplxdf .gt_font_normal {
+  font-weight: normal;
+}
+
+#msqhyplxdf .gt_font_bold {
+  font-weight: bold;
+}
+
+#msqhyplxdf .gt_font_italic {
+  font-style: italic;
+}
+
+#msqhyplxdf .gt_super {
+  font-size: 65%;
+}
+
+#msqhyplxdf .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#msqhyplxdf .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#msqhyplxdf .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#msqhyplxdf .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#msqhyplxdf .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#msqhyplxdf .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#msqhyplxdf .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="term">term</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="estimate">estimate</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="std.error">std.error</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="statistic">statistic</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="p.value">p.value</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="term" class="gt_row gt_left">(Intercept)</td>
+<td headers="estimate" class="gt_row gt_right">-15.827140</td>
+<td headers="std.error" class="gt_row gt_right">374.580924</td>
+<td headers="statistic" class="gt_row gt_right">-0.04225293</td>
+<td headers="p.value" class="gt_row gt_right">0.9663006</td></tr>
+    <tr><td headers="term" class="gt_row gt_left gt_striped">malt_sales</td>
+<td headers="estimate" class="gt_row gt_right gt_striped">-1.701081</td>
+<td headers="std.error" class="gt_row gt_right gt_striped">2.082874</td>
+<td headers="statistic" class="gt_row gt_right gt_striped">-0.81669912</td>
+<td headers="p.value" class="gt_row gt_right gt_striped">0.4141816</td></tr>
+    <tr><td headers="term" class="gt_row gt_left">temps</td>
+<td headers="estimate" class="gt_row gt_right">2702.788460</td>
+<td headers="std.error" class="gt_row gt_right">2083.160984</td>
+<td headers="statistic" class="gt_row gt_right">1.29744580</td>
+<td headers="p.value" class="gt_row gt_right">0.1946027</td></tr>
+    <tr><td headers="term" class="gt_row gt_left gt_striped">summer_months</td>
+<td headers="estimate" class="gt_row gt_right gt_striped">19548.167641</td>
+<td headers="std.error" class="gt_row gt_right gt_striped">361.571822</td>
+<td headers="statistic" class="gt_row gt_right gt_striped">54.06441117</td>
+<td headers="p.value" class="gt_row gt_right gt_striped">0.0000000</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(stand_tib, <span class="fu">aes</span>(<span class="at">x=</span>icecream_sales, <span class="at">y=</span>malt_sales)) <span class="sc">+</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Malt sales'</span>, <span class="at">y=</span><span class="st">'Iced coffee sales'</span>) <span class="sc">+</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="second-example" class="level2">
+<h2 class="anchored" data-anchor-id="second-example">Second Example</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Reading the data</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>survey_tib <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"chap1-survey_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 10000 Columns: 3
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+dbl (3): vanilla, chocolate, shopped
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Reformatting shopped variable to binary</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>survey_tib <span class="ot">&lt;-</span> survey_tib <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">shopped =</span> <span class="fu">as.factor</span>(shopped) <span class="sc">%&gt;%</span> <span class="fu">relevel</span>(<span class="at">ref=</span><span class="st">"0"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Figure 1-5. (a) Tastes for vanilla and chocolate are uncorrelated in the </span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="do">## overall population. (b) Taste for vanilla is higher for people who shop at </span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="do">## the ice-cream stand than for people who don’t. (c) Same thing with the taste for chocolate.</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Scatterplot of chocolate versus vanilla taste </span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(survey_tib, <span class="fu">aes</span>(<span class="at">x=</span>vanilla, <span class="at">y=</span>chocolate)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">28</span>)) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">28</span>)) <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">formula =</span> <span class="st">'y~x'</span>, <span class="at">method =</span> lm, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Taste for vanilla'</span>, <span class="at">y=</span><span class="st">'Taste for chocolate'</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Boxplot of vanilla taste against shopping behavior</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(survey_tib, <span class="fu">aes</span>(shopped, vanilla)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Shopped (Y/N)'</span>, <span class="at">y=</span><span class="st">'Taste for vanilla'</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">30</span>)) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co">#Boxplot of chocolate taste against shopping behavior</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(survey_tib, <span class="fu">aes</span>(shopped, chocolate)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Shopped (Y/N)'</span>, <span class="at">y=</span><span class="st">'Taste for chocolate'</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">30</span>)) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>ggpubr<span class="sc">::</span><span class="fu">ggarrange</span>(a,b,c, <span class="at">ncol =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><br>
+</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Plotting same scatterplot but for shoppers only</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Figure 1-6 Taste for vanilla and chocolate among shoppers. </span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(survey_tib <span class="sc">%&gt;%</span> <span class="fu">filter</span>(shopped<span class="sc">==</span><span class="st">'1'</span>), <span class="fu">aes</span>(<span class="at">x=</span>vanilla, <span class="at">y=</span>chocolate)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Taste for vanilla'</span>, <span class="at">y=</span><span class="st">'Taste for chocolate'</span>) <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">formula=</span><span class="st">'y~x'</span>, <span class="at">method =</span> lm,<span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>First, I’ll create a connection to my local <code>postgres</code> database thanks to the <strong><code>RPostgres</code></strong> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># | warning: false</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a connection to my local postgres database</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RPostgres)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'RPostgres' was built under R version 4.3.2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbConnect</span>(<span class="fu">Postgres</span>(),</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">dbname =</span> <span class="st">"pizza_runner"</span>,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">user =</span> <span class="st">"postgres"</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">password =</span> my_password)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="queries" class="level2">
+<h2 class="anchored" data-anchor-id="queries">Queries</h2>
+<section id="a.-pizza-metrics" class="level3">
+<h3 class="anchored" data-anchor-id="a.-pizza-metrics">A. Pizza Metrics</h3>
+<section id="how-many-runners-signed-up-for-each-1-week-period-i.e.-week-starts-2021-01-01" class="level4">
+<h4 class="anchored" data-anchor-id="how-many-runners-signed-up-for-each-1-week-period-i.e.-week-starts-2021-01-01">1. How many runners signed up for each 1 week period? (i.e.&nbsp;week starts 2021-01-01)</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="fu">count</span>(pizza_id)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> customer_orders;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>1 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">14</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="how-many-unique-customer-orders-were-made" class="level4">
+<h4 class="anchored" data-anchor-id="how-many-unique-customer-orders-were-made">2. How many unique customer orders were made?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">count</span>(<span class="kw">DISTINCT</span> order_id) <span class="kw">from</span> customer_orders;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>1 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">10</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="how-many-successful-orders-were-delivered-by-each-runner" class="level4">
+<h4 class="anchored" data-anchor-id="how-many-successful-orders-were-delivered-by-each-runner">3. How many successful orders were delivered by each runner?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> runner_id,</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(order_id) <span class="kw">as</span> count_of_successful_orders</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> runner_orders</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> cancellation <span class="kw">is</span> <span class="kw">NULL</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">or</span> cancellation <span class="kw">not</span> <span class="kw">IN</span> (</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Restaurant Cancellation'</span>,</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Customer Cancellation'</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> runner_id;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>3 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">runner_id</th>
+<th style="text-align: right;">count_of_successful_orders</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="how-many-of-each-type-of-pizza-was-delivered" class="level4">
+<h4 class="anchored" data-anchor-id="how-many-of-each-type-of-pizza-was-delivered">4. How many of each type of pizza was delivered?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> pn.pizza_name <span class="kw">as</span> pizza,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(co.pizza_id) <span class="kw">as</span> count_of_pizza_delivered</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> customer_orders co</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">INNER</span> <span class="kw">JOIN</span> runner_orders ro <span class="kw">on</span> co.order_id <span class="op">=</span> ro.order_id</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">INNER</span> <span class="kw">JOIN</span> pizza_names pn <span class="kw">on</span> pn.pizza_id <span class="op">=</span> co.pizza_id</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> cancellation <span class="kw">is</span> <span class="kw">NULL</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">or</span> cancellation <span class="kw">not</span> <span class="kw">IN</span> (</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Restaurant Cancellation'</span>,</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Customer Cancellation'</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">by</span> pn.pizza_name;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>2 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">pizza</th>
+<th style="text-align: right;">count_of_pizza_delivered</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Meatlovers</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Vegetarian</td>
+<td style="text-align: right;">3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="how-many-vegetarian-and-meatlovers-were-ordered-by-each-customer" class="level4">
+<h4 class="anchored" data-anchor-id="how-many-vegetarian-and-meatlovers-were-ordered-by-each-customer">5. How many Vegetarian and Meatlovers were ordered by each customer?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> co.customer_id <span class="kw">as</span> customers, <span class="fu">count</span>(co.pizza_id) <span class="kw">as</span> count_of_pizza_ordered <span class="kw">from</span> customer_orders co <span class="kw">INNER</span> <span class="kw">JOIN</span> pizza_names pn <span class="kw">on</span> pn.pizza_id <span class="op">=</span> co.pizza_id <span class="kw">group</span> <span class="kw">by</span> <span class="dv">1</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>5 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">customers</th>
+<th style="text-align: right;">count_of_pizza_ordered</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">101</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">103</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">104</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">105</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">102</td>
+<td style="text-align: right;">3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="what-was-the-maximum-number-of-pizzas-delivered-in-a-single-order" class="level4">
+<h4 class="anchored" data-anchor-id="what-was-the-maximum-number-of-pizzas-delivered-in-a-single-order">6. What was the maximum number of pizzas delivered in a single order?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> ro.order_id <span class="kw">as</span> <span class="kw">order</span>,</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(co.pizza_id) <span class="kw">as</span> number_of_pizzas</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> runner_orders ro</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">INNER</span> <span class="kw">JOIN</span> customer_orders co <span class="kw">ON</span> ro.order_id <span class="op">=</span> co.order_id</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> <span class="dv">1</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="dv">2</span> <span class="kw">DESC</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">1</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>1 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">order</th>
+<th style="text-align: right;">number_of_pizzas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="for-each-customer-how-many-delivered-pizzas-had-at-least-1-change-and-how-many-and-no-changes" class="level4">
+<h4 class="anchored" data-anchor-id="for-each-customer-how-many-delivered-pizzas-had-at-least-1-change-and-how-many-and-no-changes">7. For each customer, how many delivered pizzas had at least 1 change and how many? and no changes?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- PART 1</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- delivered orders</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="kw">with</span> cte1 <span class="kw">as</span> (</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">select</span> <span class="op">*</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">from</span> runner_orders</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> cancellation <span class="kw">is</span> <span class="kw">null</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">or</span> cancellation <span class="kw">in</span> (<span class="st">'null'</span>, <span class="st">''</span>)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>),</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- orders with at least 1 changes</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>cte2 <span class="kw">as</span> (</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">select</span> <span class="op">*</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">from</span> customer_orders</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> exclusions <span class="op">&lt;&gt;</span> <span class="st">''</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>        <span class="kw">and</span> extras <span class="op">&lt;&gt;</span> <span class="st">''</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>        <span class="kw">or</span> (</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>            exclusions <span class="kw">not</span> <span class="kw">in</span> (<span class="st">''</span>, <span class="st">'null'</span>)</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>            <span class="kw">or</span> extras <span class="kw">not</span> <span class="kw">in</span> (<span class="st">''</span>, <span class="st">'null'</span>, <span class="kw">null</span>)</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> cte2.customer_id,</span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(pizza_id) delivered_pizzas_with_changes</span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> cte1</span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">inner</span> <span class="kw">join</span> cte2 <span class="kw">on</span> cte1.order_id <span class="op">=</span> cte2.order_id</span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> <span class="dv">1</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>4 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">customer_id</th>
+<th style="text-align: right;">delivered_pizzas_with_changes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">102</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">105</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">104</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">103</td>
+<td style="text-align: right;">3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- PART 2: orders with no changes</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="kw">with</span> cte1 <span class="kw">as</span> (</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">select</span> <span class="op">*</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">from</span> runner_orders</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> cancellation <span class="kw">is</span> <span class="kw">null</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>        <span class="kw">or</span> cancellation <span class="kw">in</span> (<span class="st">'null'</span>, <span class="st">''</span>)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>),</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>cte2 <span class="kw">as</span> (</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">select</span> <span class="op">*</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">from</span> customer_orders</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> exclusions <span class="op">=</span> <span class="st">''</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">and</span> extras <span class="op">=</span> <span class="st">''</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>        <span class="kw">or</span> (</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>            exclusions <span class="kw">in</span> (<span class="st">''</span>, <span class="st">'null'</span>)</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>            <span class="kw">or</span> extras <span class="kw">in</span> (<span class="st">''</span>, <span class="st">'null'</span>, <span class="kw">null</span>)</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> cte2.customer_id,</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(pizza_id) delivered_pizzas_with_no_changes</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> cte1</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">inner</span> <span class="kw">join</span> cte2 <span class="kw">on</span> cte1.order_id <span class="op">=</span> cte2.order_id</span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> <span class="dv">1</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>5 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">customer_id</th>
+<th style="text-align: right;">delivered_pizzas_with_no_changes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">101</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">102</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">103</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">104</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">105</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="how-many-pizzas-were-delivered-that-had-both-exclusions-and-extras" class="level4">
+<h4 class="anchored" data-anchor-id="how-many-pizzas-were-delivered-that-had-both-exclusions-and-extras">8. How many pizzas were delivered that had both exclusions and extras?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- delivered orders</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="kw">with</span> cte1 <span class="kw">as</span> (</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">select</span> <span class="op">*</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">from</span> runner_orders</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> cancellation <span class="kw">is</span> <span class="kw">null</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>        <span class="kw">or</span> cancellation <span class="kw">in</span> (<span class="st">'null'</span>, <span class="st">''</span>)</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>),</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- orders with both exclusions and extras</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>cte2 <span class="kw">as</span> (</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">select</span> <span class="op">*</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">from</span> customer_orders</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> (</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>            exclusions <span class="op">&lt;&gt;</span> <span class="st">'null'</span></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>            <span class="kw">and</span> extras <span class="op">&lt;&gt;</span> <span class="st">'null'</span></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">and</span> exclusions <span class="op">&lt;&gt;</span> <span class="st">''</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>        <span class="kw">and</span> extras <span class="op">&lt;&gt;</span> <span class="st">''</span></span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="op">*</span></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> cte1</span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">inner</span> <span class="kw">join</span> cte2 <span class="kw">on</span> cte1.order_id <span class="op">=</span> cte2.order_id;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>1 records</caption>
+<colgroup>
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 14%">
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 4%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">order_id</th>
+<th style="text-align: right;">runner_id</th>
+<th style="text-align: left;">pickup_time</th>
+<th style="text-align: left;">distance</th>
+<th style="text-align: left;">duration</th>
+<th style="text-align: left;">cancellation</th>
+<th style="text-align: right;">order_id..7</th>
+<th style="text-align: right;">customer_id</th>
+<th style="text-align: right;">pizza_id</th>
+<th style="text-align: left;">exclusions</th>
+<th style="text-align: left;">extras</th>
+<th style="text-align: left;">order_time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2020-01-11 18:50:20</td>
+<td style="text-align: left;">10km</td>
+<td style="text-align: left;">10minutes</td>
+<td style="text-align: left;">null</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">104</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">2, 6</td>
+<td style="text-align: left;">1, 4</td>
+<td style="text-align: left;">2020-01-11 18:34:49</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="what-was-the-total-volume-of-pizzas-ordered-for-each-hour-of-the-day" class="level4">
+<h4 class="anchored" data-anchor-id="what-was-the-total-volume-of-pizzas-ordered-for-each-hour-of-the-day">9. What was the total volume of pizzas ordered for each hour of the day?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="fu">EXTRACT</span> (</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>        <span class="kw">hour</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">from</span> order_time</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">as</span> hour_of_day,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(pizza_id) <span class="kw">as</span> pizza_volume</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> customer_orders</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> <span class="dv">1</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>6 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">hour_of_day</th>
+<th style="text-align: right;">pizza_volume</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="what-was-the-volume-of-orders-for-each-day-of-the-week" class="level4">
+<h4 class="anchored" data-anchor-id="what-was-the-volume-of-orders-for-each-day-of-the-week">10. What was the volume of orders for each day of the week?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- select EXTRACT (</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co">--        dow</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co">--        from order_time</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co">--    ) as day_of_week,</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co">--    count(pizza_id) as pizza_volume</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="co">-- from customer_orders</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co">-- GROUP BY 1;</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="co">-- or</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="fu">to_char</span>(order_time, <span class="st">'Day'</span>) <span class="kw">as</span> day_of_week,</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(pizza_id) <span class="kw">as</span> pizza_volume</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> customer_orders</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> <span class="dv">1</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>4 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">day_of_week</th>
+<th style="text-align: right;">pizza_volume</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Saturday</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Thursday</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Friday</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Wednesday</td>
+<td style="text-align: right;">5</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+<section id="b.-runner-and-customer-experience" class="level3">
+<h3 class="anchored" data-anchor-id="b.-runner-and-customer-experience">B. Runner and Customer Experience</h3>
+<section id="how-many-runners-signed-up-for-each-1-week-period-i.e.-week-starts-2021-01-01-1" class="level4">
+<h4 class="anchored" data-anchor-id="how-many-runners-signed-up-for-each-1-week-period-i.e.-week-starts-2021-01-01-1">1. How many runners signed up for each 1 week period? (i.e.&nbsp;week starts 2021-01-01)</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="fu">EXTRACT</span>(</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>        week</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">from</span> registration_date</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(runner_id)</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> runners</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> <span class="dv">1</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>3 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">extract</th>
+<th style="text-align: right;">count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">53</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="what-was-the-average-time-in-minutes-it-took-for-each-runner-to-arrive-at-the-pizza-runner-hq-to-pickup-the-order" class="level4">
+<h4 class="anchored" data-anchor-id="what-was-the-average-time-in-minutes-it-took-for-each-runner-to-arrive-at-the-pizza-runner-hq-to-pickup-the-order">2. What was the average time in minutes it took for each runner to arrive at the Pizza – Runner HQ to pickup the order?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="cf">case</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>        <span class="cf">when</span> ro.pickup_time <span class="op">=</span> <span class="st">'null'</span> <span class="cf">then</span> <span class="kw">null</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> <span class="fu">round</span>(</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">EXTRACT</span>(</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>                epoch</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>                <span class="kw">from</span> (</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>                        ro.pickup_time:<span class="ch">:TIMESTAMP</span> <span class="op">-</span> co.order_time:<span class="ch">:TIMESTAMP</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>                    )</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>            ) <span class="op">/</span> <span class="dv">60</span>,</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>            <span class="dv">2</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span> <span class="kw">as</span> duration_till_pickup,</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>    ro.pickup_time,</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>    co.order_time</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> customer_orders co</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">INNER</span> <span class="kw">JOIN</span> runner_orders ro <span class="kw">on</span> co.order_id <span class="op">=</span> ro.order_id; </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">duration_till_pickup</th>
+<th style="text-align: left;">pickup_time</th>
+<th style="text-align: left;">order_time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">10.53</td>
+<td style="text-align: left;">2020-01-01 18:15:34</td>
+<td style="text-align: left;">2020-01-01 18:05:02</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10.03</td>
+<td style="text-align: left;">2020-01-01 19:10:54</td>
+<td style="text-align: left;">2020-01-01 19:00:52</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">21.23</td>
+<td style="text-align: left;">2020-01-03 00:12:37</td>
+<td style="text-align: left;">2020-01-02 23:51:23</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">21.23</td>
+<td style="text-align: left;">2020-01-03 00:12:37</td>
+<td style="text-align: left;">2020-01-02 23:51:23</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">29.28</td>
+<td style="text-align: left;">2020-01-04 13:53:03</td>
+<td style="text-align: left;">2020-01-04 13:23:46</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">29.28</td>
+<td style="text-align: left;">2020-01-04 13:53:03</td>
+<td style="text-align: left;">2020-01-04 13:23:46</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">29.28</td>
+<td style="text-align: left;">2020-01-04 13:53:03</td>
+<td style="text-align: left;">2020-01-04 13:23:46</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10.47</td>
+<td style="text-align: left;">2020-01-08 21:10:57</td>
+<td style="text-align: left;">2020-01-08 21:00:29</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">null</td>
+<td style="text-align: left;">2020-01-08 21:03:13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10.27</td>
+<td style="text-align: left;">2020-01-08 21:30:45</td>
+<td style="text-align: left;">2020-01-08 21:20:29</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>This query calculates the average time in minutes it took for each runner to arrive at the Pizza Runner HQ to pick up the order. It first joins the <code>customer_orders</code> and <code>runner_orders</code> tables to get the order information and the runner’s pickup time. Then, it checks if the <code>pickup_time</code> is null, and if so, it sets the corresponding <code>duration_till_pickup</code> to null. Otherwise, it calculates the time difference between the <code>pickup_time</code> and the <code>order_time</code> in seconds using the <code>EXTRACT()</code> and <code>TIMESTAMP()</code>functions. It then converts the time difference to minutes and rounds it to two decimal places. Finally, it selects the <code>duration_till_pickup</code>, <code>pickup_time</code>, and <code>order_time</code> for each order.</p>
+</section>
+<section id="what-was-the-average-time-in-minutes-it-took-for-each-runner-to-deliver-pizzas" class="level4">
+<h4 class="anchored" data-anchor-id="what-was-the-average-time-in-minutes-it-took-for-each-runner-to-deliver-pizzas">3. What was the average time in minutes it took for each runner to deliver pizzas?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> runner_id,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">avg</span>(</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>                <span class="cf">when</span> <span class="kw">left</span>(duration, <span class="dv">2</span>) ~ <span class="st">'^\d+$'</span> <span class="cf">THEN</span> <span class="fu">cast</span>(<span class="kw">left</span>(duration, <span class="dv">2</span>) <span class="kw">as</span> <span class="dt">integer</span>)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span> <span class="kw">null</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">end</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>        <span class="dv">2</span></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>    ) <span class="kw">as</span> extracted_minutes</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> runner_orders</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="kw">group</span> <span class="kw">by</span> runner_id;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>3 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">runner_id</th>
+<th style="text-align: right;">extracted_minutes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">15.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">26.67</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">22.25</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="what-was-the-difference-between-the-longest-and-shortest-delivery-times-for-all" class="level4">
+<h4 class="anchored" data-anchor-id="what-was-the-difference-between-the-longest-and-shortest-delivery-times-for-all">5. What was the difference between the longest and shortest delivery times for all?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- If we define delivery times as the duration between ro.pickup_time - co.order_time + ro.duration</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- then:</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="kw">with</span> cte1 <span class="kw">as</span> (</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">select</span> <span class="cf">case</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">when</span> ro.pickup_time <span class="op">=</span> <span class="st">'null'</span> <span class="cf">then</span> <span class="kw">null</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span> <span class="fu">round</span>(</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>                <span class="fu">EXTRACT</span>(</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>                    epoch</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>                    <span class="kw">from</span> (</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>                            ro.pickup_time:<span class="ch">:TIMESTAMP</span> <span class="op">-</span> co.order_time:<span class="ch">:TIMESTAMP</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>                        )</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>                ) <span class="op">/</span> <span class="dv">60</span>,</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>                <span class="dv">2</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span> <span class="kw">as</span> duration_till_pickup,</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>        ro.pickup_time,</span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>        co.order_time,</span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">round</span>(</span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span></span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>                <span class="cf">when</span> <span class="kw">left</span>(ro.duration, <span class="dv">2</span>) ~ <span class="st">'^\d+$'</span> <span class="cf">THEN</span> <span class="fu">cast</span>(<span class="kw">left</span>(ro.duration, <span class="dv">2</span>) <span class="kw">as</span> <span class="dt">integer</span>)</span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span> <span class="kw">null</span></span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">end</span>,</span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>            <span class="dv">2</span></span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a>        ) <span class="kw">as</span> cleaned_duration_minutes</span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">from</span> customer_orders co</span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a>        <span class="kw">INNER</span> <span class="kw">JOIN</span> runner_orders ro <span class="kw">on</span> co.order_id <span class="op">=</span> ro.order_id</span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="fu">max</span>(duration_till_pickup <span class="op">+</span> cleaned_duration_minutes) <span class="kw">as</span> longest_delivery_time,</span>
+<span id="cb38-30"><a href="#cb38-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">min</span>(duration_till_pickup <span class="op">+</span> cleaned_duration_minutes) <span class="kw">as</span> shortest_delivery_time,</span>
+<span id="cb38-31"><a href="#cb38-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">max</span>(duration_till_pickup <span class="op">+</span> cleaned_duration_minutes) <span class="op">-</span> <span class="fu">min</span>(duration_till_pickup <span class="op">+</span> cleaned_duration_minutes) <span class="kw">as</span> difference</span>
+<span id="cb38-32"><a href="#cb38-32" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> cte1;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>1 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">longest_delivery_time</th>
+<th style="text-align: right;">shortest_delivery_time</th>
+<th style="text-align: right;">difference</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">69.28</td>
+<td style="text-align: right;">25.47</td>
+<td style="text-align: right;">43.81</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Now, this is a monstrous looking one 😅 .</p>
+<p>A (CTE) named <code>cte1</code> is created, extracting relevant information such as <code>duration_till_pickup</code>, <code>pickup_time</code>, <code>order_time</code>, and <code>cleaned_duration_minutes</code> from the <code>customer_orders</code> (co) and <code>runner_orders</code> (ro) tables. The <code>duration_till_pickup</code> is calculated as the time between pickup and order in minutes. The <code>cleaned_duration_minutes</code> extracts the duration in minutes from the ro.<code>duration</code> field.</p>
+<p>The main query then computes the maximum, minimum, and the difference between the sum of <code>duration_till_pickup</code> and <code>cleaned_duration_minutes</code>. These values represent the longest, shortest, and the time difference between delivery times for all orders.</p>
+</section>
+<section id="what-was-the-average-speed-for-each-runner-for-each-delivery-and-do-you-notice-any-trend-for-these-values" class="level4">
+<h4 class="anchored" data-anchor-id="what-was-the-average-speed-for-each-runner-for-each-delivery-and-do-you-notice-any-trend-for-these-values">6. What was the average speed for each runner for each delivery and do you notice – any trend for these values?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="kw">with</span> cte <span class="kw">as</span> (</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">select</span> runner_id,</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">when</span> distance ~ <span class="st">'.*'</span> <span class="cf">THEN</span> <span class="fu">cast</span>(substring(distance, <span class="st">'[0-9\-+\.]+'</span>) <span class="kw">as</span> <span class="dt">float</span>)</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span> <span class="kw">null</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span> <span class="kw">as</span> cleaned_distance_km,</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">when</span> duration ~ <span class="st">'.*'</span> <span class="cf">THEN</span> <span class="fu">cast</span>(substring(duration, <span class="st">'[0-9\-+\.]+'</span>) <span class="kw">as</span> <span class="dt">float</span>) <span class="op">/</span> <span class="dv">60</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span> <span class="kw">null</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">end</span> <span class="kw">as</span> cleaned_duration_hr</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">from</span> runner_orders</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> runner_id,</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">avg</span>(cleaned_distance_km <span class="op">/</span> cleaned_duration_hr) <span class="kw">as</span> speed_km_hr</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> cte</span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a><span class="kw">group</span> <span class="kw">by</span> <span class="dv">1</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>3 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">runner_id</th>
+<th style="text-align: right;">speed_km_hr</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">40.00000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">62.90000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">45.53611</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>This psql query calculates the average speed for each runner for each delivery. It uses a CTE named <code>cte</code> to clean and extract relevant information such as <code>cleaned_distance_km</code> and <code>cleaned_duration_hr</code> from the <code>runner_orders</code> table. The main query then computes the average speed (<code>cleaned_distance_km</code> / <code>cleaned_duration_hr</code>) for each runner and presents the results grouped by runner_id. This allows you to observe trends in the average speed of each runner across their deliveries.</p>
+</section>
+<section id="what-is-the-successful-delivery-percentage-for-each-runner" class="level4">
+<h4 class="anchored" data-anchor-id="what-is-the-successful-delivery-percentage-for-each-runner">7. What is the successful delivery percentage for each runner?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">with</span> part <span class="kw">as</span> (</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">select</span> cte.runner_id,</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">count</span>(<span class="op">*</span>) <span class="kw">as</span> part_cancel</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">from</span> (</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>            <span class="kw">select</span> runner_id,</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>                <span class="fu">nullif</span>(cancellation, <span class="st">''</span>) <span class="op">||</span> <span class="fu">nullif</span>(cancellation, <span class="st">'null'</span>) <span class="kw">as</span> <span class="kw">cancel</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>            <span class="kw">from</span> runner_orders</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>        ) cte</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> <span class="kw">cancel</span> <span class="kw">is</span> <span class="kw">null</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">group</span> <span class="kw">by</span> runner_id</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>),</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>whole <span class="kw">as</span> (</span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">select</span> runner_id,</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">count</span>(<span class="op">*</span>) <span class="kw">as</span> whole_cancel</span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">from</span> (</span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>            <span class="kw">select</span> runner_id,</span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>                <span class="fu">nullif</span>(cancellation, <span class="st">''</span>) <span class="op">||</span> <span class="fu">nullif</span>(cancellation, <span class="st">'null'</span>) <span class="kw">as</span> <span class="kw">cancel</span></span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>            <span class="kw">from</span> runner_orders</span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>        ) cte</span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">group</span> <span class="kw">by</span> runner_id</span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> p.runner_id,</span>
+<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span></span>
+<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">when</span> w.whole_cancel <span class="op">=</span> <span class="dv">0</span> <span class="cf">then</span> <span class="kw">null</span></span>
+<span id="cb40-25"><a href="#cb40-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> <span class="fu">round</span>(</span>
+<span id="cb40-26"><a href="#cb40-26" aria-hidden="true" tabindex="-1"></a>            (p.part_cancel:<span class="ch">:numeric</span> <span class="op">/</span> w.whole_cancel) <span class="op">*</span> <span class="dv">100</span>,</span>
+<span id="cb40-27"><a href="#cb40-27" aria-hidden="true" tabindex="-1"></a>            <span class="dv">2</span></span>
+<span id="cb40-28"><a href="#cb40-28" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb40-29"><a href="#cb40-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span> <span class="kw">as</span> <span class="kw">percent</span></span>
+<span id="cb40-30"><a href="#cb40-30" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> part p</span>
+<span id="cb40-31"><a href="#cb40-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">inner</span> <span class="kw">join</span> whole w <span class="kw">on</span> p.runner_id <span class="op">=</span> w.runner_id;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>3 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">runner_id</th>
+<th style="text-align: right;">percent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">100</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+<section id="c.-ingredient-optimisation" class="level3">
+<h3 class="anchored" data-anchor-id="c.-ingredient-optimisation">C. Ingredient Optimisation</h3>
+<section id="what-are-the-standard-ingredients-for-each-pizza" class="level4">
+<h4 class="anchored" data-anchor-id="what-are-the-standard-ingredients-for-each-pizza">1. What are the standard ingredients for each pizza?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> pn.pizza_name, pt.topping_name</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> pizza_names pn <span class="kw">inner</span> <span class="kw">join</span> new_pizza_recipes np</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="kw">on</span> pn.pizza_id <span class="op">=</span> np.pizza_id</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="kw">inner</span> <span class="kw">join</span> pizza_toppings pt <span class="kw">on</span> pt.topping_id:<span class="ch">:text</span> <span class="op">=</span> <span class="kw">ANY</span> (np.toppings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">pizza_name</th>
+<th style="text-align: left;">topping_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Meatlovers</td>
+<td style="text-align: left;">Bacon</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Meatlovers</td>
+<td style="text-align: left;">BBQ Sauce</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Meatlovers</td>
+<td style="text-align: left;">Beef</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Meatlovers</td>
+<td style="text-align: left;">Cheese</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Meatlovers</td>
+<td style="text-align: left;">Chicken</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Meatlovers</td>
+<td style="text-align: left;">Mushrooms</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Meatlovers</td>
+<td style="text-align: left;">Pepperoni</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Meatlovers</td>
+<td style="text-align: left;">Salami</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Vegetarian</td>
+<td style="text-align: left;">Cheese</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Vegetarian</td>
+<td style="text-align: left;">Mushrooms</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+<section id="d.-pricing-and-ratings" class="level3">
+<h3 class="anchored" data-anchor-id="d.-pricing-and-ratings">D. Pricing and Ratings</h3>
+<section id="if-a-meat-lovers-pizza-costs-12-and-vegetarian-costs-10-and-there-were-no-charges-for-changes-how-much-money-has-pizza-runner-made-so-far-if-there-are-no-delivery-fees" class="level4">
+<h4 class="anchored" data-anchor-id="if-a-meat-lovers-pizza-costs-12-and-vegetarian-costs-10-and-there-were-no-charges-for-changes-how-much-money-has-pizza-runner-made-so-far-if-there-are-no-delivery-fees">1. If a Meat Lovers pizza costs $12 and Vegetarian costs $10 and there were no charges for changes, how much money has Pizza Runner made so far if there are no delivery fees?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Creating a view of cleaned data</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">OR</span> <span class="kw">REPLACE</span> <span class="kw">VIEW</span> clean_runner_orders <span class="kw">AS</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> order_id,</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    runner_id,</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">CASE</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">WHEN</span> pickup_time <span class="op">=</span> <span class="st">'null'</span> <span class="cf">THEN</span> <span class="kw">NULL</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">ELSE</span> pickup_time:<span class="ch">:TIMESTAMP</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">END</span>,</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cast</span>(substring(distance, <span class="st">'[0-9\-+\.]+'</span>) <span class="kw">as</span> <span class="dt">float</span>) <span class="kw">as</span> distance,</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cast</span>(substring(duration, <span class="st">'[0-9\-+\.]+'</span>) <span class="kw">as</span> <span class="dt">float</span>) <span class="kw">as</span> duration,</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">nullif</span>(cancellation, <span class="st">''</span>) <span class="op">||</span> <span class="fu">nullif</span>(cancellation, <span class="st">'null'</span>) <span class="kw">as</span> cancellation</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> runner_orders;</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a><span class="co">--</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">with</span> cte1 <span class="kw">as</span> (</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">select</span> co.pizza_id,</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">count</span>(co.pizza_id) <span class="kw">as</span> quantity_sold</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">from</span> clean_runner_orders ro</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">inner</span> <span class="kw">join</span> customer_orders co <span class="kw">on</span> co.order_id <span class="op">=</span> ro.order_id</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> cancellation <span class="kw">is</span> <span class="kw">null</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">GROUP</span> <span class="kw">BY</span> <span class="dv">1</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> pizza_id,</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>    quantity_sold <span class="op">*</span> price <span class="kw">as</span> revenue</span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> (</span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>        <span class="kw">select</span> <span class="op">*</span>,</span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">CASE</span></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>                <span class="cf">WHEN</span> cte1.pizza_id <span class="op">=</span> <span class="dv">1</span> <span class="cf">THEN</span> <span class="dv">12</span></span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>                <span class="cf">WHEN</span> cte1.pizza_id <span class="op">=</span> <span class="dv">2</span> <span class="cf">THEN</span> <span class="dv">10</span></span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">END</span> <span class="kw">AS</span> price</span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">from</span> cte1</span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a>    ) sq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>2 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">pizza_id</th>
+<th style="text-align: right;">revenue</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">108</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">30</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Creating a random integer generator</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="kw">create</span> <span class="kw">or</span> <span class="kw">replace</span> <span class="kw">function</span> random_between(low <span class="dt">int</span>, high <span class="dt">int</span>) returns <span class="dt">int</span> <span class="kw">as</span> $$ <span class="cf">begin</span> <span class="kw">return</span> <span class="fu">floor</span>(<span class="kw">random</span>() <span class="op">*</span> (high <span class="op">-</span> low <span class="op">+</span> <span class="dv">1</span>) <span class="op">+</span> low);</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span>;</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>$$ language <span class="st">'plpgsql'</span> STRICT;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="if-a-meat-lovers-pizza-was-12-and-vegetarian-10-fixed-prices-with-no-cost-for-extras-and-each-runner-is-paid-0.30-per-kilometre-travelled-how-much-money-does-pizza-runner-have-left-over-after-these-deliveries" class="level4">
+<h4 class="anchored" data-anchor-id="if-a-meat-lovers-pizza-was-12-and-vegetarian-10-fixed-prices-with-no-cost-for-extras-and-each-runner-is-paid-0.30-per-kilometre-travelled-how-much-money-does-pizza-runner-have-left-over-after-these-deliveries">2. If a Meat Lovers pizza was $12 and Vegetarian $10 fixed prices with no cost for extras and each runner is paid $0.30 per kilometre travelled, how much money does Pizza Runner have left over after these deliveries?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="kw">with</span> cte <span class="kw">as</span> (</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">select</span> co.pizza_id,</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>        ro.distance <span class="op">*</span> <span class="fl">0.3</span> <span class="kw">as</span> runner_cost,</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">CASE</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">WHEN</span> co.pizza_id <span class="op">=</span> <span class="dv">1</span> <span class="cf">THEN</span> <span class="dv">12</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">WHEN</span> co.pizza_id <span class="op">=</span> <span class="dv">2</span> <span class="cf">THEN</span> <span class="dv">10</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">END</span> <span class="kw">AS</span> price</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">from</span> clean_runner_orders ro</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">inner</span> <span class="kw">join</span> customer_orders co <span class="kw">on</span> co.order_id <span class="op">=</span> ro.order_id</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span> cancellation <span class="kw">is</span> <span class="kw">null</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="fu">sum</span>(price) revenue,</span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(<span class="fu">sum</span>(runner_cost):<span class="ch">:numeric</span>, <span class="dv">2</span>) <span class="kw">cost</span>,</span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(<span class="fu">sum</span>(price) <span class="op">-</span> <span class="fu">sum</span>(runner_cost):<span class="ch">:numeric</span>, <span class="dv">2</span>) profit</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> cte</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="knitsql-table">
+<table class="table table-sm table-striped small">
+<caption>1 records</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">revenue</th>
+<th style="text-align: right;">cost</th>
+<th style="text-align: right;">profit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">138</td>
+<td style="text-align: right;">64.62</td>
+<td style="text-align: right;">73.38</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="closing-the-connection" class="level2">
+<h2 class="anchored" data-anchor-id="closing-the-connection">Closing the connection</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{joshua2023,
+  author = {Joshua, Edun and Joshua, Edun},
+  title = {Chapter 1: {The} {Causal-Behavioral} {Framework} for {Data}
+    {Analysis}},
+  date = {2023-11-21},
+  url = {https://joshuaolubori.onrender.com/posts/2023-11-21-BDA-1},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-joshua2023" class="csl-entry quarto-appendix-citeas" role="listitem">
+Joshua, Edun, and Edun Joshua. 2023. <span>“Chapter 1: The
+Causal-Behavioral Framework for Data Analysis.”</span> November 21,
+2023. <a href="https://joshuaolubori.onrender.com/posts/2023-11-21-BDA-1">https://joshuaolubori.onrender.com/posts/2023-11-21-BDA-1</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp("https:\/\/joshuaolubori\.onrender\.com");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+      }
+    }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Blog made with 💚 and <a href="https://quarto.org/">Quarto</a>, by Edun Joshua. License: <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>.</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="../../about.html">About</a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/JoshuaOlubori">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://joshua_olubori.com">
+      <i class="bi bi-instagram" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com">
+      <i class="bi bi-twitter" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:joshuaolubori@gmail.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
