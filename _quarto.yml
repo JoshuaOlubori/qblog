@@ -5,12 +5,12 @@ website:
   title: "Chamber of (data) secrets"
   description: "A data science blog by Edun Joshua"
   site-url: https://joshuaolubori.onrender.com
-  repo-url: https://github.com/djnavarro/quarto-blog
+  repo-url: https://github.com/JoshuaOlubori/qblog
   # open-graph: true
   search: false
-  # twitter-card:
-  #   creator: "@djnavarro"
-  #   card-style: summary_large_image
+  twitter-card:
+    creator: "@olubori_joshua"
+    card-style: summary_large_image
   navbar:
     title: false
     background: "#eee"
@@ -19,6 +19,8 @@ website:
         text: Home
       - href: posts_index.qmd
         text: Posts
+      - href: about.qmd
+        text: About
     # right:
     #   - text: Sites
     #     menu:
@@ -43,4 +45,6 @@ format:
     css: styles.css
 
 
-
+comments:
+  giscus:
+    repo: JoshuaOlubori/qblog

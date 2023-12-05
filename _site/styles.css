@@ -174,4 +174,29 @@ main, p{
     font-family: "SF Pro Text", Helvetica, sans-serif;
   }
   
-  
+ div > img.about-image[src="profile.JPEG"] {
+    background: url(./profile.JPEG);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    /* width: 300px;
+    height: 300px; */
+    box-shadow: inset 0 0 0 9px rgb(255 255 255 / 30%);
+    justify-self: center;
+    animation: profile__animate 8s ease-in-out infinite 1s;
+}
+
+@keyframes profile__animate {
+    0% {
+        border-radius: 60% 40% 30% 70%/60% 30% 70% 40%;
+    }
+
+    50% {
+        border-radius: 30% 60% 70% 40%/50% 30% 30% 60%;
+    }
+
+    100% {
+        border-radius: 60% 40% 30% 70%/60% 30% 70% 40%;
+    }
+
+}

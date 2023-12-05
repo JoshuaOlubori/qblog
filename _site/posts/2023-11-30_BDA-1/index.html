@@ -88,6 +88,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../../styles.css">
+<meta name="twitter:title" content="Chamber of (data) secrets - The Causal-Behavioral Framework for Data Analysis">
+<meta name="twitter:description" content="Introductory part to a series on Florent Buisson’s book, Behavioral Data Analysis with R &amp; Python">
+<meta name="twitter:image" content="https://joshuaolubori.onrender.com/posts/2023-11-30_BDA-1/images/framework.PNG">
+<meta name="twitter:creator" content="@olubori_joshua">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-fixed fullcontent">
@@ -109,6 +114,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="../../posts_index.html" rel="" target="">
  <span class="menu-text">Posts</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
 </ul>
             <div class="quarto-navbar-tools ms-auto">
 </div>
@@ -123,7 +132,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <h1 class="title">The Causal-Behavioral Framework for Data Analysis</h1>
             <p class="subtitle lead">Introductory part to a series on Florent Buisson’s book, Behavioral Data Analysis with R &amp; Python</p>
                                 <div class="quarto-categories">
-                <div class="quarto-category">sql</div>
+                <div class="quarto-category">causal regression modelling</div>
               </div>
                   </div>
   </div>
@@ -175,6 +184,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/data_1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Sales information in chap1-stand_data.csv</figcaption>
 </figure>
 </div>
 <div class="cell">
@@ -183,23 +193,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_stylize</span>(<span class="at">style=</span><span class="dv">6</span>, <span class="at">color=</span><span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
-<div id="bxltnujahv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#bxltnujahv table {
+<div id="yactjcmakt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#yactjcmakt table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#bxltnujahv thead, #bxltnujahv tbody, #bxltnujahv tfoot, #bxltnujahv tr, #bxltnujahv td, #bxltnujahv th {
+#yactjcmakt thead, #yactjcmakt tbody, #yactjcmakt tfoot, #yactjcmakt tr, #yactjcmakt td, #yactjcmakt th {
   border-style: none;
 }
 
-#bxltnujahv p {
+#yactjcmakt p {
   margin: 0;
   padding: 0;
 }
 
-#bxltnujahv .gt_table {
+#yactjcmakt .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -225,12 +235,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#bxltnujahv .gt_caption {
+#yactjcmakt .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#bxltnujahv .gt_title {
+#yactjcmakt .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -242,7 +252,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#bxltnujahv .gt_subtitle {
+#yactjcmakt .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -254,7 +264,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#bxltnujahv .gt_heading {
+#yactjcmakt .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -266,13 +276,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#bxltnujahv .gt_bottom_border {
+#yactjcmakt .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #5F5F5F;
 }
 
-#bxltnujahv .gt_col_headings {
+#yactjcmakt .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #5F5F5F;
@@ -287,7 +297,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#bxltnujahv .gt_col_heading {
+#yactjcmakt .gt_col_heading {
   color: #FFFFFF;
   background-color: #0076BA;
   font-size: 100%;
@@ -307,7 +317,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#bxltnujahv .gt_column_spanner_outer {
+#yactjcmakt .gt_column_spanner_outer {
   color: #FFFFFF;
   background-color: #0076BA;
   font-size: 100%;
@@ -319,15 +329,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#bxltnujahv .gt_column_spanner_outer:first-child {
+#yactjcmakt .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#bxltnujahv .gt_column_spanner_outer:last-child {
+#yactjcmakt .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#bxltnujahv .gt_column_spanner {
+#yactjcmakt .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #5F5F5F;
@@ -339,11 +349,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#bxltnujahv .gt_spanner_row {
+#yactjcmakt .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#bxltnujahv .gt_group_heading {
+#yactjcmakt .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -369,7 +379,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#bxltnujahv .gt_empty_group_heading {
+#yactjcmakt .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -384,15 +394,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#bxltnujahv .gt_from_md > :first-child {
+#yactjcmakt .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#bxltnujahv .gt_from_md > :last-child {
+#yactjcmakt .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#bxltnujahv .gt_row {
+#yactjcmakt .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -411,7 +421,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#bxltnujahv .gt_stub {
+#yactjcmakt .gt_stub {
   color: #333333;
   background-color: #89D3FE;
   font-size: 100%;
@@ -424,7 +434,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#bxltnujahv .gt_stub_row_group {
+#yactjcmakt .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -438,15 +448,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#bxltnujahv .gt_row_group_first td {
+#yactjcmakt .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#bxltnujahv .gt_row_group_first th {
+#yactjcmakt .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#bxltnujahv .gt_summary_row {
+#yactjcmakt .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -456,16 +466,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#bxltnujahv .gt_first_summary_row {
+#yactjcmakt .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #5F5F5F;
 }
 
-#bxltnujahv .gt_first_summary_row.thick {
+#yactjcmakt .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#bxltnujahv .gt_last_summary_row {
+#yactjcmakt .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -475,7 +485,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #5F5F5F;
 }
 
-#bxltnujahv .gt_grand_summary_row {
+#yactjcmakt .gt_grand_summary_row {
   color: #333333;
   background-color: #D5D5D5;
   text-transform: inherit;
@@ -485,7 +495,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#bxltnujahv .gt_first_grand_summary_row {
+#yactjcmakt .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -495,7 +505,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #5F5F5F;
 }
 
-#bxltnujahv .gt_last_grand_summary_row_top {
+#yactjcmakt .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -505,11 +515,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #5F5F5F;
 }
 
-#bxltnujahv .gt_striped {
+#yactjcmakt .gt_striped {
   background-color: #EDF7FC;
 }
 
-#bxltnujahv .gt_table_body {
+#yactjcmakt .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #5F5F5F;
@@ -518,7 +528,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #5F5F5F;
 }
 
-#bxltnujahv .gt_footnotes {
+#yactjcmakt .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -532,7 +542,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#bxltnujahv .gt_footnote {
+#yactjcmakt .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -541,7 +551,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#bxltnujahv .gt_sourcenotes {
+#yactjcmakt .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -555,7 +565,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#bxltnujahv .gt_sourcenote {
+#yactjcmakt .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -563,63 +573,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#bxltnujahv .gt_left {
+#yactjcmakt .gt_left {
   text-align: left;
 }
 
-#bxltnujahv .gt_center {
+#yactjcmakt .gt_center {
   text-align: center;
 }
 
-#bxltnujahv .gt_right {
+#yactjcmakt .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#bxltnujahv .gt_font_normal {
+#yactjcmakt .gt_font_normal {
   font-weight: normal;
 }
 
-#bxltnujahv .gt_font_bold {
+#yactjcmakt .gt_font_bold {
   font-weight: bold;
 }
 
-#bxltnujahv .gt_font_italic {
+#yactjcmakt .gt_font_italic {
   font-style: italic;
 }
 
-#bxltnujahv .gt_super {
+#yactjcmakt .gt_super {
   font-size: 65%;
 }
 
-#bxltnujahv .gt_footnote_marks {
+#yactjcmakt .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#bxltnujahv .gt_asterisk {
+#yactjcmakt .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#bxltnujahv .gt_indent_1 {
+#yactjcmakt .gt_indent_1 {
   text-indent: 5px;
 }
 
-#bxltnujahv .gt_indent_2 {
+#yactjcmakt .gt_indent_2 {
   text-indent: 10px;
 }
 
-#bxltnujahv .gt_indent_3 {
+#yactjcmakt .gt_indent_3 {
   text-indent: 15px;
 }
 
-#bxltnujahv .gt_indent_4 {
+#yactjcmakt .gt_indent_4 {
   text-indent: 20px;
 }
 
-#bxltnujahv .gt_indent_5 {
+#yactjcmakt .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -700,8 +710,8 @@ F-statistic: 1.684e+04 on 1 and 2398 DF,  p-value: &lt; 2.2e-16</code></pre>
 <h2 class="anchored" data-anchor-id="too-many-variables-can-spoil-the-broth">Too Many Variables Can Spoil the Broth</h2>
 </section>
 <p>Remember that time when we added a bunch of random ingredients to our recipe and ended up with a weird-tasting soup? It’s the same with causal modelling.</p>
-<p>To be fair, if your goal is only to predict a variable, you have a model that is carefully designed to generalize adequately beyond your testing data, and you don't care about why the predicted variable is taking a certain value, then that's a perfectly valid stance.</p>
-<p>Let's demonstrate this with our example by adding a variable that we might be inclined to include but will bias our regression. The variable <code>IcedCoffeeSales</code> is correlated with <code>Temperature</code> but not with <code>SummerMonth</code>. Let's look at what happens to our regression if we add this variable in addition to <code>Temperature</code> and <code>SummerMonth</code> (a binary 1/0 variable that indicates if the month was July or August (1) or any other month (0)):</p>
+<p>To be fair, if your goal is only to predict a variable, you have a model that is carefully designed to generalize adequately beyond your testing data, and you don’t care about why the predicted variable is taking a certain value, then that’s a perfectly valid stance.</p>
+<p>Let’s demonstrate this with our example by adding a variable that we might be inclined to include but will bias our regression. The variable <code>IcedCoffeeSales</code> is correlated with <code>Temperature</code> but not with <code>SummerMonth</code>. Let’s look at what happens to our regression if we add this variable in addition to <code>Temperature</code> and <code>SummerMonth</code> (a binary 1/0 variable that indicates if the month was July or August (1) or any other month (0)):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(icecream_sales <span class="sc">~</span> iced_coffee_sales <span class="sc">+</span> temps <span class="sc">+</span> summer_months, <span class="at">data=</span>df1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -729,6 +739,38 @@ F-statistic: 1.344e+04 on 3 and 2396 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <p>Only <code>summer_months</code> has a statistically significant influence on <code>icecream_sales</code> . The other variable are not good predictors of the target variable and only confound the model.</p>
+<section id="another-example" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="another-example">Another example</h2>
+</section>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/data_2.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Survey information in chap1-survey_data.csv</figcaption>
+</figure>
+</div>
+<p>Imagine you’re running an ice cream stand 🍦🍨 and you want to know if people who like chocolate ice cream 🍫are more likely to buy from your shop than people who like vanilla ice. You ask a bunch of people how much they like chocolate and vanilla ice cream (on a scale of 1 to 10, of course), and whether they’ve ever bought from your shop. You find out that some people like one but not the other, some like both equally, and some like one more than the other.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/associations.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Left panel: tastes for vanilla and chocolate are uncorrelated in the overall population; middle panel: taste for vanilla is higher for people who shop at the ice cream stand than for people who don’t; right panel: same result for taste for chocolate</figcaption>
+</figure>
+</div>
+<p>Checking the association between our variables we discover 2 things:</p>
+<ul>
+<li><p>taste for vanilla ice cream and taste for chocolate ice cream are entirely uncorrelated.</p></li>
+<li><p>How much they like vanilla and chocolate affects whether they have bought from the shop</p></li>
+</ul>
+<p>All good so far! 👍 If we want to understand how both vanilla and chocolate ice cream preferences affect whether someone is a customer or not, then it makes sense to include both variables in our logistic regression model. 📈 But what if we want to know something different? What if we want to know how much the people who like vanilla ice cream also like chocolate ice cream? 🍦🍫 In other words, we’re interested in the relationship between how much someone likes vanilla ice cream and how much they like chocolate ice cream, but only for people who have <u>actually bought from the ice cream stand</u>. 🛍️ To do this, we can plot a graph of how much customers who have bought ice cream like chocolate ice cream, based on how much they like vanilla ice cream.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/vanilla-choco.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Taste for vanilla and chocolate among shoppers</figcaption>
+</figure>
+</div>
+<p>Hmm, something’s not right! 🤨 When we looked at the relationship between how much vanilla ice cream customers like and how much chocolate ice cream they like, we found a weird pattern: people who like one flavor tend to dislike the other. 🤯 But don’t worry, vanilla lovers aren’t suddenly becoming chocolate haters, and vice versa! 👎 This strange correlation was actually caused by the way we looked at the data.</p>
+<p>We only looked at people who had <u>bought ice cream from the stand</u>, and this left out a lot of people who might have liked both flavours but didn’t buy any ice cream. If someone has a weak taste for both vanilla and chocolate ice creams, they are most likely not shoppers. if someone has a strong taste for vanilla, they might shop at your stand even if they don’t have a strong taste for chocolate. However, since you excluded non-shoppers, you removed a bunch of data points that should exist in the lower left quadrant of the scatterplot. If they were included, a positive relationship would be observed.</p>
+<p>So, next time you’re looking at data, be sure to consider all of the data points, not just the ones that fit your expectations.😉</p>
+<p>Up next, chapter 2!</p>
 
 
 
@@ -965,6 +1007,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
+</script>
+<script src="https://giscus.app/client.js" data-repo="JoshuaOlubori/qblog" data-repo-id="R_kgDOKvhXew" data-category="General" data-category-id="DIC_kwDOKvhXe84CbFeH" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
 <footer class="footer">

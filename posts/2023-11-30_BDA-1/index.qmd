@@ -3,7 +3,7 @@ title: "The Causal-Behavioral Framework for Data Analysis"
 subtitle: "Introductory part to a series on Florent Buisson's book, Behavioral Data Analysis with R & Python"
 author: "Edun Joshua"
 date: "2023-11-19"
-categories: [causal ]
+categories: [causal regression modelling]
 image: "images/framework.PNG"
 ---
 
@@ -75,7 +75,9 @@ summary(lm(icecream_sales ~ iced_coffee_sales + temps + summer_months, data=df1)
 
 Only `summer_months` has a statistically significant influence on `icecream_sales` . The other variable are not good predictors of the target variable and only confound the model.
 
-## Another example {style="color: #25D366;"}
+::: {style="color: #25D366;"}
+## Another example
+:::
 
 ![Survey information in chap1-survey_data.csv](images/data_2.png){fig-align="center"}
 

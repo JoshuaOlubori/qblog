@@ -13,7 +13,8 @@
       "B3049D40",
       "posts/*/*.qmd",
       "posts/*.qmd",
-      "**/*/index.qmd"
+      "**/*/index.qmd",
+      "posts/*/index.qmd"
     ]
   }
 }

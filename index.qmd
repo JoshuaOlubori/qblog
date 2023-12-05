@@ -37,7 +37,7 @@ get_post_categories <- function(post) {
     return(character(0))
   }
   file |>
-    readLines() |> 
+    readLines(warn=FALSE) |> 
     stringr::str_subset("^categories:") |>
     stringr::str_extract("\\[.*\\]") |> 
     stringr::str_remove_all("[\\[\\]]") |>
