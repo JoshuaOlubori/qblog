@@ -2,7 +2,7 @@
 title: "The Causal-Behavioral Framework for Data Analysis"
 subtitle: "Introductory part to a series on Florent Buisson's book, Behavioral Data Analysis with R & Python"
 author: "Edun Joshua"
-date: "2023-11-25"
+date: "2023-11-30"
 categories: [causal regression modelling]
 image: "images/framework.PNG"
 ---
