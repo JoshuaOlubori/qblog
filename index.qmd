@@ -1,6 +1,7 @@
 ---
 title: "Chamber of (data) secrets"
 subtitle: A blog by Edun Joshua
+comments: false
 listing:
   feed: true
   contents: "posts/*/index.qmd"

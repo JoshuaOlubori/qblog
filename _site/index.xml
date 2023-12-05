@@ -15,7 +15,672 @@
 <link>https://joshuaolubori.onrender.com/index.html</link>
 </image>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Sat, 18 Nov 2023 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 24 Nov 2023 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>The Causal-Behavioral Framework for Data Analysis</title>
+  <dc:creator>Edun Joshua</dc:creator>
+  <link>https://joshuaolubori.onrender.com/posts/2023-11-30_BDA-1/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="disclaimer" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="disclaimer">Disclaimer</h2>
+</section>
+<p>Please Note: The ideas presented in this article are not my own original thoughts. This material is merely a condensed version of my study notes based on Florent Buisson’s excellent book. Due to the need for brevity, certain nuances of these concepts have been omitted. For a more comprehensive understanding, please refer to the original source.</p>
+<section id="causal-analytics-unraveling-the-mystery-behind-why-things-happen" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="causal-analytics-unraveling-the-mystery-behind-why-things-happen">Causal Analytics: 🕵️‍♂️Unraveling the Mystery Behind Why Things Happen</h2>
+</section>
+<p>Predictive analytics is like having a super cool fortune teller 🔮who can predict what’s going to happen next. But causal analytics is like being a detective 🕵️‍♀️🕵️‍♂️, trying to figure out why things happen in the first place 🤔. In predictive analytics, we just want to find a bunch of clues 🕵️‍♀️🕵️‍♂️ that can help us guess what’s going to happen next, even if those clues aren’t actually causing it to happen. But in causal analytics, we’re not just interested in guessing 🔮, we want to understand the real reasons behind things 🧠.</p>
+<p>Imagine you want to know if eating more fruits and veggies 🍎🥦 will make you healthier 💪. Predictive analytics might tell you that people who eat more fruits and veggies tend to be healthier, but that doesn’t mean the fruits and veggies are actually causing the better health. It could be that healthier people just tend to make healthier choices overall 🏃‍♀️🚴🥗.</p>
+<p>So, how do we really know if eating more fruits and veggies is making us healthier? That’s where causal analytics comes in 🕵️‍♀️🕵️‍♂️. We need to carefully choose the clues we use to solve the mystery, making sure they’re not just guessing 🔮but actually helping us understand the real reasons behind things 🧠.</p>
+<section id="data" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="data">Data</h2>
+</section>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://joshuaolubori.onrender.com/posts/2023-11-30_BDA-1/images/data_1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Sales information in chap1-stand_data.csv</figcaption>
+</figure>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">df1 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">read_csv</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"chap1-stand_data.csv"</span>)</span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(df1) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">gt</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span></span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">opt_stylize</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">style=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"blue"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+
+<div id="gzlkuahpes" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gzlkuahpes table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#gzlkuahpes thead, #gzlkuahpes tbody, #gzlkuahpes tfoot, #gzlkuahpes tr, #gzlkuahpes td, #gzlkuahpes th {
+  border-style: none;
+}
+
+#gzlkuahpes p {
+  margin: 0;
+  padding: 0;
+}
+
+#gzlkuahpes .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#gzlkuahpes .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#gzlkuahpes .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#gzlkuahpes .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#gzlkuahpes .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#gzlkuahpes .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#gzlkuahpes .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#gzlkuahpes .gt_col_heading {
+  color: #FFFFFF;
+  background-color: #0076BA;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#gzlkuahpes .gt_column_spanner_outer {
+  color: #FFFFFF;
+  background-color: #0076BA;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#gzlkuahpes .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#gzlkuahpes .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#gzlkuahpes .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#gzlkuahpes .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#gzlkuahpes .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#gzlkuahpes .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  vertical-align: middle;
+}
+
+#gzlkuahpes .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#gzlkuahpes .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#gzlkuahpes .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: none;
+  border-top-width: 1px;
+  border-top-color: #D5D5D5;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D5D5D5;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D5D5D5;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#gzlkuahpes .gt_stub {
+  color: #333333;
+  background-color: #89D3FE;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D5D5D5;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gzlkuahpes .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#gzlkuahpes .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#gzlkuahpes .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#gzlkuahpes .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gzlkuahpes .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #5F5F5F;
+}
+
+#gzlkuahpes .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#gzlkuahpes .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#gzlkuahpes .gt_grand_summary_row {
+  color: #333333;
+  background-color: #D5D5D5;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gzlkuahpes .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #5F5F5F;
+}
+
+#gzlkuahpes .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #5F5F5F;
+}
+
+#gzlkuahpes .gt_striped {
+  background-color: #EDF7FC;
+}
+
+#gzlkuahpes .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#gzlkuahpes .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#gzlkuahpes .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gzlkuahpes .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#gzlkuahpes .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gzlkuahpes .gt_left {
+  text-align: left;
+}
+
+#gzlkuahpes .gt_center {
+  text-align: center;
+}
+
+#gzlkuahpes .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#gzlkuahpes .gt_font_normal {
+  font-weight: normal;
+}
+
+#gzlkuahpes .gt_font_bold {
+  font-weight: bold;
+}
+
+#gzlkuahpes .gt_font_italic {
+  font-style: italic;
+}
+
+#gzlkuahpes .gt_super {
+  font-size: 65%;
+}
+
+#gzlkuahpes .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#gzlkuahpes .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#gzlkuahpes .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#gzlkuahpes .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#gzlkuahpes .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#gzlkuahpes .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#gzlkuahpes .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="icecream_sales">icecream_sales</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="iced_coffee_sales">iced_coffee_sales</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="summer_months">summer_months</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="temps">temps</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="icecream_sales" class="gt_row gt_right">25649.78</td>
+<td headers="iced_coffee_sales" class="gt_row gt_right">28592.18</td>
+<td headers="summer_months" class="gt_row gt_right">0</td>
+<td headers="temps" class="gt_row gt_right">28.59314</td></tr>
+    <tr><td headers="icecream_sales" class="gt_row gt_right gt_striped">32694.93</td>
+<td headers="iced_coffee_sales" class="gt_row gt_right gt_striped">37152.84</td>
+<td headers="summer_months" class="gt_row gt_right gt_striped">0</td>
+<td headers="temps" class="gt_row gt_right gt_striped">37.13064</td></tr>
+    <tr><td headers="icecream_sales" class="gt_row gt_right">26467.80</td>
+<td headers="iced_coffee_sales" class="gt_row gt_right">24074.19</td>
+<td headers="summer_months" class="gt_row gt_right">0</td>
+<td headers="temps" class="gt_row gt_right">24.11190</td></tr>
+    <tr><td headers="icecream_sales" class="gt_row gt_right gt_striped">43438.79</td>
+<td headers="iced_coffee_sales" class="gt_row gt_right gt_striped">49169.47</td>
+<td headers="summer_months" class="gt_row gt_right gt_striped">0</td>
+<td headers="temps" class="gt_row gt_right gt_striped">49.21807</td></tr>
+    <tr><td headers="icecream_sales" class="gt_row gt_right">52452.63</td>
+<td headers="iced_coffee_sales" class="gt_row gt_right">47249.40</td>
+<td headers="summer_months" class="gt_row gt_right">0</td>
+<td headers="temps" class="gt_row gt_right">47.25766</td></tr>
+    <tr><td headers="icecream_sales" class="gt_row gt_right gt_striped">34130.66</td>
+<td headers="iced_coffee_sales" class="gt_row gt_right gt_striped">34228.50</td>
+<td headers="summer_months" class="gt_row gt_right gt_striped">0</td>
+<td headers="temps" class="gt_row gt_right gt_striped">34.25746</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<section id="why-correlation-is-not-causation-a-confounder-in-action" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="why-correlation-is-not-causation-a-confounder-in-action">Why Correlation Is Not Causation: A Confounder in Action</h2>
+</section>
+<p>Imagine you’re an ice cream 🍦 seller and you want to know if hotter days ☀️mean more ice cream sales 🤑. You track the temperature and your sales for a while and find that for every degree the temperature rises, your sales go up by $1,171!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lm</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"icecream_sales ~ temps"</span>,<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data=</span>df1))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = "icecream_sales ~ temps", data = df1)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-30272  -5197   -494   3787  37430 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -6169.844    531.506  -11.61   &lt;2e-16 ***
+temps        1171.335      9.027  129.76   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 8730 on 2398 degrees of freedom
+Multiple R-squared:  0.8753,    Adjusted R-squared:  0.8753 
+F-statistic: 1.684e+04 on 1 and 2398 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>You’re excited and think you’ve found the perfect formula for success!🤑 But then something strange happens. October comes around and it’s a scorcher 🥵, but your sales actually drop! 😨 What gives?</p>
+<p>After some sleuthing, you realize that the culprit is school 🏫. In the summer, kids are out of school and have more time to enjoy ice cream 🍦. But in October, they’re back in class and have less time for frozen treats.</p>
+<p>So, even though the temperature was high, your sales dropped because of the school year. This is called a “confounder” 😵. <strong>A confounder is something that can make it look like something else is causing a (third) something when it’s actually not.</strong></p>
+<p>In this case, the school year made it look like the temperature was causing sales to drop, when it was really the school year all along 🏫. So, next time you’re trying to figure out what’s causing something, be sure to watch out for confounders! 👀👀</p>
+<section id="too-many-variables-can-spoil-the-broth" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="too-many-variables-can-spoil-the-broth">Too Many Variables Can Spoil the Broth</h2>
+</section>
+<p>Remember that time when we added a bunch of random ingredients to our recipe and ended up with a weird-tasting soup? It’s the same with causal modelling.</p>
+<p>To be fair, if your goal is only to predict a variable, you have a model that is carefully designed to generalize adequately beyond your testing data, and you don’t care about why the predicted variable is taking a certain value, then that’s a perfectly valid stance.</p>
+<p>Let’s demonstrate this with our example by adding a variable that we might be inclined to include but will bias our regression. The variable <code>IcedCoffeeSales</code> is correlated with <code>Temperature</code> but not with <code>SummerMonth</code>. Let’s look at what happens to our regression if we add this variable in addition to <code>Temperature</code> and <code>SummerMonth</code> (a binary 1/0 variable that indicates if the month was July or August (1) or any other month (0)):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lm</span>(icecream_sales <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> iced_coffee_sales <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> temps <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> summer_months, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data=</span>df1))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = icecream_sales ~ iced_coffee_sales + temps + summer_months, 
+    data = df1)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-25763.1  -3364.4     78.6   3317.5  27512.0 
+
+Coefficients:
+                   Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)         -15.827    374.581  -0.042    0.966    
+iced_coffee_sales    -1.701      2.083  -0.817    0.414    
+temps              2702.788   2083.161   1.297    0.195    
+summer_months     19548.168    361.572  54.064   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 5859 on 2396 degrees of freedom
+Multiple R-squared:  0.9439,    Adjusted R-squared:  0.9438 
+F-statistic: 1.344e+04 on 3 and 2396 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>Only <code>summer_months</code> has a statistically significant influence on <code>icecream_sales</code> . The other variable are not good predictors of the target variable and only confound the model.</p>
+<section id="another-example" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="another-example">Another example</h2>
+</section>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://joshuaolubori.onrender.com/posts/2023-11-30_BDA-1/images/data_2.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Survey information in chap1-survey_data.csv</figcaption>
+</figure>
+</div>
+<p>Imagine you’re running an ice cream stand 🍦🍨 and you want to know if people who like chocolate ice cream 🍫are more likely to buy from your shop than people who like vanilla ice. You ask a bunch of people how much they like chocolate and vanilla ice cream (on a scale of 1 to 10, of course), and whether they’ve ever bought from your shop. You find out that some people like one but not the other, some like both equally, and some like one more than the other.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://joshuaolubori.onrender.com/posts/2023-11-30_BDA-1/images/associations.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Left panel: tastes for vanilla and chocolate are uncorrelated in the overall population; middle panel: taste for vanilla is higher for people who shop at the ice cream stand than for people who don’t; right panel: same result for taste for chocolate</figcaption>
+</figure>
+</div>
+<p>Checking the association between our variables we discover 2 things:</p>
+<ul>
+<li><p>taste for vanilla ice cream and taste for chocolate ice cream are entirely uncorrelated.</p></li>
+<li><p>How much they like vanilla and chocolate affects whether they have bought from the shop</p></li>
+</ul>
+<p>All good so far! 👍 If we want to understand how both vanilla and chocolate ice cream preferences affect whether someone is a customer or not, then it makes sense to include both variables in our logistic regression model. 📈 But what if we want to know something different? What if we want to know how much the people who like vanilla ice cream also like chocolate ice cream? 🍦🍫 In other words, we’re interested in the relationship between how much someone likes vanilla ice cream and how much they like chocolate ice cream, but only for people who have <u>actually bought from the ice cream stand</u>. 🛍️ To do this, we can plot a graph of how much customers who have bought ice cream like chocolate ice cream, based on how much they like vanilla ice cream.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://joshuaolubori.onrender.com/posts/2023-11-30_BDA-1/images/vanilla-choco.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Taste for vanilla and chocolate among shoppers</figcaption>
+</figure>
+</div>
+<p>Hmm, something’s not right! 🤨 When we looked at the relationship between how much vanilla ice cream customers like and how much chocolate ice cream they like, we found a weird pattern: people who like one flavor tend to dislike the other. 🤯 But don’t worry, vanilla lovers aren’t suddenly becoming chocolate haters, and vice versa! 👎 This strange correlation was actually caused by the way we looked at the data.</p>
+<p>We only looked at people who had <u>bought ice cream from the stand</u>, and this left out a lot of people who might have liked both flavours but didn’t buy any ice cream. If someone has a weak taste for both vanilla and chocolate ice creams, they are most likely not shoppers. if someone has a strong taste for vanilla, they might shop at your stand even if they don’t have a strong taste for chocolate. However, since you excluded non-shoppers, you removed a bunch of data points that should exist in the lower left quadrant of the scatterplot. If they were included, a positive relationship would be observed.</p>
+<p>So, next time you’re looking at data, be sure to consider all of the data points, not just the ones that fit your expectations.😉</p>
+<p>Up next, chapter 2!</p>
+
+
+
+ ]]></description>
+  <category>causal regression modelling</category>
+  <guid>https://joshuaolubori.onrender.com/posts/2023-11-30_BDA-1/index.html</guid>
+  <pubDate>Fri, 24 Nov 2023 23:00:00 GMT</pubDate>
+  <media:content url="https://joshuaolubori.onrender.com/posts/2023-11-30_BDA-1/images/framework.PNG" medium="image"/>
+</item>
 <item>
   <title>Pizza Runner</title>
   <dc:creator>Edun Joshua</dc:creator>
@@ -3818,671 +4483,6 @@ font-style: inherit;">dbDisconnect</span>(con)</span></code></pre></div>
   <guid>https://joshuaolubori.onrender.com/posts/2023-11-19_8weeks-sql-challenge-4/index.html</guid>
   <pubDate>Sat, 18 Nov 2023 23:00:00 GMT</pubDate>
   <media:content url="https://joshuaolubori.onrender.com/posts/2023-11-19_8weeks-sql-challenge-4/image.PNG" medium="image"/>
-</item>
-<item>
-  <title>The Causal-Behavioral Framework for Data Analysis</title>
-  <dc:creator>Edun Joshua</dc:creator>
-  <link>https://joshuaolubori.onrender.com/posts/2023-11-30_BDA-1/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<section id="disclaimer" class="level2" style="color: #25D366;">
-<h2 class="anchored" data-anchor-id="disclaimer">Disclaimer</h2>
-</section>
-<p>Please Note: The ideas presented in this article are not my own original thoughts. This material is merely a condensed version of my study notes based on Florent Buisson’s excellent book. Due to the need for brevity, certain nuances of these concepts have been omitted. For a more comprehensive understanding, please refer to the original source.</p>
-<section id="causal-analytics-unraveling-the-mystery-behind-why-things-happen" class="level2" style="color: #25D366;">
-<h2 class="anchored" data-anchor-id="causal-analytics-unraveling-the-mystery-behind-why-things-happen">Causal Analytics: 🕵️‍♂️Unraveling the Mystery Behind Why Things Happen</h2>
-</section>
-<p>Predictive analytics is like having a super cool fortune teller 🔮who can predict what’s going to happen next. But causal analytics is like being a detective 🕵️‍♀️🕵️‍♂️, trying to figure out why things happen in the first place 🤔. In predictive analytics, we just want to find a bunch of clues 🕵️‍♀️🕵️‍♂️ that can help us guess what’s going to happen next, even if those clues aren’t actually causing it to happen. But in causal analytics, we’re not just interested in guessing 🔮, we want to understand the real reasons behind things 🧠.</p>
-<p>Imagine you want to know if eating more fruits and veggies 🍎🥦 will make you healthier 💪. Predictive analytics might tell you that people who eat more fruits and veggies tend to be healthier, but that doesn’t mean the fruits and veggies are actually causing the better health. It could be that healthier people just tend to make healthier choices overall 🏃‍♀️🚴🥗.</p>
-<p>So, how do we really know if eating more fruits and veggies is making us healthier? That’s where causal analytics comes in 🕵️‍♀️🕵️‍♂️. We need to carefully choose the clues we use to solve the mystery, making sure they’re not just guessing 🔮but actually helping us understand the real reasons behind things 🧠.</p>
-<section id="data" class="level2" style="color: #25D366;">
-<h2 class="anchored" data-anchor-id="data">Data</h2>
-</section>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://joshuaolubori.onrender.com/posts/2023-11-30_BDA-1/images/data_1.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Sales information in chap1-stand_data.csv</figcaption>
-</figure>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">df1 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">read_csv</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"chap1-stand_data.csv"</span>)</span>
-<span id="cb1-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">head</span>(df1) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%&gt;%</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">gt</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%&gt;%</span></span>
-<span id="cb1-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">opt_stylize</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">6</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">color=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"blue"</span>)</span></code></pre></div>
-<div class="cell-output-display">
-
-<div id="yactjcmakt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#yactjcmakt table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#yactjcmakt thead, #yactjcmakt tbody, #yactjcmakt tfoot, #yactjcmakt tr, #yactjcmakt td, #yactjcmakt th {
-  border-style: none;
-}
-
-#yactjcmakt p {
-  margin: 0;
-  padding: 0;
-}
-
-#yactjcmakt .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #5F5F5F;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #5F5F5F;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#yactjcmakt .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#yactjcmakt .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#yactjcmakt .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#yactjcmakt .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#yactjcmakt .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #5F5F5F;
-}
-
-#yactjcmakt .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #5F5F5F;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #5F5F5F;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#yactjcmakt .gt_col_heading {
-  color: #FFFFFF;
-  background-color: #0076BA;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#yactjcmakt .gt_column_spanner_outer {
-  color: #FFFFFF;
-  background-color: #0076BA;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#yactjcmakt .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#yactjcmakt .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#yactjcmakt .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #5F5F5F;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#yactjcmakt .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#yactjcmakt .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #5F5F5F;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #5F5F5F;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#yactjcmakt .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #5F5F5F;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #5F5F5F;
-  vertical-align: middle;
-}
-
-#yactjcmakt .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#yactjcmakt .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#yactjcmakt .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: none;
-  border-top-width: 1px;
-  border-top-color: #D5D5D5;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D5D5D5;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D5D5D5;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#yactjcmakt .gt_stub {
-  color: #333333;
-  background-color: #89D3FE;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D5D5D5;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#yactjcmakt .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#yactjcmakt .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#yactjcmakt .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#yactjcmakt .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#yactjcmakt .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #5F5F5F;
-}
-
-#yactjcmakt .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#yactjcmakt .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #5F5F5F;
-}
-
-#yactjcmakt .gt_grand_summary_row {
-  color: #333333;
-  background-color: #D5D5D5;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#yactjcmakt .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #5F5F5F;
-}
-
-#yactjcmakt .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #5F5F5F;
-}
-
-#yactjcmakt .gt_striped {
-  background-color: #EDF7FC;
-}
-
-#yactjcmakt .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #5F5F5F;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #5F5F5F;
-}
-
-#yactjcmakt .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#yactjcmakt .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#yactjcmakt .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#yactjcmakt .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#yactjcmakt .gt_left {
-  text-align: left;
-}
-
-#yactjcmakt .gt_center {
-  text-align: center;
-}
-
-#yactjcmakt .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#yactjcmakt .gt_font_normal {
-  font-weight: normal;
-}
-
-#yactjcmakt .gt_font_bold {
-  font-weight: bold;
-}
-
-#yactjcmakt .gt_font_italic {
-  font-style: italic;
-}
-
-#yactjcmakt .gt_super {
-  font-size: 65%;
-}
-
-#yactjcmakt .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#yactjcmakt .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#yactjcmakt .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#yactjcmakt .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#yactjcmakt .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#yactjcmakt .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#yactjcmakt .gt_indent_5 {
-  text-indent: 25px;
-}
-</style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="icecream_sales">icecream_sales</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="iced_coffee_sales">iced_coffee_sales</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="summer_months">summer_months</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="temps">temps</th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="icecream_sales" class="gt_row gt_right">25649.78</td>
-<td headers="iced_coffee_sales" class="gt_row gt_right">28592.18</td>
-<td headers="summer_months" class="gt_row gt_right">0</td>
-<td headers="temps" class="gt_row gt_right">28.59314</td></tr>
-    <tr><td headers="icecream_sales" class="gt_row gt_right gt_striped">32694.93</td>
-<td headers="iced_coffee_sales" class="gt_row gt_right gt_striped">37152.84</td>
-<td headers="summer_months" class="gt_row gt_right gt_striped">0</td>
-<td headers="temps" class="gt_row gt_right gt_striped">37.13064</td></tr>
-    <tr><td headers="icecream_sales" class="gt_row gt_right">26467.80</td>
-<td headers="iced_coffee_sales" class="gt_row gt_right">24074.19</td>
-<td headers="summer_months" class="gt_row gt_right">0</td>
-<td headers="temps" class="gt_row gt_right">24.11190</td></tr>
-    <tr><td headers="icecream_sales" class="gt_row gt_right gt_striped">43438.79</td>
-<td headers="iced_coffee_sales" class="gt_row gt_right gt_striped">49169.47</td>
-<td headers="summer_months" class="gt_row gt_right gt_striped">0</td>
-<td headers="temps" class="gt_row gt_right gt_striped">49.21807</td></tr>
-    <tr><td headers="icecream_sales" class="gt_row gt_right">52452.63</td>
-<td headers="iced_coffee_sales" class="gt_row gt_right">47249.40</td>
-<td headers="summer_months" class="gt_row gt_right">0</td>
-<td headers="temps" class="gt_row gt_right">47.25766</td></tr>
-    <tr><td headers="icecream_sales" class="gt_row gt_right gt_striped">34130.66</td>
-<td headers="iced_coffee_sales" class="gt_row gt_right gt_striped">34228.50</td>
-<td headers="summer_months" class="gt_row gt_right gt_striped">0</td>
-<td headers="temps" class="gt_row gt_right gt_striped">34.25746</td></tr>
-  </tbody>
-  
-  
-</table>
-</div>
-</div>
-</div>
-<section id="why-correlation-is-not-causation-a-confounder-in-action" class="level2" style="color: #25D366;">
-<h2 class="anchored" data-anchor-id="why-correlation-is-not-causation-a-confounder-in-action">Why Correlation Is Not Causation: A Confounder in Action</h2>
-</section>
-<p>Imagine you’re an ice cream 🍦 seller and you want to know if hotter days ☀️mean more ice cream sales 🤑. You track the temperature and your sales for a while and find that for every degree the temperature rises, your sales go up by $1,171!</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">summary</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">lm</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"icecream_sales ~ temps"</span>,<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">data=</span>df1))</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = "icecream_sales ~ temps", data = df1)
-
-Residuals:
-   Min     1Q Median     3Q    Max 
--30272  -5197   -494   3787  37430 
-
-Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -6169.844    531.506  -11.61   &lt;2e-16 ***
-temps        1171.335      9.027  129.76   &lt;2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 8730 on 2398 degrees of freedom
-Multiple R-squared:  0.8753,    Adjusted R-squared:  0.8753 
-F-statistic: 1.684e+04 on 1 and 2398 DF,  p-value: &lt; 2.2e-16</code></pre>
-</div>
-</div>
-<p>You’re excited and think you’ve found the perfect formula for success!🤑 But then something strange happens. October comes around and it’s a scorcher 🥵, but your sales actually drop! 😨 What gives?</p>
-<p>After some sleuthing, you realize that the culprit is school 🏫. In the summer, kids are out of school and have more time to enjoy ice cream 🍦. But in October, they’re back in class and have less time for frozen treats.</p>
-<p>So, even though the temperature was high, your sales dropped because of the school year. This is called a “confounder” 😵. <strong>A confounder is something that can make it look like something else is causing a (third) something when it’s actually not.</strong></p>
-<p>In this case, the school year made it look like the temperature was causing sales to drop, when it was really the school year all along 🏫. So, next time you’re trying to figure out what’s causing something, be sure to watch out for confounders! 👀👀</p>
-<section id="too-many-variables-can-spoil-the-broth" class="level2" style="color: #25D366;">
-<h2 class="anchored" data-anchor-id="too-many-variables-can-spoil-the-broth">Too Many Variables Can Spoil the Broth</h2>
-</section>
-<p>Remember that time when we added a bunch of random ingredients to our recipe and ended up with a weird-tasting soup? It’s the same with causal modelling.</p>
-<p>To be fair, if your goal is only to predict a variable, you have a model that is carefully designed to generalize adequately beyond your testing data, and you don’t care about why the predicted variable is taking a certain value, then that’s a perfectly valid stance.</p>
-<p>Let’s demonstrate this with our example by adding a variable that we might be inclined to include but will bias our regression. The variable <code>IcedCoffeeSales</code> is correlated with <code>Temperature</code> but not with <code>SummerMonth</code>. Let’s look at what happens to our regression if we add this variable in addition to <code>Temperature</code> and <code>SummerMonth</code> (a binary 1/0 variable that indicates if the month was July or August (1) or any other month (0)):</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">summary</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">lm</span>(icecream_sales <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">~</span> iced_coffee_sales <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> temps <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> summer_months, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">data=</span>df1))</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = icecream_sales ~ iced_coffee_sales + temps + summer_months, 
-    data = df1)
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--25763.1  -3364.4     78.6   3317.5  27512.0 
-
-Coefficients:
-                   Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)         -15.827    374.581  -0.042    0.966    
-iced_coffee_sales    -1.701      2.083  -0.817    0.414    
-temps              2702.788   2083.161   1.297    0.195    
-summer_months     19548.168    361.572  54.064   &lt;2e-16 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 5859 on 2396 degrees of freedom
-Multiple R-squared:  0.9439,    Adjusted R-squared:  0.9438 
-F-statistic: 1.344e+04 on 3 and 2396 DF,  p-value: &lt; 2.2e-16</code></pre>
-</div>
-</div>
-<p>Only <code>summer_months</code> has a statistically significant influence on <code>icecream_sales</code> . The other variable are not good predictors of the target variable and only confound the model.</p>
-<section id="another-example" class="level2" style="color: #25D366;">
-<h2 class="anchored" data-anchor-id="another-example">Another example</h2>
-</section>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://joshuaolubori.onrender.com/posts/2023-11-30_BDA-1/images/data_2.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Survey information in chap1-survey_data.csv</figcaption>
-</figure>
-</div>
-<p>Imagine you’re running an ice cream stand 🍦🍨 and you want to know if people who like chocolate ice cream 🍫are more likely to buy from your shop than people who like vanilla ice. You ask a bunch of people how much they like chocolate and vanilla ice cream (on a scale of 1 to 10, of course), and whether they’ve ever bought from your shop. You find out that some people like one but not the other, some like both equally, and some like one more than the other.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://joshuaolubori.onrender.com/posts/2023-11-30_BDA-1/images/associations.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Left panel: tastes for vanilla and chocolate are uncorrelated in the overall population; middle panel: taste for vanilla is higher for people who shop at the ice cream stand than for people who don’t; right panel: same result for taste for chocolate</figcaption>
-</figure>
-</div>
-<p>Checking the association between our variables we discover 2 things:</p>
-<ul>
-<li><p>taste for vanilla ice cream and taste for chocolate ice cream are entirely uncorrelated.</p></li>
-<li><p>How much they like vanilla and chocolate affects whether they have bought from the shop</p></li>
-</ul>
-<p>All good so far! 👍 If we want to understand how both vanilla and chocolate ice cream preferences affect whether someone is a customer or not, then it makes sense to include both variables in our logistic regression model. 📈 But what if we want to know something different? What if we want to know how much the people who like vanilla ice cream also like chocolate ice cream? 🍦🍫 In other words, we’re interested in the relationship between how much someone likes vanilla ice cream and how much they like chocolate ice cream, but only for people who have <u>actually bought from the ice cream stand</u>. 🛍️ To do this, we can plot a graph of how much customers who have bought ice cream like chocolate ice cream, based on how much they like vanilla ice cream.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://joshuaolubori.onrender.com/posts/2023-11-30_BDA-1/images/vanilla-choco.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Taste for vanilla and chocolate among shoppers</figcaption>
-</figure>
-</div>
-<p>Hmm, something’s not right! 🤨 When we looked at the relationship between how much vanilla ice cream customers like and how much chocolate ice cream they like, we found a weird pattern: people who like one flavor tend to dislike the other. 🤯 But don’t worry, vanilla lovers aren’t suddenly becoming chocolate haters, and vice versa! 👎 This strange correlation was actually caused by the way we looked at the data.</p>
-<p>We only looked at people who had <u>bought ice cream from the stand</u>, and this left out a lot of people who might have liked both flavours but didn’t buy any ice cream. If someone has a weak taste for both vanilla and chocolate ice creams, they are most likely not shoppers. if someone has a strong taste for vanilla, they might shop at your stand even if they don’t have a strong taste for chocolate. However, since you excluded non-shoppers, you removed a bunch of data points that should exist in the lower left quadrant of the scatterplot. If they were included, a positive relationship would be observed.</p>
-<p>So, next time you’re looking at data, be sure to consider all of the data points, not just the ones that fit your expectations.😉</p>
-<p>Up next, chapter 2!</p>
-
-
-
- ]]></description>
-  <category>causal regression modelling</category>
-  <guid>https://joshuaolubori.onrender.com/posts/2023-11-30_BDA-1/index.html</guid>
-  <pubDate>Sat, 18 Nov 2023 23:00:00 GMT</pubDate>
-  <media:content url="https://joshuaolubori.onrender.com/posts/2023-11-30_BDA-1/images/framework.PNG" medium="image"/>
 </item>
 <item>
   <title>Danny’s Diner</title>
