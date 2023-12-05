@@ -14,6 +14,12 @@ about:
     - icon: linkedin
       text: LinkedIn
       href: https://linkedin.com/in/joshua-edun
+    - icon: Kaggle
+      text: Kaggle
+      href: https://www.kaggle.com/joshuaolubori/code
+    - icon: Medium
+      text: Medium
+      href: https://www.medium.com/@joshuaolubori
 ---
 
 Edun Joshua is a data enthusiast and an environmental engineering student. Data science is a reprieve from the existential crises that haunt him.
