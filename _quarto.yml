@@ -2,6 +2,7 @@ project:
   type: website
 
 website:
+  google-analytics: "G-X2C4499YPY"
   title: "Chamber of (data) secrets"
   description: "A data science blog by Edun Joshua"
   site-url: https://joshuaolubori.onrender.com
