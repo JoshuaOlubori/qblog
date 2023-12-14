@@ -55,5 +55,23 @@
   },
   "posts/2023-11-30_BDA-1/index.qmd": {
     "index.html": "cec05de5"
+  },
+  "posts/2022_05_28_UK-accidents/index.qmd": {
+    "index.html": "074dc614"
+  },
+  "posts/2022_05_28_Adventure-works/Adw README 3.md": {
+    "Adw README 3.html": "9f0ff7fd"
+  },
+  "posts/2022_05_28_Adventure-works/index.qmd": {
+    "index.html": "ebd91ae5"
+  },
+  "posts/2022_05_28_COVID-NGA-analysis/index.qmd": {
+    "index.html": "49449f72"
+  },
+  "posts/2022_05_28_COVID-NGA-analysis/nga_covid19.ipynb": {
+    "nga_covid19.html": "dc9e6cff"
+  },
+  "posts/2022_05_28_UK-accidents/UK Road Accidents.md": {
+    "UK Road Accidents.html": "205de4f9"
   }
 }

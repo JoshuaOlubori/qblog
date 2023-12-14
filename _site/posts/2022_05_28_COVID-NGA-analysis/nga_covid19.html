@@ -1,0 +1,3532 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Chamber of (data) secrets – nga_covid19</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-X2C4499YPY"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../posts_index.html" rel="" target="">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools ms-auto">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+<div class="cell" data-execution_count="174">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.dates <span class="im">as</span> mdates</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.dates <span class="im">import</span> DateFormatter</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Importing the neccesary libraries..</p>
+<p>Reading the files and inspecting the data…</p>
+<div class="cell" data-execution_count="175">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>nga <span class="op">=</span> pd.read_csv(<span class="st">"nga_subnational_covid19_hera.csv"</span>, sep<span class="op">=</span><span class="st">";"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="176">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#checking the columns</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>nga.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="176">
+<pre><code>Index(['ID', 'DATE', 'ISO_3', 'PAYS', 'ID_PAYS', 'REGION', 'ID_REGION',
+       'CONTAMINES', 'DECES', 'GUERIS', 'CONTAMINES_FEMME', 'CONTAMINES_HOMME',
+       'CONTAMINES_GENRE_NON_SPECIFIE', 'SOURCE'],
+      dtype='object')</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="177">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>nga.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="177">
+<pre><code>(26866, 14)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="178">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nga.head(<span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   ID        DATE ISO_3     PAYS  ID_PAYS       REGION  ID_REGION  CONTAMINES  \
+0   1  27/02/2020   NGA  Nigéria       15         Abia        170         0.0   
+1   2  27/02/2020   NGA  Nigéria       15      Adamawa        171         0.0   
+2   3  27/02/2020   NGA  Nigéria       15    Akwa Ibom        172         0.0   
+3   4  27/02/2020   NGA  Nigéria       15      Anambra        173         0.0   
+4   5  27/02/2020   NGA  Nigéria       15       Bauchi        174         0.0   
+5   6  27/02/2020   NGA  Nigéria       15      Bayelsa        175         0.0   
+6   7  27/02/2020   NGA  Nigéria       15        Benue        176         0.0   
+7   8  27/02/2020   NGA  Nigéria       15        Borno        177         0.0   
+8   9  27/02/2020   NGA  Nigéria       15  Cross River        178         0.0   
+9  10  27/02/2020   NGA  Nigéria       15        Delta        179         0.0   
+
+   DECES  GUERIS  CONTAMINES_FEMME  CONTAMINES_HOMME  \
+0    0.0     0.0               0.0               0.0   
+1    0.0     0.0               0.0               0.0   
+2    0.0     0.0               0.0               0.0   
+3    0.0     0.0               0.0               0.0   
+4    0.0     0.0               0.0               0.0   
+5    0.0     0.0               0.0               0.0   
+6    0.0     0.0               0.0               0.0   
+7    0.0     0.0               0.0               0.0   
+8    0.0     0.0               0.0               0.0   
+9    0.0     0.0               0.0               0.0   
+
+   CONTAMINES_GENRE_NON_SPECIFIE                              SOURCE  
+0                            0.0  Nigeria Centre for Disease Control  
+1                            0.0  Nigeria Centre for Disease Control  
+2                            0.0  Nigeria Centre for Disease Control  
+3                            0.0  Nigeria Centre for Disease Control  
+4                            0.0  Nigeria Centre for Disease Control  
+5                            0.0  Nigeria Centre for Disease Control  
+6                            0.0  Nigeria Centre for Disease Control  
+7                            0.0  Nigeria Centre for Disease Control  
+8                            0.0  Nigeria Centre for Disease Control  
+9                            0.0  Nigeria Centre for Disease Control  </code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="179">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>nga.tail()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="179">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">ID</th>
+<th data-quarto-table-cell-role="th">DATE</th>
+<th data-quarto-table-cell-role="th">ISO_3</th>
+<th data-quarto-table-cell-role="th">PAYS</th>
+<th data-quarto-table-cell-role="th">ID_PAYS</th>
+<th data-quarto-table-cell-role="th">REGION</th>
+<th data-quarto-table-cell-role="th">ID_REGION</th>
+<th data-quarto-table-cell-role="th">CONTAMINES</th>
+<th data-quarto-table-cell-role="th">DECES</th>
+<th data-quarto-table-cell-role="th">GUERIS</th>
+<th data-quarto-table-cell-role="th">CONTAMINES_FEMME</th>
+<th data-quarto-table-cell-role="th">CONTAMINES_HOMME</th>
+<th data-quarto-table-cell-role="th">CONTAMINES_GENRE_NON_SPECIFIE</th>
+<th data-quarto-table-cell-role="th">SOURCE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26861</td>
+<td>26862</td>
+<td>02/02/2022</td>
+<td>NGA</td>
+<td>Nigéria</td>
+<td>15</td>
+<td>Sokoto</td>
+<td>203</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">26862</td>
+<td>26863</td>
+<td>02/02/2022</td>
+<td>NGA</td>
+<td>Nigéria</td>
+<td>15</td>
+<td>Taraba</td>
+<td>204</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26863</td>
+<td>26864</td>
+<td>02/02/2022</td>
+<td>NGA</td>
+<td>Nigéria</td>
+<td>15</td>
+<td>Yobe</td>
+<td>205</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">26864</td>
+<td>26865</td>
+<td>02/02/2022</td>
+<td>NGA</td>
+<td>Nigéria</td>
+<td>15</td>
+<td>Zamfara</td>
+<td>206</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26865</td>
+<td>26866</td>
+<td>02/02/2022</td>
+<td>NGA</td>
+<td>Nigéria</td>
+<td>15</td>
+<td>Non spécifié</td>
+<td>207</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="180">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>nga.describe()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#negative numbers present in contamines,gueris, homme, non_specifie columns</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="180">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">ID</th>
+<th data-quarto-table-cell-role="th">ID_PAYS</th>
+<th data-quarto-table-cell-role="th">ID_REGION</th>
+<th data-quarto-table-cell-role="th">CONTAMINES</th>
+<th data-quarto-table-cell-role="th">DECES</th>
+<th data-quarto-table-cell-role="th">GUERIS</th>
+<th data-quarto-table-cell-role="th">CONTAMINES_FEMME</th>
+<th data-quarto-table-cell-role="th">CONTAMINES_HOMME</th>
+<th data-quarto-table-cell-role="th">CONTAMINES_GENRE_NON_SPECIFIE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>26866.000000</td>
+<td>26866.0</td>
+<td>26866.00000</td>
+<td>26802.000000</td>
+<td>26463.000000</td>
+<td>26280.000000</td>
+<td>17734.000000</td>
+<td>17734.000000</td>
+<td>23663.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>13433.500000</td>
+<td>15.0</td>
+<td>188.50000</td>
+<td>9.440452</td>
+<td>0.118467</td>
+<td>8.714574</td>
+<td>2.197023</td>
+<td>1.259276</td>
+<td>8.102481</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>7755.690502</td>
+<td>0.0</td>
+<td>10.96606</td>
+<td>45.747271</td>
+<td>0.942725</td>
+<td>107.723565</td>
+<td>25.365332</td>
+<td>15.169063</td>
+<td>46.874095</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>1.000000</td>
+<td>15.0</td>
+<td>170.00000</td>
+<td>-1.000000</td>
+<td>0.000000</td>
+<td>-46.000000</td>
+<td>0.000000</td>
+<td>-90.000000</td>
+<td>-1.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>6717.250000</td>
+<td>15.0</td>
+<td>179.00000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>13433.500000</td>
+<td>15.0</td>
+<td>188.50000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>20149.750000</td>
+<td>15.0</td>
+<td>198.00000</td>
+<td>3.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>26866.000000</td>
+<td>15.0</td>
+<td>207.00000</td>
+<td>3393.000000</td>
+<td>79.000000</td>
+<td>10946.000000</td>
+<td>696.000000</td>
+<td>493.000000</td>
+<td>3393.000000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Checking for null values…</p>
+<div class="cell" data-execution_count="181">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>nga.isna().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="181">
+<pre><code>ID                                  0
+DATE                                0
+ISO_3                               0
+PAYS                                0
+ID_PAYS                             0
+REGION                              0
+ID_REGION                           0
+CONTAMINES                         64
+DECES                             403
+GUERIS                            586
+CONTAMINES_FEMME                 9132
+CONTAMINES_HOMME                 9132
+CONTAMINES_GENRE_NON_SPECIFIE    3203
+SOURCE                              0
+dtype: int64</code></pre>
+</div>
+</div>
+<p>Filling in the null values with the median values per column</p>
+<div class="cell" data-execution_count="182">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>nga[<span class="st">'CONTAMINES'</span>]<span class="op">=</span>nga.CONTAMINES.fillna(nga.CONTAMINES.median())</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>nga[<span class="st">'DECES'</span>]<span class="op">=</span>nga.DECES.fillna(nga.DECES.median())</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>nga[<span class="st">'GUERIS'</span>]<span class="op">=</span>nga.GUERIS.fillna(nga.GUERIS.median())</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>nga[<span class="st">'CONTAMINES_FEMME'</span>]<span class="op">=</span>nga.CONTAMINES_FEMME.fillna(nga.CONTAMINES_FEMME.median())</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>nga[<span class="st">'CONTAMINES_HOMME'</span>]<span class="op">=</span>nga.CONTAMINES_HOMME.fillna(nga.CONTAMINES_HOMME.median())</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>nga[<span class="st">'CONTAMINES_GENRE_NON_SPECIFIE'</span>]<span class="op">=</span>nga.CONTAMINES_GENRE_NON_SPECIFIE.fillna(nga.CONTAMINES_GENRE_NON_SPECIFIE.median())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="183">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#checking for null values</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>nga.isna().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="183">
+<pre><code>ID                               0
+DATE                             0
+ISO_3                            0
+PAYS                             0
+ID_PAYS                          0
+REGION                           0
+ID_REGION                        0
+CONTAMINES                       0
+DECES                            0
+GUERIS                           0
+CONTAMINES_FEMME                 0
+CONTAMINES_HOMME                 0
+CONTAMINES_GENRE_NON_SPECIFIE    0
+SOURCE                           0
+dtype: int64</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="184">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>nga.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="184">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">ID</th>
+<th data-quarto-table-cell-role="th">ID_PAYS</th>
+<th data-quarto-table-cell-role="th">ID_REGION</th>
+<th data-quarto-table-cell-role="th">CONTAMINES</th>
+<th data-quarto-table-cell-role="th">DECES</th>
+<th data-quarto-table-cell-role="th">GUERIS</th>
+<th data-quarto-table-cell-role="th">CONTAMINES_FEMME</th>
+<th data-quarto-table-cell-role="th">CONTAMINES_HOMME</th>
+<th data-quarto-table-cell-role="th">CONTAMINES_GENRE_NON_SPECIFIE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>26866.000000</td>
+<td>26866.0</td>
+<td>26866.00000</td>
+<td>26866.000000</td>
+<td>26866.000000</td>
+<td>26866.000000</td>
+<td>26866.000000</td>
+<td>26866.000000</td>
+<td>26866.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>13433.500000</td>
+<td>15.0</td>
+<td>188.50000</td>
+<td>9.417963</td>
+<td>0.116690</td>
+<td>8.524492</td>
+<td>1.450234</td>
+<td>0.831237</td>
+<td>7.136492</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>7755.690502</td>
+<td>0.0</td>
+<td>10.96606</td>
+<td>45.695065</td>
+<td>0.935739</td>
+<td>106.549817</td>
+<td>20.634374</td>
+<td>12.338562</td>
+<td>44.069426</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>1.000000</td>
+<td>15.0</td>
+<td>170.00000</td>
+<td>-1.000000</td>
+<td>0.000000</td>
+<td>-46.000000</td>
+<td>0.000000</td>
+<td>-90.000000</td>
+<td>-1.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>6717.250000</td>
+<td>15.0</td>
+<td>179.00000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>13433.500000</td>
+<td>15.0</td>
+<td>188.50000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>20149.750000</td>
+<td>15.0</td>
+<td>198.00000</td>
+<td>3.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>26866.000000</td>
+<td>15.0</td>
+<td>207.00000</td>
+<td>3393.000000</td>
+<td>79.000000</td>
+<td>10946.000000</td>
+<td>696.000000</td>
+<td>493.000000</td>
+<td>3393.000000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>I observe from the code above that some columns contain negative values. These are probable input errors. I replace them with the median values per column.</p>
+<div class="cell" data-execution_count="185">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>nga.GUERIS <span class="op">=</span> np.<span class="bu">abs</span>(nga.GUERIS)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>nga.CONTAMINES <span class="op">=</span> np.<span class="bu">abs</span>(nga.CONTAMINES)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>nga.CONTAMINES_HOMME <span class="op">=</span> np.<span class="bu">abs</span>(nga.CONTAMINES_HOMME)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>nga.CONTAMINES <span class="op">=</span> np.<span class="bu">abs</span>(nga.CONTAMINES)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>nga.CONTAMINES_GENRE_NON_SPECIFIE <span class="op">=</span> np.<span class="bu">abs</span>(nga.CONTAMINES_GENRE_NON_SPECIFIE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="186">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>nga.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="186">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">ID</th>
+<th data-quarto-table-cell-role="th">ID_PAYS</th>
+<th data-quarto-table-cell-role="th">ID_REGION</th>
+<th data-quarto-table-cell-role="th">CONTAMINES</th>
+<th data-quarto-table-cell-role="th">DECES</th>
+<th data-quarto-table-cell-role="th">GUERIS</th>
+<th data-quarto-table-cell-role="th">CONTAMINES_FEMME</th>
+<th data-quarto-table-cell-role="th">CONTAMINES_HOMME</th>
+<th data-quarto-table-cell-role="th">CONTAMINES_GENRE_NON_SPECIFIE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>26866.000000</td>
+<td>26866.0</td>
+<td>26866.00000</td>
+<td>26866.000000</td>
+<td>26866.000000</td>
+<td>26866.000000</td>
+<td>26866.000000</td>
+<td>26866.000000</td>
+<td>26866.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>13433.500000</td>
+<td>15.0</td>
+<td>188.50000</td>
+<td>9.418038</td>
+<td>0.116690</td>
+<td>8.528735</td>
+<td>1.450234</td>
+<td>0.837936</td>
+<td>7.136567</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>7755.690502</td>
+<td>0.0</td>
+<td>10.96606</td>
+<td>45.695049</td>
+<td>0.935739</td>
+<td>106.549477</td>
+<td>20.634374</td>
+<td>12.338109</td>
+<td>44.069414</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>1.000000</td>
+<td>15.0</td>
+<td>170.00000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>6717.250000</td>
+<td>15.0</td>
+<td>179.00000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>13433.500000</td>
+<td>15.0</td>
+<td>188.50000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>20149.750000</td>
+<td>15.0</td>
+<td>198.00000</td>
+<td>3.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>26866.000000</td>
+<td>15.0</td>
+<td>207.00000</td>
+<td>3393.000000</td>
+<td>79.000000</td>
+<td>10946.000000</td>
+<td>696.000000</td>
+<td>493.000000</td>
+<td>3393.000000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="187">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>nga.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="187">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">ID</th>
+<th data-quarto-table-cell-role="th">DATE</th>
+<th data-quarto-table-cell-role="th">ISO_3</th>
+<th data-quarto-table-cell-role="th">PAYS</th>
+<th data-quarto-table-cell-role="th">ID_PAYS</th>
+<th data-quarto-table-cell-role="th">REGION</th>
+<th data-quarto-table-cell-role="th">ID_REGION</th>
+<th data-quarto-table-cell-role="th">CONTAMINES</th>
+<th data-quarto-table-cell-role="th">DECES</th>
+<th data-quarto-table-cell-role="th">GUERIS</th>
+<th data-quarto-table-cell-role="th">CONTAMINES_FEMME</th>
+<th data-quarto-table-cell-role="th">CONTAMINES_HOMME</th>
+<th data-quarto-table-cell-role="th">CONTAMINES_GENRE_NON_SPECIFIE</th>
+<th data-quarto-table-cell-role="th">SOURCE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>27/02/2020</td>
+<td>NGA</td>
+<td>Nigéria</td>
+<td>15</td>
+<td>Abia</td>
+<td>170</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>27/02/2020</td>
+<td>NGA</td>
+<td>Nigéria</td>
+<td>15</td>
+<td>Adamawa</td>
+<td>171</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>27/02/2020</td>
+<td>NGA</td>
+<td>Nigéria</td>
+<td>15</td>
+<td>Akwa Ibom</td>
+<td>172</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>27/02/2020</td>
+<td>NGA</td>
+<td>Nigéria</td>
+<td>15</td>
+<td>Anambra</td>
+<td>173</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>27/02/2020</td>
+<td>NGA</td>
+<td>Nigéria</td>
+<td>15</td>
+<td>Bauchi</td>
+<td>174</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Now the values are all integers</p>
+<p>The columns are in French. I rename each accordingly below</p>
+<div class="cell" data-execution_count="188">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>nga.rename(columns<span class="op">=</span>{</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ID'</span>: <span class="st">'id'</span>,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'DATE'</span>: <span class="st">'date'</span>,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ISO_3'</span>: <span class="st">'iso_3'</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'PAYS'</span>: <span class="st">'country'</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ID_PAYS'</span>: <span class="st">'country_id'</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'REGION'</span>: <span class="st">'state'</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ID_REGION'</span>: <span class="st">'state_id'</span>,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'CONTAMINES'</span>: <span class="st">'confirmed'</span>,</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'DECES'</span>: <span class="st">'deaths'</span>,</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'GUERIS'</span>: <span class="st">'recovered'</span>,</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'CONTAMINES_FEMME'</span>: <span class="st">'confirmed_female'</span>,</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'CONTAMINES_HOMME'</span>: <span class="st">'confirmed_male'</span>,</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">'CONTAMINES_GENRE_NON_SPECIFIE'</span>: <span class="st">'confirmed_gender_ns'</span>,</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">'SOURCE'</span>: <span class="st">'source'</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>}, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="189">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>nga.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="189">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id</th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">iso_3</th>
+<th data-quarto-table-cell-role="th">country</th>
+<th data-quarto-table-cell-role="th">country_id</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">state_id</th>
+<th data-quarto-table-cell-role="th">confirmed</th>
+<th data-quarto-table-cell-role="th">deaths</th>
+<th data-quarto-table-cell-role="th">recovered</th>
+<th data-quarto-table-cell-role="th">confirmed_female</th>
+<th data-quarto-table-cell-role="th">confirmed_male</th>
+<th data-quarto-table-cell-role="th">confirmed_gender_ns</th>
+<th data-quarto-table-cell-role="th">source</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>27/02/2020</td>
+<td>NGA</td>
+<td>Nigéria</td>
+<td>15</td>
+<td>Abia</td>
+<td>170</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>27/02/2020</td>
+<td>NGA</td>
+<td>Nigéria</td>
+<td>15</td>
+<td>Adamawa</td>
+<td>171</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>27/02/2020</td>
+<td>NGA</td>
+<td>Nigéria</td>
+<td>15</td>
+<td>Akwa Ibom</td>
+<td>172</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>27/02/2020</td>
+<td>NGA</td>
+<td>Nigéria</td>
+<td>15</td>
+<td>Anambra</td>
+<td>173</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>27/02/2020</td>
+<td>NGA</td>
+<td>Nigéria</td>
+<td>15</td>
+<td>Bauchi</td>
+<td>174</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>‘Nigeria’ is misspelt. Correcting the error.</p>
+<div class="cell" data-execution_count="190">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>nga.country<span class="op">=</span>nga.country.replace([<span class="st">'Nigéria'</span>],<span class="st">'Nigeria'</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>nga.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="190">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id</th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">iso_3</th>
+<th data-quarto-table-cell-role="th">country</th>
+<th data-quarto-table-cell-role="th">country_id</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">state_id</th>
+<th data-quarto-table-cell-role="th">confirmed</th>
+<th data-quarto-table-cell-role="th">deaths</th>
+<th data-quarto-table-cell-role="th">recovered</th>
+<th data-quarto-table-cell-role="th">confirmed_female</th>
+<th data-quarto-table-cell-role="th">confirmed_male</th>
+<th data-quarto-table-cell-role="th">confirmed_gender_ns</th>
+<th data-quarto-table-cell-role="th">source</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>27/02/2020</td>
+<td>NGA</td>
+<td>Nigeria</td>
+<td>15</td>
+<td>Abia</td>
+<td>170</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>27/02/2020</td>
+<td>NGA</td>
+<td>Nigeria</td>
+<td>15</td>
+<td>Adamawa</td>
+<td>171</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>27/02/2020</td>
+<td>NGA</td>
+<td>Nigeria</td>
+<td>15</td>
+<td>Akwa Ibom</td>
+<td>172</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>27/02/2020</td>
+<td>NGA</td>
+<td>Nigeria</td>
+<td>15</td>
+<td>Anambra</td>
+<td>173</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>27/02/2020</td>
+<td>NGA</td>
+<td>Nigeria</td>
+<td>15</td>
+<td>Bauchi</td>
+<td>174</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>Nigeria Centre for Disease Control</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="191">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that there is only one instance of each country</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>nga[<span class="st">'country'</span>].value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="191">
+<pre><code>Nigeria    26866
+Name: country, dtype: int64</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="192">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#checking that there are 36 states</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>states <span class="op">=</span> nga[<span class="st">'state'</span>]</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(states)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0                Abia
+1             Adamawa
+2           Akwa Ibom
+3             Anambra
+4              Bauchi
+             ...     
+26861          Sokoto
+26862          Taraba
+26863            Yobe
+26864         Zamfara
+26865    Non spécifié
+Name: state, Length: 26866, dtype: object</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="193">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(states)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0                Abia
+1             Adamawa
+2           Akwa Ibom
+3             Anambra
+4              Bauchi
+             ...     
+26861          Sokoto
+26862          Taraba
+26863            Yobe
+26864         Zamfara
+26865    Non spécifié
+Name: state, Length: 26866, dtype: object</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="194">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#checking for this unwanted value</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>nga.state[<span class="dv">26865</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="194">
+<pre><code>'Non spécifié'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="195">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#converting date datattype to datetime</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>nga.date <span class="op">=</span> pd.to_datetime(nga.date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="196">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#checking if conversion is successfull</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>nga.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="196">
+<pre><code>id                              int64
+date                   datetime64[ns]
+iso_3                          object
+country                        object
+country_id                      int64
+state                          object
+state_id                        int64
+confirmed                     float64
+deaths                        float64
+recovered                     float64
+confirmed_female              float64
+confirmed_male                float64
+confirmed_gender_ns           float64
+source                         object
+dtype: object</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="197">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#dropping unwanted columns</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>nga.drop([<span class="st">'iso_3'</span>, <span class="st">'country_id'</span>, <span class="st">'state_id'</span>, <span class="st">'id'</span>], axis<span class="op">=</span><span class="dv">1</span>, inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="198">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#removing an error value (row)</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>nga.drop([<span class="dv">26865</span>], inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="199">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#removing an unwanted column</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>nga.drop([<span class="st">'source'</span>], axis<span class="op">=</span><span class="dv">1</span>, inplace<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="200">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nga.info())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 26865 entries, 0 to 26864
+Data columns (total 9 columns):
+ #   Column               Non-Null Count  Dtype         
+---  ------               --------------  -----         
+ 0   date                 26865 non-null  datetime64[ns]
+ 1   country              26865 non-null  object        
+ 2   state                26865 non-null  object        
+ 3   confirmed            26865 non-null  float64       
+ 4   deaths               26865 non-null  float64       
+ 5   recovered            26865 non-null  float64       
+ 6   confirmed_female     26865 non-null  float64       
+ 7   confirmed_male       26865 non-null  float64       
+ 8   confirmed_gender_ns  26865 non-null  float64       
+dtypes: datetime64[ns](1), float64(6), object(2)
+memory usage: 1.8+ MB
+None</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="201">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#number of confirmed cases</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nga.confirmed.<span class="bu">sum</span>())</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nga.deaths.<span class="bu">sum</span>())</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nga.recovered.<span class="bu">sum</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>253025.0
+3135.0
+229133.0</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="202">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#checking most states with confirmed cases</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>nga.sort_values(by<span class="op">=</span>[<span class="st">'confirmed'</span>], ascending<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="202">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">country</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">confirmed</th>
+<th data-quarto-table-cell-role="th">deaths</th>
+<th data-quarto-table-cell-role="th">recovered</th>
+<th data-quarto-table-cell-role="th">confirmed_female</th>
+<th data-quarto-table-cell-role="th">confirmed_male</th>
+<th data-quarto-table-cell-role="th">confirmed_gender_ns</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25256</td>
+<td>2021-12-22</td>
+<td>Nigeria</td>
+<td>Lagos</td>
+<td>3393.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>3393.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">25218</td>
+<td>2021-12-21</td>
+<td>Nigeria</td>
+<td>Lagos</td>
+<td>1552.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1552.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12868</td>
+<td>2021-01-30</td>
+<td>Nigeria</td>
+<td>Lagos</td>
+<td>1040.0</td>
+<td>0.0</td>
+<td>461.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1040.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">25066</td>
+<td>2021-12-17</td>
+<td>Nigeria</td>
+<td>Lagos</td>
+<td>906.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>906.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12374</td>
+<td>2021-01-17</td>
+<td>Nigeria</td>
+<td>Lagos</td>
+<td>901.0</td>
+<td>2.0</td>
+<td>717.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>901.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10456</td>
+<td>2020-11-28</td>
+<td>Nigeria</td>
+<td>Benue</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">10455</td>
+<td>2020-11-28</td>
+<td>Nigeria</td>
+<td>Bayelsa</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10454</td>
+<td>2020-11-28</td>
+<td>Nigeria</td>
+<td>Bauchi</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">10453</td>
+<td>2020-11-28</td>
+<td>Nigeria</td>
+<td>Anambra</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26864</td>
+<td>2022-02-02</td>
+<td>Nigeria</td>
+<td>Zamfara</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+
+<p>26865 rows × 9 columns</p>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="203">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#exporting the data</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>out_nga <span class="op">=</span> <span class="st">'nga_covid19.csv'</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>nga.to_csv(out_nga)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="204">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>nga.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 26865 entries, 0 to 26864
+Data columns (total 9 columns):
+ #   Column               Non-Null Count  Dtype         
+---  ------               --------------  -----         
+ 0   date                 26865 non-null  datetime64[ns]
+ 1   country              26865 non-null  object        
+ 2   state                26865 non-null  object        
+ 3   confirmed            26865 non-null  float64       
+ 4   deaths               26865 non-null  float64       
+ 5   recovered            26865 non-null  float64       
+ 6   confirmed_female     26865 non-null  float64       
+ 7   confirmed_male       26865 non-null  float64       
+ 8   confirmed_gender_ns  26865 non-null  float64       
+dtypes: datetime64[ns](1), float64(6), object(2)
+memory usage: 1.8+ MB</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="205">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#reading population table. The goal is to merge with nga</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>pop_nga <span class="op">=</span> pd.read_csv(<span class="vs">r"C:\Users\eduna\Documents\state_pop.txt"</span>, sep<span class="op">=</span><span class="st">'\s+'</span>)</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>pop_nga.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="205">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">population_(2022)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Lagos</td>
+<td>21,000,000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Kano</td>
+<td>12,550,598</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Kaduna</td>
+<td>8,252,366</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Oyo</td>
+<td>7,840,864</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Katsina</td>
+<td>7,831,319</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="206">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">#correcting some states misspellings</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>pop_nga.state<span class="op">=</span>pop_nga.state.replace([<span class="st">'Akwa-Ibom'</span>],<span class="st">'Akwa Ibom'</span>)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>pop_nga.state<span class="op">=</span>pop_nga.state.replace([<span class="st">'Cross-River'</span>],<span class="st">'Cross River'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="207">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#checking the correction</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>pop_nga.state[<span class="dv">13</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="207">
+<pre><code>'Akwa Ibom'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="208">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">#checking that data is clean</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>pop_nga.isna().<span class="bu">sum</span>()</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>pop_nga.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 37 entries, 0 to 36
+Data columns (total 2 columns):
+ #   Column             Non-Null Count  Dtype 
+---  ------             --------------  ----- 
+ 0   state              37 non-null     object
+ 1   population_(2022)  37 non-null     object
+dtypes: object(2)
+memory usage: 720.0+ bytes</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="209">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co">#exporting the data</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>pop_nga.to_csv(<span class="st">'pop_nga.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="210">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>nga.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="210">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">country</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">confirmed</th>
+<th data-quarto-table-cell-role="th">deaths</th>
+<th data-quarto-table-cell-role="th">recovered</th>
+<th data-quarto-table-cell-role="th">confirmed_female</th>
+<th data-quarto-table-cell-role="th">confirmed_male</th>
+<th data-quarto-table-cell-role="th">confirmed_gender_ns</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Abia</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Adamawa</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Akwa Ibom</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Anambra</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Bauchi</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="211">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co">#dropping rows with 'Non specifie'</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>nga.drop(nga.index[nga[<span class="st">'state'</span>] <span class="op">==</span> <span class="st">'Non spécifié'</span>], inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>nga[<span class="st">'state'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="211">
+<pre><code>0             Abia
+1          Adamawa
+2        Akwa Ibom
+3          Anambra
+4           Bauchi
+           ...    
+26860       Rivers
+26861       Sokoto
+26862       Taraba
+26863         Yobe
+26864      Zamfara
+Name: state, Length: 26159, dtype: object</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="212">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co">#merging the data with population data</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>nga_merged <span class="op">=</span> pd.merge(nga, pop_nga, on<span class="op">=</span><span class="st">'state'</span>, how<span class="op">=</span><span class="st">'left'</span>)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>nga_merged.head(<span class="dv">45</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="212">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">country</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">confirmed</th>
+<th data-quarto-table-cell-role="th">deaths</th>
+<th data-quarto-table-cell-role="th">recovered</th>
+<th data-quarto-table-cell-role="th">confirmed_female</th>
+<th data-quarto-table-cell-role="th">confirmed_male</th>
+<th data-quarto-table-cell-role="th">confirmed_gender_ns</th>
+<th data-quarto-table-cell-role="th">population_(2022)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Abia</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>3,727,347</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Adamawa</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>4,248,436</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Akwa Ibom</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,482,177</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Anambra</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,527,809</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Bauchi</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>6,537,314</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Bayelsa</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>2,277,961</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Benue</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,741,815</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Borno</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,860,183</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Cross River</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>3,866,269</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Delta</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,663,362</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Ebonyi</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>2,880,383</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Edo</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>4,235,595</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Ekiti</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>3,270,798</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">13</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Enugu</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>4,411,119</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">14</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Federal Capital Territory</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">15</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Gombe</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>3,256,962</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Imo</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,408,756</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Jigawa</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,828,163</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">18</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Kaduna</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>8,252,366</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">19</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Kano</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>12,550,598</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Katsina</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>7,831,319</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">21</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Kebbi</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>4,440,050</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">22</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Kogi</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>4,473,490</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">23</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Kwara</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>3,192,893</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">24</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Lagos</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>21,000,000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">25</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Nasarawa</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>2,523,395</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Niger</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,556,247</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">27</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Ogun</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>5,217,716</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">28</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Osun</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>4,705,589</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">29</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Ondo</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>4,671,695</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">30</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Oyo</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>7,840,864</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">31</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Plateau</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>4,200,442</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">32</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Rivers</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>7,303,924</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">33</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Sokoto</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>4,998,090</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">34</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Taraba</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>3,066,834</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">35</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Yobe</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>3,294,137</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">36</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Zamfara</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>4,515,427</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">37</td>
+<td>2020-02-28</td>
+<td>Nigeria</td>
+<td>Abia</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>3,727,347</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">38</td>
+<td>2020-02-28</td>
+<td>Nigeria</td>
+<td>Adamawa</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>4,248,436</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">39</td>
+<td>2020-02-28</td>
+<td>Nigeria</td>
+<td>Akwa Ibom</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,482,177</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">40</td>
+<td>2020-02-28</td>
+<td>Nigeria</td>
+<td>Anambra</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,527,809</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">41</td>
+<td>2020-02-28</td>
+<td>Nigeria</td>
+<td>Bauchi</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>6,537,314</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">42</td>
+<td>2020-02-28</td>
+<td>Nigeria</td>
+<td>Bayelsa</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>2,277,961</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">43</td>
+<td>2020-02-28</td>
+<td>Nigeria</td>
+<td>Benue</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,741,815</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">44</td>
+<td>2020-02-28</td>
+<td>Nigeria</td>
+<td>Borno</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,860,183</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="213">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co">#exporting the data</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>nga_merged.to_csv(<span class="st">'nga_merged.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>PermissionError: [Errno 13] Permission denied: 'nga_merged.csv'</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co">#checking the newly merged column</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>nga_merged.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Int64Index: 26159 entries, 0 to 26158
+Data columns (total 10 columns):
+ #   Column               Non-Null Count  Dtype         
+---  ------               --------------  -----         
+ 0   date                 26159 non-null  datetime64[ns]
+ 1   country              26159 non-null  object        
+ 2   state                26159 non-null  object        
+ 3   confirmed            26159 non-null  float64       
+ 4   deaths               26159 non-null  float64       
+ 5   recovered            26159 non-null  float64       
+ 6   confirmed_female     26159 non-null  float64       
+ 7   confirmed_male       26159 non-null  float64       
+ 8   confirmed_gender_ns  26159 non-null  float64       
+ 9   population_(2022)    25452 non-null  object        
+dtypes: datetime64[ns](1), float64(6), object(3)
+memory usage: 2.2+ MB</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co">#checking for the columns with null values</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>nga_merged.isnull().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="127">
+<pre><code>date                     0
+country                  0
+state                    0
+confirmed                0
+deaths                   0
+recovered                0
+confirmed_female         0
+confirmed_male           0
+confirmed_gender_ns      0
+population_(2022)      707
+dtype: int64</code></pre>
+</div>
+</div>
+<p>The population column has some missing values. Let’s check that out…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>nga_merged[nga_merged[<span class="st">'population_(2022)'</span>].isnull()]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="128">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">country</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">confirmed</th>
+<th data-quarto-table-cell-role="th">deaths</th>
+<th data-quarto-table-cell-role="th">recovered</th>
+<th data-quarto-table-cell-role="th">confirmed_female</th>
+<th data-quarto-table-cell-role="th">confirmed_male</th>
+<th data-quarto-table-cell-role="th">confirmed_gender_ns</th>
+<th data-quarto-table-cell-role="th">population_(2022)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">14</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Federal Capital Territory</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">51</td>
+<td>2020-02-28</td>
+<td>Nigeria</td>
+<td>Federal Capital Territory</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">88</td>
+<td>2020-02-29</td>
+<td>Nigeria</td>
+<td>Federal Capital Territory</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">125</td>
+<td>2020-01-03</td>
+<td>Nigeria</td>
+<td>Federal Capital Territory</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">162</td>
+<td>2020-02-03</td>
+<td>Nigeria</td>
+<td>Federal Capital Territory</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25988</td>
+<td>2022-01-29</td>
+<td>Nigeria</td>
+<td>Federal Capital Territory</td>
+<td>3.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>3.0</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">26025</td>
+<td>2022-01-30</td>
+<td>Nigeria</td>
+<td>Federal Capital Territory</td>
+<td>6.0</td>
+<td>0.0</td>
+<td>245.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>6.0</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26062</td>
+<td>2022-01-31</td>
+<td>Nigeria</td>
+<td>Federal Capital Territory</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">26099</td>
+<td>2022-01-02</td>
+<td>Nigeria</td>
+<td>Federal Capital Territory</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26136</td>
+<td>2022-02-02</td>
+<td>Nigeria</td>
+<td>Federal Capital Territory</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+
+<p>707 rows × 10 columns</p>
+</div>
+</div>
+</div>
+<p>The problem seems to be that values for the Federal Capital Territory were not inputed during the merging</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fixing the nans in the population column by inserting with the value of the population of the FCT</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>nga_merged[<span class="st">'population_(2022)'</span>] <span class="op">=</span> nga_merged[<span class="st">'population_(2022)'</span>].fillna(<span class="dv">3564126</span>)</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a><span class="co">#confirming that no nulls are present</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>nga_merged[nga_merged[<span class="st">'population_(2022)'</span>].isnull()]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="129">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">country</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">confirmed</th>
+<th data-quarto-table-cell-role="th">deaths</th>
+<th data-quarto-table-cell-role="th">recovered</th>
+<th data-quarto-table-cell-role="th">confirmed_female</th>
+<th data-quarto-table-cell-role="th">confirmed_male</th>
+<th data-quarto-table-cell-role="th">confirmed_gender_ns</th>
+<th data-quarto-table-cell-role="th">population_(2022)</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>nga_merged.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Int64Index: 26159 entries, 0 to 26158
+Data columns (total 10 columns):
+ #   Column               Non-Null Count  Dtype         
+---  ------               --------------  -----         
+ 0   date                 26159 non-null  datetime64[ns]
+ 1   country              26159 non-null  object        
+ 2   state                26159 non-null  object        
+ 3   confirmed            26159 non-null  float64       
+ 4   deaths               26159 non-null  float64       
+ 5   recovered            26159 non-null  float64       
+ 6   confirmed_female     26159 non-null  float64       
+ 7   confirmed_male       26159 non-null  float64       
+ 8   confirmed_gender_ns  26159 non-null  float64       
+ 9   population_(2022)    26159 non-null  object        
+dtypes: datetime64[ns](1), float64(6), object(3)
+memory usage: 2.2+ MB</code></pre>
+</div>
+</div>
+<p>Creating separate columns for year, month and date in preparation for aggregation</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Extracting the year from the date column</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>nga_merged[<span class="st">'year'</span>] <span class="op">=</span> pd.DatetimeIndex(nga_merged[<span class="st">'date'</span>]).year</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="co">#confirming</span></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>nga_merged.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="131">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">country</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">confirmed</th>
+<th data-quarto-table-cell-role="th">deaths</th>
+<th data-quarto-table-cell-role="th">recovered</th>
+<th data-quarto-table-cell-role="th">confirmed_female</th>
+<th data-quarto-table-cell-role="th">confirmed_male</th>
+<th data-quarto-table-cell-role="th">confirmed_gender_ns</th>
+<th data-quarto-table-cell-role="th">population_(2022)</th>
+<th data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Abia</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>3,727,347</td>
+<td>2020</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Adamawa</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>4,248,436</td>
+<td>2020</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Akwa Ibom</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,482,177</td>
+<td>2020</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Anambra</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,527,809</td>
+<td>2020</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Bauchi</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>6,537,314</td>
+<td>2020</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Extracting month</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>nga_merged[<span class="st">'month'</span>] <span class="op">=</span> pd.DatetimeIndex(nga_merged[<span class="st">'date'</span>]).month</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="co">#confirming</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>nga_merged.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="132">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">country</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">confirmed</th>
+<th data-quarto-table-cell-role="th">deaths</th>
+<th data-quarto-table-cell-role="th">recovered</th>
+<th data-quarto-table-cell-role="th">confirmed_female</th>
+<th data-quarto-table-cell-role="th">confirmed_male</th>
+<th data-quarto-table-cell-role="th">confirmed_gender_ns</th>
+<th data-quarto-table-cell-role="th">population_(2022)</th>
+<th data-quarto-table-cell-role="th">year</th>
+<th data-quarto-table-cell-role="th">month</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Abia</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>3,727,347</td>
+<td>2020</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Adamawa</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>4,248,436</td>
+<td>2020</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Akwa Ibom</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,482,177</td>
+<td>2020</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Anambra</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,527,809</td>
+<td>2020</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2020-02-27</td>
+<td>Nigeria</td>
+<td>Bauchi</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>6,537,314</td>
+<td>2020</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>nga_merged.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Int64Index: 26159 entries, 0 to 26158
+Data columns (total 12 columns):
+ #   Column               Non-Null Count  Dtype         
+---  ------               --------------  -----         
+ 0   date                 26159 non-null  datetime64[ns]
+ 1   country              26159 non-null  object        
+ 2   state                26159 non-null  object        
+ 3   confirmed            26159 non-null  float64       
+ 4   deaths               26159 non-null  float64       
+ 5   recovered            26159 non-null  float64       
+ 6   confirmed_female     26159 non-null  float64       
+ 7   confirmed_male       26159 non-null  float64       
+ 8   confirmed_gender_ns  26159 non-null  float64       
+ 9   population_(2022)    26159 non-null  object        
+ 10  year                 26159 non-null  int64         
+ 11  month                26159 non-null  int64         
+dtypes: datetime64[ns](1), float64(6), int64(2), object(3)
+memory usage: 2.6+ MB</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>nga_merged.to_csv(<span class="st">"nga_merged_month_year.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>nga_merged[<span class="st">'active_cases'</span>] <span class="op">=</span> nga_merged[<span class="st">'confirmed'</span>]<span class="op">-</span>(nga_merged[<span class="st">'recovered'</span>]<span class="op">+</span>nga_merged[<span class="st">'deaths'</span>])</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>nga_merged.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Int64Index: 26159 entries, 0 to 26158
+Data columns (total 13 columns):
+ #   Column               Non-Null Count  Dtype         
+---  ------               --------------  -----         
+ 0   date                 26159 non-null  datetime64[ns]
+ 1   country              26159 non-null  object        
+ 2   state                26159 non-null  object        
+ 3   confirmed            26159 non-null  float64       
+ 4   deaths               26159 non-null  float64       
+ 5   recovered            26159 non-null  float64       
+ 6   confirmed_female     26159 non-null  float64       
+ 7   confirmed_male       26159 non-null  float64       
+ 8   confirmed_gender_ns  26159 non-null  float64       
+ 9   population_(2022)    26159 non-null  object        
+ 10  year                 26159 non-null  int64         
+ 11  month                26159 non-null  int64         
+ 12  active_cases         26159 non-null  float64       
+dtypes: datetime64[ns](1), float64(7), int64(2), object(3)
+memory usage: 2.8+ MB</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>nga_merged[nga_merged[<span class="st">'active_cases'</span>].values <span class="op">&lt;</span> <span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="136">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">country</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">confirmed</th>
+<th data-quarto-table-cell-role="th">deaths</th>
+<th data-quarto-table-cell-role="th">recovered</th>
+<th data-quarto-table-cell-role="th">confirmed_female</th>
+<th data-quarto-table-cell-role="th">confirmed_male</th>
+<th data-quarto-table-cell-role="th">confirmed_gender_ns</th>
+<th data-quarto-table-cell-role="th">population_(2022)</th>
+<th data-quarto-table-cell-role="th">year</th>
+<th data-quarto-table-cell-role="th">month</th>
+<th data-quarto-table-cell-role="th">active_cases</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">767</td>
+<td>2020-03-18</td>
+<td>Nigeria</td>
+<td>Ogun</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,217,716</td>
+<td>2020</td>
+<td>3</td>
+<td>-1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">878</td>
+<td>2020-03-21</td>
+<td>Nigeria</td>
+<td>Ogun</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,217,716</td>
+<td>2020</td>
+<td>3</td>
+<td>-1.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1233</td>
+<td>2020-03-31</td>
+<td>Nigeria</td>
+<td>Ekiti</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>3,270,798</td>
+<td>2020</td>
+<td>3</td>
+<td>-1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1356</td>
+<td>2020-03-04</td>
+<td>Nigeria</td>
+<td>Lagos</td>
+<td>7.0</td>
+<td>0.0</td>
+<td>11.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>21,000,000</td>
+<td>2020</td>
+<td>3</td>
+<td>-4.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1467</td>
+<td>2020-06-04</td>
+<td>Nigeria</td>
+<td>Lagos</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>21,000,000</td>
+<td>2020</td>
+<td>6</td>
+<td>-1.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26029</td>
+<td>2022-01-30</td>
+<td>Nigeria</td>
+<td>Kaduna</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>7.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>8,252,366</td>
+<td>2022</td>
+<td>1</td>
+<td>-7.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">26030</td>
+<td>2022-01-30</td>
+<td>Nigeria</td>
+<td>Kano</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>6.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>12,550,598</td>
+<td>2022</td>
+<td>1</td>
+<td>-5.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26038</td>
+<td>2022-01-30</td>
+<td>Nigeria</td>
+<td>Ogun</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>3.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>5,217,716</td>
+<td>2022</td>
+<td>1</td>
+<td>-3.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">26039</td>
+<td>2022-01-30</td>
+<td>Nigeria</td>
+<td>Osun</td>
+<td>9.0</td>
+<td>0.0</td>
+<td>15.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>9.0</td>
+<td>4,705,589</td>
+<td>2022</td>
+<td>1</td>
+<td>-6.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26043</td>
+<td>2022-01-30</td>
+<td>Nigeria</td>
+<td>Rivers</td>
+<td>2.0</td>
+<td>0.0</td>
+<td>11.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>2.0</td>
+<td>7,303,924</td>
+<td>2022</td>
+<td>1</td>
+<td>-9.0</td>
+</tr>
+</tbody>
+</table>
+
+<p>3372 rows × 13 columns</p>
+</div>
+</div>
+</div>
+<p>The issue seems to be from the formula. And the negative values occur at dates when ‘recovered’ is greater than ‘confirmed’. At such cases, active cases should be zero</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="co">#using clip function to correct this</span></span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>nga_merged[<span class="st">'active_cases'</span>] <span class="op">=</span> nga_merged[<span class="st">'active_cases'</span>].clip(lower<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>nga_merged.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="137">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">confirmed</th>
+<th data-quarto-table-cell-role="th">deaths</th>
+<th data-quarto-table-cell-role="th">recovered</th>
+<th data-quarto-table-cell-role="th">confirmed_female</th>
+<th data-quarto-table-cell-role="th">confirmed_male</th>
+<th data-quarto-table-cell-role="th">confirmed_gender_ns</th>
+<th data-quarto-table-cell-role="th">year</th>
+<th data-quarto-table-cell-role="th">month</th>
+<th data-quarto-table-cell-role="th">active_cases</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>26159.000000</td>
+<td>26159.000000</td>
+<td>26159.000000</td>
+<td>26159.0</td>
+<td>26159.0</td>
+<td>26159.000000</td>
+<td>26159.000000</td>
+<td>26159.000000</td>
+<td>26159.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>9.672579</td>
+<td>0.119844</td>
+<td>8.759242</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>7.329447</td>
+<td>2020.609618</td>
+<td>6.595474</td>
+<td>6.319584</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>46.281864</td>
+<td>0.948101</td>
+<td>107.970440</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>44.645168</td>
+<td>0.575629</td>
+<td>3.429761</td>
+<td>38.039798</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>2020.000000</td>
+<td>1.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>2020.000000</td>
+<td>4.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>2021.000000</td>
+<td>7.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>3.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.000000</td>
+<td>2021.000000</td>
+<td>10.000000</td>
+<td>0.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>3393.000000</td>
+<td>79.000000</td>
+<td>10946.000000</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>3393.000000</td>
+<td>2022.000000</td>
+<td>12.000000</td>
+<td>3393.000000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co">#total deaths</span></span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>nga_merged[<span class="st">'deaths'</span>].<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="138">
+<pre><code>3135.0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co">#total cases</span></span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>nga_merged[<span class="st">'confirmed'</span>].<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="139">
+<pre><code>253025.0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co">#total recovered</span></span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>nga_merged[<span class="st">'recovered'</span>].<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="140">
+<pre><code>229133.0</code></pre>
+</div>
+</div>
+<p>Visualizing the data</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>sns.<span class="bu">set</span>(rc<span class="op">=</span>{<span class="st">'figure.figsize'</span>:(<span class="dv">10</span>,<span class="dv">8</span>)})</span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>sns.lineplot(x<span class="op">=</span><span class="st">'date'</span>, y<span class="op">=</span><span class="st">'confirmed'</span>, data<span class="op">=</span>nga_merged)</span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a><span class="co">#number of confirmed cases peaked early 2022</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="141">
+<pre><code>&lt;AxesSubplot:xlabel='date', ylabel='confirmed'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="nga_covid19_files/figure-html/cell-57-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>sns.<span class="bu">set</span>(rc<span class="op">=</span>{<span class="st">'figure.figsize'</span>:(<span class="dv">10</span>,<span class="dv">8</span>)})</span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>sns.lineplot(x<span class="op">=</span><span class="st">'date'</span>, y<span class="op">=</span><span class="st">'deaths'</span>, data<span class="op">=</span>nga_merged)</span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="co">#number of deaths peaked mid 2021</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="142">
+<pre><code>&lt;AxesSubplot:xlabel='date', ylabel='deaths'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="nga_covid19_files/figure-html/cell-58-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>sns.<span class="bu">set</span>(rc<span class="op">=</span>{<span class="st">'figure.figsize'</span>:(<span class="dv">30</span>,<span class="dv">16</span>)})</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>sns.barplot(x<span class="op">=</span><span class="st">'state'</span>, y<span class="op">=</span><span class="st">'confirmed'</span>, data<span class="op">=</span>nga_merged)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="143">
+<pre><code>&lt;AxesSubplot:xlabel='state', ylabel='confirmed'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="nga_covid19_files/figure-html/cell-59-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>sns.<span class="bu">set</span>(rc<span class="op">=</span>{<span class="st">'figure.figsize'</span>:(<span class="dv">30</span>,<span class="dv">16</span>)})</span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>sns.barplot(x<span class="op">=</span><span class="st">'state'</span>, y<span class="op">=</span><span class="st">'deaths'</span>, data<span class="op">=</span>nga_merged)</span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Lagos by far suffered the most fatalities. Not surprising given its massive population.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="144">
+<pre><code>&lt;AxesSubplot:xlabel='state', ylabel='deaths'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="nga_covid19_files/figure-html/cell-60-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Grouping the data</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>nga_20 <span class="op">=</span> nga_merged2[nga_merged2[<span class="st">'year'</span>]<span class="op">==</span><span class="dv">2020</span>] <span class="co"># Considering data for the year 2020 only</span></span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>nga_21 <span class="op">=</span> nga_merged2[nga_merged2[<span class="st">'year'</span>]<span class="op">==</span><span class="dv">2021</span>] <span class="co"># Considering data for the year 2021 only</span></span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a><span class="co">#nga_22 = nga_merged2[nga_merged2['year']==2022] # Considering data for the year 2022 only</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Grouping by confirmed cases, recovered and deaths by month for each year since the pandemic</p>
+<p>For 2020…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>nga_confirmed_20 <span class="op">=</span> nga_20[<span class="st">'confirmed'</span>].groupby(nga_20[<span class="st">'month'</span>]).<span class="bu">sum</span>()</span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>nga_confirmed_20</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="233">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>plt.plot(nga_confirmed_20)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="nga_covid19_files/figure-html/cell-63-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>nga_rec_20 <span class="op">=</span> nga_20[<span class="st">'recovered'</span>].groupby(nga_20[<span class="st">'month'</span>]).<span class="bu">sum</span>()</span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a>nga_rec_20.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="234">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>plt.plot(nga_rec_20)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="nga_covid19_files/figure-html/cell-65-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>nga_dea_20 <span class="op">=</span> nga_20[<span class="st">'deaths'</span>].groupby(nga_20[<span class="st">'month'</span>]).<span class="bu">sum</span>()</span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a>nga_dea_20.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="235">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>plt.plot(nga_dea_20)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="nga_covid19_files/figure-html/cell-67-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>For 2021…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>nga_confirmed_21 <span class="op">=</span> nga_21[<span class="st">'confirmed'</span>].groupby(nga_21[<span class="st">'month'</span>]).<span class="bu">sum</span>()</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>nga_confirmed_21.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="236">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>plt.plot(nga_confirmed_21)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="nga_covid19_files/figure-html/cell-69-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>nga_rec_21 <span class="op">=</span> nga_21[<span class="st">'recovered'</span>].groupby(nga_21[<span class="st">'month'</span>]).<span class="bu">sum</span>()</span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>nga_rec_21.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="237">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>plt.plot(nga_rec_21)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="nga_covid19_files/figure-html/cell-71-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>nga_dea_21 <span class="op">=</span> nga_21[<span class="st">'deaths'</span>].groupby(nga_21[<span class="st">'month'</span>]).<span class="bu">sum</span>()</span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a>nga_dea_21.head</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="238">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a>plt.plot(nga_dea_21)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="nga_covid19_files/figure-html/cell-73-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Findings: 2020 &gt; Cases surged in the middle of year, spiking at the end of the year</p>
+<blockquote class="blockquote">
+<p>Mosts of the deaths occurred during the middle of the year</p>
+</blockquote>
+<p>Findings: 2021 &gt; The beginning saw high number of cases, sharply falling and surging for a while in the middle of the year before rising sharply again towards the end of the year</p>
+<blockquote class="blockquote">
+<p>Mosts of the deaths occurred during the in the beginning of the year, paralleling the rise in cases. Deaths lowered throughout the first quarter until August, its peak.</p>
+</blockquote>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="JoshuaOlubori/qblog" data-repo-id="R_kgDOKvhXew" data-category="General" data-category-id="DIC_kwDOKvhXe84CbFeH" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Blog made with 💚 and <a href="https://quarto.org/">Quarto</a>, by Edun Joshua. License: <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>.</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>

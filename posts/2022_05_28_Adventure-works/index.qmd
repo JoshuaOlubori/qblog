@@ -1,0 +1,191 @@
+---
+title: "Sales Monitoring Dashboard"
+subtitle: "My take on the AdventureWorks dataset; featuring database creation, data modeling in Power BI and python scripting"
+author: "Edun Joshua"
+date: "2022-05-28"
+toc: true
+categories: [python, data visualisation]
+image: "Adw ERD.png"
+---
+
+## About The Project 🍪
+
+<div>
+
+```{=html}
+<iframe title="adventureworks" width="600" height="373.5" src="https://app.powerbi.com/
+view?
+r=eyJrIjoiNzEwMmY3OWMtNmU3Zi00ZWU3LWFkNmYtYjQ1NGMwZjBjNjNiIiwidCI6ImRmODY3O
+WNkLWE4MGUtNDVkOC05OWFjLWM4M2VkN2ZmOTVhMCJ9&amp;embedImagePlaceholder=true" frameborder="0" allowFullScreen="true">
+```
+</iframe>
+
+</div>
+
+### Requirement Gathering
+
+Client wants a dashboard monitoring sales of company's product
+
+#### a. Primary KPIs
+
+-   Top ten customers, filtered by:
+    -   product name
+    -   product category
+    -   product status
+    -   product line
+-   Top ten products by sales, filtered by:
+    -   product name
+    -   product category
+    -   product status
+    -   product line
+
+#### b. Secondary KPIs
+
+-   Total sales by category
+
+-   Daily sales trend
+
+-   
+
+## Identifying Stakeholders 🧑🏽‍💼
+
+-   Sales team
+-   Marketing Department
+
+### Understanding Raw Data 🥩
+
+The raw data exists in 9 CSV files representing 1 fact table and 8 dimension tables
+
+| Table                 | description (datatype)                                           |
+|-----------------------|------------------------------------------------------------------|
+| Budget                | details budget of each product and product categories per period |
+| BudgetPeriod          | date table for the budget table                                  |
+| customer              | each row records a customer information                          |
+| dimdates              | date table for the fact table                                    |
+| dimProductCategory    | records the various product categories available                 |
+| dimProductSubCategory | lists the product subcategories available                        |
+| product               | lists individual products                                        |
+| Sales                 | The fact table: records individual sales transaction             |
+| Territory             | Lists regional locations                                         |
+
+### Converting CSV to SQL INSERT statements with Python 🐍
+
+I wrote a Python script using the `csv` and `os` modules, that takes in a `csv` file and outputs an SQL file with INSERT statements for each row in the CSV.
+
+```{python}
+import csv
+import os
+
+def escape_quotes(value):
+    # Escape single quotes within a value by doubling them
+    return value.replace("'", "''")
+
+def convert_csv_to_sql(csv_file):
+    try:
+        # Extract table name from CSV file name
+        table_name = os.path.splitext(os.path.basename(csv_file))[0].lower()
+        
+        # Open the CSV file for reading
+        with open(csv_file, 'r') as csvfile:
+            # Create a CSV reader object
+            reader = csv.reader(csvfile)
+            
+            # Extract the header row and column names
+            headers = next(reader)
+            columns = ', '.join(headers)
+            
+            # Generate the output SQL file name
+            sql_file = f"{table_name}.sql"
+            
+            # Create the results folder if it doesn't exist
+            os.makedirs('results', exist_ok=True)
+            
+            # Update the SQL file path to include the results folder
+            sql_file = os.path.join('results', sql_file)
+            
+            # Create the SQL file for writing
+            with open(sql_file, 'w') as sqlfile:
+                # Initialize a list to store values for each row
+                all_values = []
+                
+                # Iterate over the CSV rows
+                for row in reader:
+                    # Prepare the values for the insert statement, escaping single quotes
+                    values = []
+                    for header, value in zip(headers, row):
+                        if header.lower() == 'id' or header.lower().endswith('_id') or header.lower() == 'quantity' or header.lower() == 'unit_price':
+                            # For 'id' columns and columns ending with '_id', insert the value as is (without quotes):
+                            values.append(value)
+                        elif value == '':
+                            # Insert NULL for blank values
+                            values.append('NULL')
+                        else:
+                            # Escape single quotes for other columns
+                            values.append(f"'{escape_quotes(value)}'")
+                    
+                    # Append the values for the current row to the list
+                    all_values.append(f"({', '.join(values)})")
+
+                # Generate the final SQL insert statement with multiple value sets
+                sql_insert = f"INSERT INTO {table_name} ({columns}) VALUES {', '.join(all_values)};\n"
+                
+                # Write the SQL insert statement to the SQL file
+                sqlfile.write(sql_insert)
+                
+                print(f"Conversion completed successfully. SQL file '{sql_file}' generated.")
+    
+    except FileNotFoundError:
+        print("The specified CSV file does not exist.")
+    
+    except Exception as e:
+        print(f"An error occurred during the conversion: {str(e)}")
+
+
+files = ["customer.csv","department.csv","employee.csv","employee_product.csv","orders.csv","product.csv"]
+
+for file in files:
+	convert_csv_to_sql(file)
+print("\nConversion Completed")
+
+```
+
+### Loading into database 🧺
+
+a MySQL database was created to host the data. The ERD is shown below and using MySQL's built-in GUI tool, it was converted into a database schema
+
+![](Adw%20ERD.png){fig-align="center"}
+
+To lessen the load on the BI tool further down the pipeline, and to make modelling easier, I created 4 views on top of the data (dim_customer, dim_calendar, dim_product and fact_sales)
+
+### Data cleansing 🧹
+
+Issues - No major cleaning issues; data was loaded directly into the BI tool
+
+### Data Modeling 🏛
+
+The following star schema was created for the data model in Power BI
+
+![](Adw%20data%20model.png){fig-align="center" width="643"}
+
+### Data Visualization 🎨
+
+-   Power BI magic!✨
+
+    The following DAX measures were used:
+
+```         
+Non-Null Days = 
+CALCULATE(
+    COUNTROWS('awdb dim_calendar'),
+    NOT(ISBLANK('awdb dim_calendar'[Day]))
+)
+
+Top 10 Customers by Sales = 
+IF(RANKX(ALL('awdb dim_customer'[fullname]), [Total Sales],,DESC)<=10,[Total Sales], BLANK())
+
+Top 10 Products by Sales = 
+IF(RANKX(ALL('awdb dim_product'[product_name]), [Total Sales],,DESC)<=10,[Total Sales], BLANK())
+
+Total Sales = 
+SUM('awdb fact_sales'[SalesAmount])
+```

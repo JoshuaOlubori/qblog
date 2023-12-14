@@ -1,0 +1,141 @@
+---
+title: "UK Road Accidents and Casualties Tracking Dashboard (2021 - 2022)"
+subtitle: "Featuring data modeling in Power BI, and Dax"
+author: "Edun Joshua"
+date: "2022-05-28"
+toc: true
+categories: [power bi, data visualisation]
+image: "report.png"
+---
+
+## About The Project 🍪
+
+<div>
+
+```{=html}
+<iframe title="uk_accident_report" width="600" height="373.5" src="https://app.powerbi.com/
+view?
+r=eyJrIjoiYjZiNDYwMTctY2EwOC00NGQ2LWJmOGEtMzVlN2I2YTFlZTEwIiwidCI6ImRmODY3OWN
+kLWE4MGUtNDVkOC05OWFjLWM4M2VkN2ZmOTVhMCJ9&amp;embedImagePlaceholder=true" frameborder="0" allowFullScreen="true">
+```
+
+</div>
+
+## Requirement Gathering
+
+Client wants to create a dashboard on road accidents for the year 2021 and 2022.
+
+#### a. Primary KPIs
+
+-   Total Casualties and Total Accident Values:
+    -   Current Year
+    -   Year-over-Year (YoY) Growth
+-   Total Casualties by Accident Severity:
+    -   Current Year
+    -   Year-over-Year (YoY) Growth
+
+#### b. Secondary KPIs
+
+-   Total Casualties with Respect to Vehicle Type:
+
+    -   Current Year
+
+-   Monthly Trend Comparison of Casualties:
+
+    -   Current Year vs. Previous Year
+
+-   Casualties by Road Type:
+
+    -   Current Year
+
+-   Current Year Casualties by Area/Location & Day/Night
+
+-   Total Casualties and Total Accidents by Location Total casualties and total accidents by location
+
+## Identifying Stakeholders 🧑🏽‍💼
+
+-   Emergency Services Departments
+-   Road Safety Corps
+-   Traffic Management Agencies
+-   Police Force
+-   General public
+
+## Understanding Raw Data 🥩
+
+Data Grain: A single instance of a reported accident event in the UK in 2021 and 2022
+
+| Fields                      | description (datatype)                                       |
+|-----------------------------|--------------------------------------------------------------|
+| Accident_Index              | unique row identifier (string)                               |
+| Accident Date               | date of accident event (date)                                |
+| Day_of_Week                 | day of the week (string)                                     |
+| Junction_Control            | mechanism of traffic control at junction (string)            |
+| Junction_Detail             | type of junction (string)                                    |
+| Accident_Severity           | severity of accident (string)                                |
+| Latitude                    | latitude (float)                                             |
+| Light_Conditions            | light conditions at accident scene (string)                  |
+| Local_Authority\_(District) | name of district (string)                                    |
+| Carriageway_Hazards         | hazards on the road if any                                   |
+| Number_of_Casualties        | number of causalities (integer)                              |
+| Number_of_Vehicles          | number of vehicles involved in the accident (integer)        |
+| Police_Force                | Police force jurisdiction (string)                           |
+| Road_Surface_Conditions     | condition of road surface (string)                           |
+| Road_Type                   | road type (string)                                           |
+| Speed_limit                 | road speed limit in mph (string)                             |
+| Time                        | time of day accident occurred (time)                         |
+| Urban_or_Rural_Area         | Whether accident occurred in an urban or rural area (string) |
+| Weather_Conditions          | weather condition at time of accident (string)               |
+| Vehicle_Type                | type of vehicle involved in the accident                     |
+
+## Data cleansing 🧹
+
+Issues - Junction_Control column has, among others, two values "Auto traffic sigl" and "Auto traffic signal" of which the former is a misspelling of the latter
+
+-   Instances where "Fatal" is misspelled as "Fetal" in Accident_Severity column
+
+-   "Time" column was represented as a datetime data type in Power BI
+
+Fixes - Used the Replace Values feature to correct the misspellings of Issues 1 & 2 - Changed the data type to time accordingly - All fixes were done in Power Query.
+
+### Data Processing ⚙️
+
+-   The data needs a calendar table so as to use Time Intelligence functions further down the line.
+
+-   Using the CALENDAR function, a new table with calculated, dynamic columns of Date, Month and Year was generated.
+
+### Data Modeling 🏛
+
+a one-to-many active relationship was established between the calendar table and the data table ![Schema](data-model.png)
+
+### Data Visualization 🎨
+
+-   Power BI magic!✨ The report pbix file is available in this repo to explore design decisions The following DAX measures were used:
+
+```         
+Count of Accidents = DISTINCTCOUNT(Data[Accident_Index])
+
+Current Year Accident Count = TOTALYTD(COUNT(Data[Accident_Index]),'Calendar'[Date])
+
+Current Year Casualties = TOTALYTD(SUM(Data[Number_of_Casualties]),'Calendar'[Date])
+
+Previous Year Accident Counts = CALCULATE(COUNT(Data[Accident_Index]), SAMEPERIODLASTYEAR('Calendar'[Date]))
+
+Previous Year Casualties = CALCULATE(SUM(Data[Number_of_Casualties]),
+SAMEPERIODLASTYEAR('Calendar'[Date]))
+
+YoY Accident Count = DIVIDE([Current Year Accident Count] - [Previous Year Accident Counts], [Previous Year Accident Counts])
+
+YoY Casualties = (DIVIDE([Current Year Casualties] - [Previous Year Casualties],[Previous Year Casualties]))
+```
+
+### Deriving Insights
+
+-   The vehicle type most involved in accidents was cars. This can be explained by the fact that most vehicles plying UK roads are cars
+
+-   There is a general decrease in casualty counts in 2022 compared to 2021
+
+## Contact
+
+Edun Joshua Olubori - [connect on linkedin](https://www.linkedin.com/in/joshua-edun) - joshuaolubori\@gmail.com
+
+Live Demo: [here](https://app.powerbi.com/view?r=eyJrIjoiYjZiNDYwMTctY2EwOC00NGQ2LWJmOGEtMzVlN2I2YTFlZTEwIiwidCI6ImRmODY3OWNkLWE4MGUtNDVkOC05OWFjLWM4M2VkN2ZmOTVhMCJ9&embedImagePlaceholder=true)
