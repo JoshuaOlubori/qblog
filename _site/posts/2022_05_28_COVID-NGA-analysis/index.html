@@ -63,6 +63,12 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 
 
 <link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Chamber of (data) secrets - Visualising COVID-19’s Impact in Nigeria">
+<meta property="og:description" content="Tracking a pandemic with data">
+<meta property="og:image" content="https://joshuaolubori.onrender.com/posts/2022_05_28_COVID-NGA-analysis/dashboard.png">
+<meta property="og:site-name" content="Chamber of (data) secrets">
+<meta property="og:image:height" content="1111">
+<meta property="og:image:width" content="1977">
 <meta name="twitter:title" content="Chamber of (data) secrets - Visualising COVID-19’s Impact in Nigeria">
 <meta name="twitter:description" content="Tracking a pandemic with data">
 <meta name="twitter:image" content="https://joshuaolubori.onrender.com/posts/2022_05_28_COVID-NGA-analysis/dashboard.png">
@@ -187,14 +193,16 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 </section>
 <section id="prepare" class="level2">
 <h2 class="anchored" data-anchor-id="prepare">Prepare 🧹</h2>
-<p>Where was the data located and organized?</p>
+<p><em>Where was the data located and organized?</em></p>
 <p>The data was sourced from the NCDC (Nigerian Centre for Disease Control) and accessed via <a href="https://data.humdata.org/m/dataset/nigeria_covid19_subnational">link</a> on the 15th of May, 2022. The dataset was contained in a CSV file, arranged in 14 columns with the headers written in French. That had to be taken care of in the data cleaning process.</p>
-<p>#Are there issues with bias or credibility in this data? There are concerns that the data from Nigeria may not completely reflective of the true situation on ground due to low testing rates compared to Western countries. #Are there any problems with the data? Problems of note include the columns headers being in French and a few redundant columns.</p>
+<p><em>Are there issues with bias or credibility in this data?</em> There are concerns that the data from Nigeria may not completely reflective of the true situation on ground due to low testing rates compared to Western countries. #Are there any problems with the data? Problems of note include the columns headers being in French and a few redundant columns.</p>
 </section>
 <section id="process" class="level2">
 <h2 class="anchored" data-anchor-id="process">Process ⚙️</h2>
 <p><em>What tools are you choosing and why?</em></p>
-<p>For data cleaning, exploratory data analysis (EDA) and visualization, I choose Python’s pandas with Jupyter Notebooks. I like pandas versatility with handling data and together with Jupyter Notebook’s flexible running of code in cells, it makes for an efficient workflow. #What steps have you taken to ensure that your data is clean? I opened a folder for the project on my PC and named the file with an appropriate naming convention. Then I imported the dataset using pandas and inspected the first few rows, the last few rows, the columns, the shape and some summary statistics of the data to confirm that it was imported correctly and to have a feel of the data. Using a mapping function, I renamed the column headers appropriately. Where null values where present, I filled in with zero. The Jupyter Notebook file delineates the whole data preparation process</p>
+<p>For data cleaning, exploratory data analysis (EDA) and visualization, I choose Python’s pandas with Jupyter Notebooks. I like pandas versatility with handling data and together with Jupyter Notebook’s flexible running of code in cells, it makes for an efficient workflow.</p>
+<p><em>What steps have you taken to ensure that your data is clean?</em></p>
+<p>I opened a folder for the project on my PC and named the file with an appropriate naming convention. Then I imported the dataset using pandas and inspected the first few rows, the last few rows, the columns, the shape and some summary statistics of the data to confirm that it was imported correctly and to have a feel of the data. Using a mapping function, I renamed the column headers appropriately. Where null values where present, I filled in with zero. The Jupyter Notebook file delineates the whole data preparation process</p>
 <p>On preliminary exploration on Excel, I discovered that date values on some of the tables were inconsistently formatted. Therefore all date fields have to be homogenized going forward</p>
 <p>I did all data cleaning and wrangling with Python’s pandas on Jupyter Notebooks. The codes can be accessed checked <a href="https://github.com/JoshuaOlubori/Covid19-in-Nigeria/blob/a8bbb53505da3baae032347552ed12e430d83046/notebook.ipynb">here</a></p>
 </section>

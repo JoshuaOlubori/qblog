@@ -7,11 +7,11 @@ website:
   description: "A data science blog by Edun Joshua"
   site-url: https://joshuaolubori.onrender.com
   repo-url: https://github.com/JoshuaOlubori/qblog
-  # open-graph: true
+  open-graph: true
   search: false
   twitter-card:
-    creator: "@olubori_joshua"
-    card-style: summary_large_image
+      creator: "@olubori_joshua"
+      card-style: summary_large_image
   navbar:
     title: false
     background: "#eee"
@@ -35,5 +35,5 @@ format:
 
 
 comments:
-  giscus:
-    repo: JoshuaOlubori/qblog
+    giscus:
+      repo: JoshuaOlubori/qblog

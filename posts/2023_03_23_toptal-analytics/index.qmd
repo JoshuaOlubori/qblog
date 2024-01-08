@@ -1,0 +1,100 @@
+---
+title: "Leads Acquisition Analysis"
+subtitle: "An assessment for a Report Developer role at Toptal"
+author: "Edun Joshua"
+date: "2023-03-23"
+toc: true
+categories: [Tableau, data visualisation]
+image: "dashboard.png"
+---
+
+## About The Project 🍪
+
+Live Demo: [here](https://public.tableau.com/views/toptal-analytics/Dashboard?:language=en-GB&:display_count=n&:origin=viz_share_link)
+
+<div>
+
+::: {#viz1704585184473 .tableauPlaceholder style="position: relative"}
+<noscript><a href='#'><img src="https://public.tableau.com/static/images/to/toptal-analytics/Dashboard/1_rss.png" alt="Dashboard " style="border: none"/></a></noscript>
+
+<object class="tableauViz" style="display:none;">
+
+
+<param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='toptal-analytics&#47;Dashboard' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;to&#47;toptal-analytics&#47;Dashboard&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-GB' />
+
+</object>
+:::
+
+</div>
+
+```{=html}
+<script type='text/javascript'>                    var divElement = document.getElementById('viz1704585184473');                    var vizElement = divElement.getElementsByTagName('object')[0];                    if ( divElement.offsetWidth > 800 ) { vizElement.style.width='1000px';vizElement.style.height='1227px';} else if ( divElement.offsetWidth > 500 ) { vizElement.style.width='1000px';vizElement.style.height='1227px';} else { vizElement.style.width='100%';vizElement.style.height='2077px';}                     var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+```
+
+### Overview
+Assume that you are partnering with Toptal’s Growth team; a highly analytical,
+experimental team that is responsible for growing Toptal’s revenue by scaling and
+optimizing client acquisition channels. The growth team wants your help in measuring
+and reporting on their business performance.
+
+For this exercise, 2 datasets are provided. GrowthOperations.csv consists of all the leads
+that Toptal’s Growth Team has obtained over the past 48 weeks. GrowthSpend.csv
+shows how much the Growth Team has spent each week on each client acquisition
+channel over the past 48 weeks.
+
+### Tasks
+1. Choose appropriate KPIs you recommend the Growth team use to measure their
+performance.
+
+2. Design a dashboard that the Growth team can use to regularly monitor performance
+You can choose to use SQL, Microsoft Excel, Google Sheets, or any data manipulation tool to analyze
+the data. But you need to use Tableau to build the dashboard.
+○ The purpose of the exercise is to choose and define meaningful KPIs and insights, to be presented in
+an effective design, using Tableau as a tool.
+○ Feel free to include any additional documents or sheets you create to analyze the data, in addition to
+the Tableau file.
+
+3. Prepare slide for a presentation on the following:
+● An Executive Summary on the Growth team performance
+○ Include specific recommendations for improving performance. Why did you make these
+recommendations?
+
+● A more detailed dive into Growth’s team performance over the past 48 weeks:
+○ Identify and discuss the most problematic channel. Why is it the most problematic?
+○ Are there major shifts in performance over time?
+○ In what ways does lead priority predict the way in which leads will move through the funnel?
+● Definitions of the KPIs you have chosen and explain why you chose them
+● Screenshots of your dashboard design showing overall layout and functionality
+● A list of any assumptions you made and the justification of why you think they are reasonable
+
+
+### Definitions
+● Lead: A company that has signed up on Toptal.com and is interested in learning more
+about Toptal.
+● Verified: A company that has provided us their billing information after having a call
+with a sales representative. Treat this as a strong indicator that they are going to
+convert into a paying client. This is the primary metric that the Growth Team is
+responsible for on a weekly basis.
+● Lead Priority: A priority assigned to each lead according to a machine learning
+algorithm that indicates how likely the lead is to become a Verified, based on Toptal’s
+historical data. Leads are treated differently by the sales team according to which
+priority they are assigned.
+● Time Until Verification: The time from when a company signs up as a Lead until it
+turns into a Verified.
+● Channel: The client acquisition channel through which this company found out about
+Toptal (i.e. How they ended up on Toptal.com).
+● Display: Leads coming in from display advertising. For example, the Google Display
+Network.
+● AdWords: Leads coming in from Google AdWords, a paid search channel.
+● Organic: Leads coming in from Google organic (unpaid) search results. Since this is
+not an advertising channel, the weekly spend here is always $0.
+● LinkedIn: Leads coming in from the LinkedIn advertising platform.
+
+The visual can be viewed and interacted with at [link](https://public.tableau.com/views/toptal-analytics/Dashboard?:language=en-GB&:display_count=n&:origin=viz_share_link)
+
+The link to the slides can be found [here](https://docs.google.com/presentation/d/1TiRQhkx97wa-Aj8XFFGiejtjXH2UQKiZ/edit?usp=drive_link&ouid=114194024907032392859&rtpof=true&sd=true)
+
+## Contact
+
+Edun Joshua Olubori - [connect on linkedin](https://www.linkedin.com/in/joshua-edun) - joshuaolubori\@gmail.com
+

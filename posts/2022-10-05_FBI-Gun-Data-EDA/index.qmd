@@ -1,0 +1,1727 @@
+---
+title: 'Project: Analyzing Trends in Gun Sales Data across the U.S.'
+jupyter: python3
+
+subtitle: "An project for Udacity's Nanodegree"
+author: "Edun Joshua"
+date: "2022-10-05"
+toc: true
+categories: [python, data wrangling]
+image: "dashboard.jpg"
+
+---
+
+## Introduction
+
+The data comes from the FBI's National Instant Criminal Background Check System. The NICS is used by to determine whether a prospective buyer is eligible to buy firearms or explosives. Gun shops call into this system to ensure that each customer does not have a criminal record or isn't otherwise ineligible to make a purchase. The data has been supplemented with state level data from census.gov.
+
+> Mandated by the Brady Handgun Violence Prevention Act of 1993 and launched by the FBI on November 30, 1998, NICS is used by Federal Firearms Licensees (FFLs) to instantly determine whether a prospective buyer is eligible to buy firearms or explosives. Before ringing up the sale, cashiers call in a check to the FBI or to other designated agencies to ensure that each customer does not have a criminal record or isn't otherwise ineligible to make a purchase. More than 100 million such checks have been made in the last decade, leading to more than 700,000 denials.
+
+These statistics represent the number of firearm background checks initiated through the NICS. They do not represent the number of firearms sold. According to The Trace, 2015: The FBI's background check numbers come with caveats: As seen in the late February-early March 2014 bubble, many checks are for concealed carry permits, not actual gun sales. Kentucky runs a new check on each concealed carry license holder each month. And of course, the FBI's numbers don't include private gun sales, many of which do not require a background check. Despite those vagaries, the FBI's NICS numbers are widely accepted as **the best proxy for total gun sales** in a given time period.
+
+In 2015, New York Times ran a similar analysis with the data and estimated sales from background checks with a method suggested by a researcher.
+
+According to them:
+
+> To convert background checks into estimated sales, we relied on a method suggested in the Small Arms Survey by Jurgen Brauer, a professor at Georgia Regents University. Each long gun and handgun check was counted as 1.1 sales. Each multiple-gun check was counted as two sales. Permit checks and other types of checks were omitted. The multiplier is an estimate based on Mr. Brauer's interviews with gun shop owners.
+
+This is the method I applied in this analysis.
+
+The NICS is in a wide format and contains a total of 23 variables, out of which I deem only 5 is relevant to this analysis:
+
+-   month (monthly data from November 1998 to September 2017)
+
+-   state (55 U.S. states and offshore territories)
+
+-   handgun (number of check calls)
+
+-   long-gun (number of check calls)
+
+-   multiple (number of check calls)
+
+The census data is a wide-table format data with 66 variables measuring quantities for 50 U.S. states. I have selected only 18 variables that I deem relevant to this analysis. The starred variables are just a few of the variables that are present in the raw data that I will not include in this analysis.
+
+| s/n | Variable                                                                    |
+|------------------------------------|------------------------------------|
+| 1   | Population estimates, July 1, 2016, (V2016)                                 |
+| 2   | Persons under 18 years, percent, July 1, 2016, (V2016)                      |
+| 3   | Persons 65 years and over, percent, July 1, 2016,(V2016)                    |
+| 4   | Female persons, percent, July 1, 2016, (V2016)                              |
+| 5   | White alone, percent, July 1, 2016, (V2016)                                 |
+| 6   | Black or African American alone, percent, July 1, 2016, (V2016)             |
+| 7   | Asian alone, percent, July 1, 2016, (V2016)                                 |
+| 8   | Median value of owner-occupied housing units, 2011-2015                     |
+| 9   | Median gross rent, 2011-2015                                                |
+| 10  | Persons per household, 2011-2015                                            |
+| 11  | High school graduate or higher, percent of persons age 25 years+, 2011-2015 |
+| 12  | Bachelor's degree or higher, percent of persons age 25 years+, 2011-2015    |
+| 13  | Persons without health insurance, under age 65 years, percent               |
+| 14  | Median household income (in 2015 dollars), 2011-2015                        |
+| 15  | Per capita income in past 12 months (in 2015 dollars), 2011-2015            |
+| 16  | Persons in poverty, percent                                                 |
+| 17  | All firms, 2012                                                             |
+| \*  | Persons under 5 years, percent, July 1, 2016, (V2016)                       |
+| \*  | Minority-owned firms, 2012                                                  |
+| \*  | Population per square mile, 2010                                            |
+| \*  | Total employer establishments, 2015                                         |
+| \*  | Total employment, 2015                                                      |
+| \*  | Total annual payroll, 2015 (\$1,000)                                        |
+| \*  | Total employment, percent change, 2014-2015                                 |
+| \*  | Total nonemployer establishments, 2015                                      |
+
+The 18th variable is state but in the raw data, it would have to be created by transposing the dataframe. The starred variables are just some of the ones I deem irrelevant.
+
+## Research Questions
+
+*In this analysis, I will answer the following research questions*:
+
+> -   *How many guns were sold in the U.S. in selected years?*
+> -   *What kind of gun was bought the most in those years?*
+> -   *What are the overall monthly trends of gun purchases in those years?*
+
+> -   *What are the top 5 states in terms of gun purchases in the U.S. in those years?*
+>
+> -   *What are the most bought gun types in those states?*
+>
+> -   *What kind of gun was bought the most in one of those states?*
+>
+> -   *What are the overall monthly trends of gun purchases in those states?*
+>
+> -   *Which states had the highest growth in gun sales over the span of a decade?*
+
+## Data Wrangling (a)
+
+### General Properties
+
+*Loading and inspecting the census data*
+
+```{python}
+#| collapsed: true
+# Importing packages.
+import pandas as pd, numpy as np
+import matplotlib.pyplot as plt, seaborn as sns
+#% matplotlib inline
+
+df_census_raw = pd.read_csv('Data/US_Census_Data.csv')
+df_census_raw.head()
+```
+
+```{python}
+# shape of the dataframe
+df_census_raw.shape
+```
+
+```{python}
+# viewing all columns in the dataframe
+df_census_raw.columns
+```
+
+#### Dropping Irrelevant Columns
+
+In this section, I will drop all irrelevant columns from the census dataset, reshape the dataframe and then rename columns for clarity
+
+```{python}
+# dropping the 'Fact Note' column
+df_census_raw.drop('Fact Note', axis=1, inplace=True)
+df_census_raw.head()
+```
+
+```{python}
+# reshaping the dataframe
+df_T = df_census_raw.transpose(copy=False)
+```
+
+```{python}
+# observing the result
+df_T.head()
+```
+
+```{python}
+# checking out the new shape
+df_T.shape
+```
+
+```{python}
+# selecting the columns of interest
+df_T = df_T.iloc[:, 0:65]
+df_T.head()
+```
+
+```{python}
+columns = df_T.iloc[0, :]
+df_T.rename(columns=columns, inplace = True)
+df_T.head()
+```
+
+```{python}
+# dropping redundant column index
+df_T.drop('Fact', axis=0, inplace=True)
+df_T.head()
+```
+
+```{python}
+# inspecting the shape of the reshaped dataframe
+df_T.shape
+```
+
+```{python}
+# inspecting all states present in the census data
+state = df_T.index
+state
+```
+
+```{python}
+# dropping irrelevant columns
+
+df_T.drop(columns=['Total employer establishments, 2015',
+'Total employment, 2015',
+'Total annual payroll, 2015 ($1,000)',
+'Total employment, percent change, 2014-2015',
+'Total nonemployer establishments, 2015'], inplace=True)
+
+df_T.head()
+```
+
+```{python}
+# dropping more irrelevant columns
+
+df_T.drop(columns=['Men-owned firms, 2012',
+'Women-owned firms, 2012',
+'Minority-owned firms, 2012',
+'Nonminority-owned firms, 2012',
+'Veteran-owned firms, 2012',
+'Nonveteran-owned firms, 2012',
+'Population per square mile, 2010',
+'Land area in square miles, 2010',
+'FIPS Code',
+'In civilian labor force, total, percent of population age 16 years+, 2011-2015',
+'In civilian labor force, female, percent of population age 16 years+, 2011-2015',
+'Total accommodation and food services sales, 2012 ($1,000)',
+'Total health care and social assistance receipts/revenue, 2012 ($1,000)',
+'Total manufacturers shipments, 2012 ($1,000)',
+'Total merchant wholesaler sales, 2012 ($1,000)',
+'Total retail sales, 2012 ($1,000)',
+'Total retail sales per capita, 2012',
+'Mean travel time to work (minutes), workers age 16 years+, 2011-2015',
+'With a disability, under age 65 years, percent, 2011-2015',
+'Living in same house 1 year ago, percent of persons age 1 year+, 2011-2015',
+'Language other than English spoken at home, percent of persons age 5 years+, 2011-2015',
+'Building permits, 2016',
+'Households, 2011-2015',
+'Median selected monthly owner costs -with a mortgage, 2011-2015',
+'Median selected monthly owner costs -without a mortgage, 2011-2015',
+'Native Hawaiian and Other Pacific Islander alone, percent, July 1, 2016,  (V2016)',
+'Two or More Races, percent, July 1, 2016,  (V2016)',
+'Hispanic or Latino, percent, July 1, 2016,  (V2016)',
+'White alone, not Hispanic or Latino, percent, July 1, 2016,  (V2016)',
+'Veterans, 2011-2015',
+'Foreign born persons, percent, 2011-2015',
+'Housing units,  July 1, 2016,  (V2016)',
+'Housing units, April 1, 2010',
+'Owner-occupied housing unit rate, 2011-2015',
+'American Indian and Alaska Native alone, percent, July 1, 2016,  (V2016)',
+'Persons 65 years and over, percent, April 1, 2010',
+'Female persons, percent, April 1, 2010',
+'Persons under 18 years, percent, April 1, 2010',
+'Persons under 5 years, percent, April 1, 2010',
+'Population estimates base, April 1, 2010,  (V2016)',
+'Population, percent change - April 1, 2010 (estimates base) to July 1, 2016,  (V2016)',
+'Population, Census, April 1, 2010'], inplace=True)
+
+df_T.head(3)
+```
+
+```{python}
+# checking dataframe
+df_T.shape
+```
+
+```{python}
+# checking columns
+df_T.columns
+```
+
+```{python}
+# renaming the columns for clarity
+
+df_T.rename(columns={'Population estimates, July 1, 2016,  (V2016)':'pop_2016',
+'Persons under 5 years, percent, July 1, 2016,  (V2016)':'under_5',
+'Persons under 18 years, percent, July 1, 2016,  (V2016)':'under_18',
+'Persons 65 years and over, percent,  July 1, 2016,  (V2016)':'65_above',
+'Female persons, percent,  July 1, 2016,  (V2016)':'female_pct',
+'White alone, percent, July 1, 2016,  (V2016)':'white_pct',
+'Black or African American alone, percent, July 1, 2016,  (V2016)':'black_pct',
+'Asian alone, percent, July 1, 2016,  (V2016)':'asian_pct',
+'Median value of owner-occupied housing units, 2011-2015':'median_hu',
+'Median gross rent, 2011-2015':'median_gross_rent',
+'Persons per household, 2011-2015':'pe_hh',
+'High school graduate or higher, percent of persons age 25 years+, 2011-2015':'high_school_grad_higher',
+'Bachelor\'s degree or higher, percent of persons age 25 years+, 2011-2015':'bsc_higher',
+'Persons  without health insurance, under age 65 years, percent':'pe_whi',
+'Median household income (in 2015 dollars), 2011-2015':'median_hh_income',
+'Per capita income in past 12 months (in 2015 dollars), 2011-2015':'per_cap_inc',
+'Persons in poverty, percent':'poverty_pct',
+'All firms, 2012':'firms'
+}, inplace=True)
+
+df_T.head()
+```
+
+```{python}
+# I subsequently decided to drop 'under_5' as it relates little to the problem statement
+
+df_T.drop(columns='under_5', inplace=True)
+```
+
+### In this section I will assess the data to spot irregularities and then clean the data
+
+Using pandas to explore `df_T` to answer the following questions about the characteristics of the datasets:
+
+-   *number of states in each dataset*
+
+-   *number of columns in each datase*t
+
+-   *duplicate rows in each dataset*
+
+-   *datatypes of columns*
+
+-   *features with missing values*
+
+-   *number of non-null unique values for features in each dataset*
+
+-   *what those unique values are and counts for each*
+
+-   *Number of rows with missing values in each dataset*
+
+-   *Types of fuels present in each dataset*
+
+```{python}
+# checking out the head of the dataframe
+df_T.head()
+```
+
+```{python}
+# number of states
+print(f'There are {df_T.shape[0]} rows (representing each state in the contiguous U.S. and Alaska) in this dataset')
+```
+
+```{python}
+# number of columns
+print(f'There are {df_T.shape[1]} columns')
+```
+
+```{python}
+# number of duplicate rows
+df_T.duplicated().sum()
+```
+
+```{python}
+# datatypes of each column
+df_T.info()
+```
+
+The datatypes are oddly all in object type. This was because of the transpose function I used earlier in the script to convert the data from wide to long According to the pandas documentation, when *transpose()* is called upon a dataframe with heterogeneous datatypes, all the columns are converted to the object datatype.
+
+I will fix this later.
+
+```{python}
+# features with missing values
+df_T.isnull().sum()
+```
+
+```{python}
+# number of rows with missing values
+df_T.isnull().any(axis=1).sum()
+```
+
+```{python}
+# saving for later
+df_T.to_csv('Data/df_T_01.csv')
+```
+
+```{python}
+# reading in the data
+df_U = pd.read_csv('Data/df_T_01.csv')
+df_U.head()
+```
+
+```{python}
+# dropping renaming column
+df_U.rename(columns={'Unnamed: 0':'state'}, inplace=True)
+df_U.head()
+```
+
+One of the reasons the data is stored as the object type is because of the '%', ',', and '\$' symbols. In the following cells, I remove these offending characters
+
+```{python}
+# extracting digits from the following columns using regex
+
+import re
+
+cols_extract = ['under_18','65_above', 'female_pct', 'white_pct', 'black_pct', 'asian_pct','high_school_grad_higher', 'bsc_higher', 'pe_whi', 'poverty_pct']
+
+for col in cols_extract:
+    df_U[col]= df_U[col].str.extract(r'(\d*\.?\d+)').astype(float)
+
+df_U.head()
+```
+
+```{python}
+# removing the dollar sign symbol using a lambda function and converting to the float datatype
+cols_extract = ['pop_2016', 'median_hu', 'median_gross_rent', 'median_hh_income', 'per_cap_inc', 'firms']
+
+for col in cols_extract:
+    df_U[col]= df_U[col].apply(lambda x: x.replace('$','').replace(',','') if isinstance(x, str) else x).astype(float)
+df_U.head()
+```
+
+```{python}
+# checking the transformed datatypes
+df_U.info()
+```
+
+```{python}
+# shape of the new dataframe
+df_U.shape
+```
+
+```{python}
+# tail of the new dataframe
+df_U.tail()
+```
+
+```{python}
+# summary statistics
+df_U.describe()
+```
+
+```{python}
+# saving for later
+df_U.to_csv('Data/df_census_cleaned.csv')
+```
+
+Now, on to wrangle the second dataset in this project – NCIS gun data
+
+## Data Wrangling (b)
+
+### General Properties
+
+*Loading and inspecting the census data*
+
+```{python}
+# reading the data in
+df_gun = pd.read_excel('Data/gun_data.xlsx')
+df_gun.head()
+```
+
+### In this section I will assess the data to spot irregularities and then clean the data
+
+Using pandas to explore `df_T` to answer the following questions about the characteristics of the datasets:
+
+-   *number of states in each dataset*
+
+-   *number of columns in each datase*t
+
+-   *duplicate rows in each dataset*
+
+-   *datatypes of columns*
+
+-   *features with missing values*
+
+-   *number of non-null unique values for features in each dataset*
+
+-   *what those unique values are and counts for each*
+
+-   *Number of rows with missing values in each dataset*
+
+-   *Types of fuels present in each dataset*
+
+```{python}
+# selecting relevant columns
+col_gun = ['state', 'month', 'handgun', 'long_gun', 'multiple']
+df_gun_raw =  df_gun[col_gun]
+df_gun_raw.head()
+```
+
+```{python}
+# number of rows
+print(f'Rows: {df_gun_raw.shape[0]}')
+
+# number of columns
+print(f'Columns: {df_gun_raw.shape[1]}')
+```
+
+```{python}
+# duplicate rows 
+df_gun_raw.duplicated().sum()
+```
+
+```{python}
+# datatypes of columns
+df_gun_raw.info()
+```
+
+```{python}
+# number of non-null unique values for features
+df_gun_raw['state'].nunique()
+```
+
+```{python}
+# what those unique values are and counts for each
+df_gun_raw.state.value_counts()
+```
+
+```{python}
+# observing the result
+df_gun_raw.info()
+```
+
+```{python}
+# renaming the column appropriately
+df_gun_raw.rename(columns={'month':'date'}, inplace=True)
+df_gun_raw.info()
+```
+
+```{python}
+# converting to datetime
+df_gun_raw['date'] = pd.to_datetime(df_gun_raw['date'], format='%Y-%m')
+df_gun_raw['date'].head()
+```
+
+```{python}
+df_gun_raw.info()
+```
+
+```{python}
+df_gun_raw.date.dt.year
+```
+
+```{python}
+# extracting year and month data from the date column
+df_gun_raw['year'] = df_gun_raw['date'].dt.year
+df_gun_raw['month'] = df_gun_raw['date'].dt.month
+df_gun_raw.head(1)
+```
+
+```{python}
+#| warnings: false
+# dropping the redundant date column
+df_gun_raw.drop(columns='date', inplace=True)
+df_gun_raw.head()
+```
+
+```{python}
+# observing the tail of the data
+df_gun_raw.tail()
+```
+
+```{python}
+# checking out metadata of dataframe
+df_gun_raw.info()
+```
+
+```{python}
+# saving data for later
+df_gun_raw.to_csv('Data/df_gun_cleaned.csv')
+```
+
+------------------------------------------------------------------------
+
+## Further Wrangling
+
+### *In this section, I will further wrangle the dataframes and derive calculated columns*
+
+```{python}
+# reading in the census data
+df1=pd.read_csv('Data/df_census_cleaned.csv', index_col=0)
+df1.head()
+```
+
+```{python}
+# reading in the gun sales data
+df2=pd.read_csv('Data/df_gun_cleaned.csv', index_col=0)
+df2.head()
+```
+
+```{python}
+# checking out the shape of the census dataframe
+df1.shape
+```
+
+```{python}
+# checking out the shape of the gun dataframe
+df2.shape
+```
+
+```{python}
+# I want to have a calculated column for the % of adult population (between 18 & 65),
+# as I think this would be more relevant to the analysis than the data on children and elderly population
+
+df1['adults_below_65'] = 100 - (df1['under_18']  +	df1['65_above'])
+df1.head()
+```
+
+```{python}
+# dropping the afore-used columns
+df1.drop(columns=['under_18', '65_above'], inplace=True)
+df1.head()
+```
+
+```{python}
+# grouping the columns in similar group
+
+demographic = [
+    'state',
+    "pop_2016",
+    "female_pct",
+    "white_pct",
+    "black_pct",
+    "asian_pct",
+    "pe_hh",
+    "pe_whi",
+    "adults_below_65"
+]
+
+education = [
+    "high_school_grad_higher",
+    "bsc_higher"
+]
+
+finances = [
+    "median_hu",
+    "median_gross_rent",
+    "poverty_pct",
+    "median_hh_income",
+    "per_cap_inc",
+    "firms"
+]
+```
+
+```{python}
+# new column ordering
+new_col_order = (demographic + education + finances)
+
+# checking if the number of items in new_col_order is the same as in the original column
+set(df1.columns) == set(new_col_order)
+```
+
+```{python}
+# proceeding to reorder
+df1 = df1[new_col_order]
+df1.head()
+```
+
+```{python}
+# saving for later
+df1.to_csv('Data/df_census_cleaned_1.csv')
+```
+
+------------------------------------------------------------------------
+
+## Exploratory Data Analysis 1
+
+### (Census Data)
+
+```{python}
+# Reading in the dataset, and viewing heads, tails and  and random sample of the rows 
+df1 = pd.read_csv('Data/df_census_cleaned_1.csv', index_col=0)
+df1.head()
+```
+
+```{python}
+# viewing tail of data
+df1.tail()
+```
+
+```{python}
+# viewing random sample
+df1.sample(n=5)
+```
+
+```{python}
+# Getting the dimensions of the DataFrame with the .shape attribute:
+df1.shape
+```
+
+```{python}
+#  List the data type of each column, the number of non-missing values, and memory usage with the .info method:
+df1.info()
+```
+
+There are 50 rows in this dataset representing each state of the U.S measured by 16 features of interest The data is clean: there are no null values, and the datatypes are appropriate
+
+## Data Dictionary
+
+| **s/n** | **Variable**            | **Description**                                                             |
+|:------------------|:------------------|:---------------------------------|
+| 0       | state                   | Each of the 50 states of the contiguous U.S.                                |
+| 1       | pop_2016                | Population estimates by July 1, 2016                                        |
+| 2       | female_pct              | Female persons, percent, by July 1, 2016                                    |
+| 3       | white_pct               | White alone, percent, by July 1, 2016                                       |
+| 4       | black_pct               | Black or African American alone, percent by July 1, 2016                    |
+| 5       | asian_pct               | Asian alone, percent, July 1, 2016                                          |
+| 6       | pe_hh                   | Persons per household, 2011-2015                                            |
+| 7       | pe_whi                  | Persons without health insurance, under age 65 years, percent               |
+| 8       | adults_below_65         | adults older than 18, younger than 65, percent, 2016                        |
+| 9       | high_school_grad_higher | High school graduate or higher, percent of persons age 25 years+, 2011-2015 |
+| 10      | bsc_higher              | Bachelor\\'s degree or higher, percent of persons age 25 years+, 2011-2015  |
+| 11      | median_hu               | Median value of owner-occupied housing units, 2011-2015                     |
+| 12      | median_gross_rent       | Median gross rent, 2011-2015                                                |
+| 13      | poverty_pct             | Persons in poverty, percent                                                 |
+| 14      | median_hh_income        | Median household income (in 2015 dollars), 2011-2015                        |
+| 15      | per_cap_inc             | Per capita income in past 12 months (in 2015 dollars), 2011-2015            |
+| 16      | firms                   | All firms, 2012                                                             |
+
+```{python}
+# displaying summary statistics
+df1.describe()
+```
+
+```{python}
+# plotting the kde of some variables to have a sense of the data distribution
+sns.set_style('darkgrid')
+fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1, 5, figsize=(20, 4))
+
+df1["pop_2016"].plot.kde(ax=ax1)
+ax1.set_title('KDE plot for pop_2016')
+
+df1["female_pct"].plot.kde(ax=ax2)
+ax2.set_title('KDE plot for female_pct')
+
+df1["white_pct"].plot.kde(ax=ax3)
+ax3.set_title('KDE plot for white_pct')
+
+df1["pe_hh"].plot.kde(ax=ax4)
+ax4.set_title('KDE plot for pe_hh')
+
+df1["median_hu"].plot.kde(ax=ax5)
+ax5.set_title('KDE plot for median_hu')
+
+plt.show()
+
+```
+
+Upon viewing the kde plot, there seems to be some unusually low values for the percentages columns. This was a result of some of the percentage columns being formatted as decimals After inspection, I identified the offending rows as rows\[30:42\]. To correct these rows, I simply target rows having values less than a benchmark below which the values cannot possibly be valid and multiply by 100
+
+```{python}
+# correcting `female_pct` column
+mask1 = df1['female_pct'] < 5
+col1 = ['female_pct']
+df1.loc[mask1, col1] = df1.loc[mask1, col1] * 100
+```
+
+```{python}
+# checking that values are reasonable
+df1.female_pct.describe()
+```
+
+```{python}
+# checking offending rows
+df1.white_pct[30:42]
+```
+
+```{python}
+# standardizing
+mask3 = df1['white_pct'] < 1
+col3 = ['white_pct']
+df1.loc[mask3, col3] = df1.loc[mask3, col3] * 100
+```
+
+```{python}
+# checking result
+df1.white_pct[30:42]
+```
+
+```{python}
+# fishing rows
+df1.black_pct.sort_values()
+```
+
+```{python}
+# checking for a particular row to see if indeed the value is valid, which it is
+df1.loc[25]
+```
+
+```{python}
+# correcting 'black_pct
+mask2 = df1['black_pct'] < 0.3
+col2 = ['black_pct']
+df1.loc[mask2, col2] = df1.loc[mask2, col2] * 100
+```
+
+```{python}
+# checking result
+df1.black_pct.describe()
+```
+
+```{python}
+# fishing out offending rows
+df1.asian_pct.sort_values()
+```
+
+```{python}
+mask4 = df1['asian_pct'] < 0.3
+col4 = ['asian_pct']
+df1.loc[mask4, col4] = df1.loc[mask4, col4] * 100
+```
+
+```{python}
+# checking results
+df1.asian_pct.describe()
+```
+
+```{python}
+# correcting 'high_school_grad_higher'
+mask5 = df1['high_school_grad_higher'] < 5
+col5 = ['high_school_grad_higher']
+df1.loc[mask5, col5] = df1.loc[mask5, col5] * 100
+```
+
+```{python}
+# checking result
+df1.bsc_higher.describe()
+```
+
+```{python}
+df1.bsc_higher.sort_values()
+
+```
+
+```{python}
+#
+mask6 = df1['bsc_higher'] < 2
+col6 = ['bsc_higher']
+df1.loc[mask6, col6] = df1.loc[mask6, col6] * 100
+```
+
+```{python}
+df1.bsc_higher.describe()
+```
+
+```{python}
+#
+mask7 = df1['pe_whi'] < 1
+col7 = ['pe_whi']
+df1.loc[mask7, col7] = df1.loc[mask7, col7] * 100
+```
+
+```{python}
+# correcting the last % column
+mask8 = df1['poverty_pct'] < 1
+col8 = ['poverty_pct']
+df1.loc[mask8, col8] = df1.loc[mask8, col8] * 100
+```
+
+```{python}
+# checking the summary statistics again
+df1.describe()
+```
+
+```{python}
+# checking distribution again
+# plotting the kde of some variables to have a sense of the data distribution
+
+fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1, 5, figsize=(20, 4))
+
+df1["pop_2016"].plot.kde(ax=ax1)
+ax1.set_title('KDE plot for pop_2016')
+
+df1["female_pct"].plot.kde(ax=ax2)
+ax2.set_title('KDE plot for female_pct')
+
+df1["white_pct"].plot.kde(ax=ax3)
+ax3.set_title('KDE plot for white_pct')
+
+df1["pe_hh"].plot.kde(ax=ax4)
+ax4.set_title('KDE plot for pe_hh')
+
+df1["median_hu"].plot.kde(ax=ax5)
+ax5.set_title('KDE plot for median_hu')
+
+plt.show()
+```
+
+Now, the min values have no unusual numbers\
+Proceeding to EDA...
+
+## Preliminary Exploration on the Census Data
+
+Since the census dataset isn't the focus of this analysis, I will just do some brief exploration of the dataframe
+
+-   *What are the most populated and least states?*
+
+-   *Which states have highest and least black population?*
+
+-   *Which states have highest and lowest median household income?*
+
+```{python}
+# What are the most populated and least states?
+a = df1[['state', 'pop_2016']].nlargest(5,'pop_2016')
+b = df1[['state', 'pop_2016']].nsmallest(5,'pop_2016')
+
+c_list = [a, b]
+pd.concat(c_list, keys=['most populated', 'least pupulated'], axis='rows')
+
+```
+
+```{python}
+# Which states have highest and least black population?
+a = df1[['state', 'black_pct']].nlargest(5,'black_pct')
+b = df1[['state', 'black_pct']].nsmallest(5,'black_pct')
+
+c_list = [a, b]
+pd.concat(c_list, keys=['high black population', 'low black population'], axis='rows')
+
+```
+
+```{python}
+# Which states have highest and lowest median household income?
+a = df1[['state', 'median_hh_income']].nlargest(5,'median_hh_income')
+b = df1[['state', 'median_hh_income']].nsmallest(5,'median_hh_income')
+c_list = [a, b]
+pd.concat(c_list, keys=['high median household income ($)', 'low median household income ($)'], axis='rows')
+
+```
+
+```{python}
+# saving for later
+df1.to_csv('Data/df_census_cleaned_v2.csv', index=0)
+```
+
+------------------------------------------------------------------------
+
+## Preparing Gun Sales Data for EDA
+
+*In this section, I will prepare the dataframe for EDA*:
+
+```{python}
+# Reading in the dataset, and viewing heads, tails and  and random sample of the rows 
+df2 = pd.read_csv('Data/df_gun_cleaned.csv', index_col=0)
+df2.head()
+```
+
+```{python}
+# checking tail of data
+df2.tail()
+```
+
+```{python}
+# viewing random sample
+df2.sample(n=5)
+```
+
+```{python}
+# Getting the dimensions of the DataFrame with the .shape attribute:
+df2.shape
+```
+
+```{python}
+# checking for nulls
+df2.isnull().sum()
+
+```
+
+```{python}
+# revealing the nulls
+mask = df2.long_gun.isnull()
+df2[mask]
+```
+
+After doing some research, I could not find adequate data on gun purchases on these islands. If any, I figured it is going to be insubstantial anyway. So I proceed to fill these NaNs with zero.
+
+```{python}
+# fill nans with 0
+df2.long_gun.fillna(0, inplace=True)
+df2.handgun.fillna(0, inplace=True)
+```
+
+```{python}
+# inspecting
+df2.isnull().sum()
+```
+
+```{python}
+#  List the data type of each column, the number of non-missing values, and memory usage with the .info method:
+df2.info()
+```
+
+```{python}
+# saving for later
+df2.to_csv('Data/df2_gun_cleaned_v2.csv', index=False)
+```
+
+```{python}
+df2 = pd.read_csv('Data/df2_gun_cleaned_v2.csv')
+df2.head()
+```
+
+There are 12485 rows in this dataset representing each month per state, from 1998 - 2017. The data is clean: there are no null values, and the datatypes are appropriately assigned.
+
+## Data Dictionary
+
+| **s/n** | **Variable** | **Description**                                          |
+|:-----------------|:-----------------|:-----------------------------------|
+| 0       | state        | Each of the 50 states of the contiguous U.S.             |
+| 1       | handgun      | Population estimates by July 1, 2016                     |
+| 2       | long_gun     | Female persons, percent, by July 1, 2016                 |
+| 3       | multiple     | White alone, percent, by July 1, 2016                    |
+| 4       | year         | Black or African American alone, percent by July 1, 2016 |
+| 5       | month        | Asian alone, percent, July 1, 2016                       |
+
+```{python}
+# displaying summary statistics
+df2.describe()
+```
+
+```{python}
+# Following a [NY Times recommendation], gun sales can be approximated from check calls 
+# by multiplying checks for handgun and long_gun by a factor of 1.1 and that of multiple by 2
+
+df2['handgun'] = df2['handgun'].mul(1.1)
+df2['long_gun'] = df2['long_gun'].mul(1.1)
+df2['multiple'] = df2['multiple'].mul(2)
+
+
+df2.head()
+```
+
+```{python}
+# I am interested in gun trends in 2006, 2015 and 2016
+# so I extract data for those years
+
+df2_2006 = df2[df2['year'] == 2006]
+df2_2015 = df2[df2['year'] == 2015]
+df2_2016 = df2[df2['year'] == 2016]
+```
+
+```{python}
+# Since the year variable is now redundant, I opt to drop them
+# I use the reset_index method to have the index start from 0
+
+df2_2006 = df2_2006.drop(columns='year').reset_index(drop=True)
+df2_2015 = df2_2015.drop(columns='year').reset_index(drop=True)
+df2_2016 = df2_2016.drop(columns='year').reset_index(drop=True)
+```
+
+```{python}
+# checking the result
+df2_2006.head(3)
+```
+
+```{python}
+# saving for later
+df2_2006.to_csv('Data/df2_2006.csv')
+df2_2015.to_csv('Data/df2_2015.csv')
+df2_2016.to_csv('Data/df2_2016.csv')
+```
+
+Viewing the head of the three dataframes
+
+```{python}
+df2_2006 = pd.read_csv('Data/df2_2006.csv', index_col=0)
+df2_2015 = pd.read_csv('Data/df2_2015.csv', index_col=0)
+df2_2016 = pd.read_csv('Data/df2_2016.csv', index_col=0)
+
+df2_2006.head()
+```
+
+```{python}
+df2_2015.head()
+```
+
+```{python}
+df2_2016.head()
+```
+
+## **Exploratory Data Analysis 2**
+
+### **(Gun Sales Data)**
+
+*In this section, I will answer the following research questions*:
+
+> Year Level Questions: - *How many guns were sold in the U.S. in 2006?* - *What kind of gun was bought the most?* - *What are the overall monthly trends of gun purchases in 2006?*
+>
+> State Level Questions
+>
+> -   What are the top 5 states in terms of gun purchases in the U.S. in 2006?
+>
+> -   What are the most bought gun types in those states?
+>
+> -   What kind of gun was bought the most in one of those states?
+>
+> -   What are the overall monthly trends of gun purchases in those states?
+>
+> Which states had the highest growth in gun sales over the span of a decade?
+
+## 2006
+
+```{python}
+df2_2006 = pd.read_csv('Data/df2_2006.csv', index_col=0)
+df2_2006.head()
+```
+
+```{python}
+df2_2006.describe().T
+```
+
+```{python}
+# plotting the kde of the variables to have a sense of the data distribution
+# check how to change line color
+
+sns.set_style('darkgrid')
+
+fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(20, 4))
+
+df2_2006["handgun"].plot.kde(ax=ax1)
+ax1.set_title('KDE plot for handgun')
+
+df2_2006["long_gun"].plot.kde(ax=ax2)
+ax2.set_title('KDE plot for long_gun')
+
+df2_2006["multiple"].plot.kde(ax=ax3)
+ax3.set_title('KDE plot for multiple')
+
+df2_2006["month"].plot.kde(ax=ax4)
+ax4.set_title('KDE plot for month')
+
+plt.show()
+```
+
+### Year Level Questions
+
+-   How many guns were sold in the U.S. in 2006?
+
+-   What kind of gun was bought the most?
+
+-   What are the overall monthly trends of gun purchases in 2006?
+
+*How many guns were sold in the U.S. in 2006?*
+
+```{python}
+df2_2006[['handgun', 'long_gun', 'multiple']].sum().sum()
+```
+
+*What type of gun sold the most?*
+
+```{python}
+sns.set_style('darkgrid')
+fig, ax = plt.subplots(figsize=(8,6))
+
+d = df2_2006[['handgun', 'long_gun', 'multiple']].sum().sort_values(ascending=False)
+
+df2_2006[['handgun', 'long_gun', 'multiple']].sum().plot.barh(table=d)
+plt.setp(ax.get_xticklabels(), y=.05)
+plt.setp(ax.get_xticklines(), visible=False)
+
+print(df2_2006[['handgun', 'long_gun', 'multiple']].sum().sort_values(ascending=False))
+```
+
+*What is the trend of gun sales throughout the year in 2006?*
+
+```{python}
+df2_2006.groupby('month')[['handgun', 'long_gun', 'multiple']].sum().plot.line(title='Monthly Trends of Gun Sales in 2006')
+```
+
+### **State Level Questions**
+
+-   What are the top 5 states in terms of gun purchases in the U.S. in 2006?
+
+-   What are the most bought gun types in those states?
+
+-   What are the overall monthly trends of gun purchases in those states?
+
+*What are the top 5 states in terms of gun purchases in the U.S. in 2006?*
+
+```{python}
+df2_2006.head()
+```
+
+```{python}
+df2_2006['total'] = df2_2006['handgun'] + df2_2006['long_gun'] + df2_2006['multiple']
+df2_2006.head()
+```
+
+```{python}
+sns.set_style('darkgrid')
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+df2_2006.groupby('state')['total'].sum().sort_values(ascending=False).head().plot.barh(ax=ax1, title='Top 5 States by Gun Sales')
+df2_2006.groupby('state')[['handgun', 'long_gun', 'multiple','total']].sum().nlargest(5, 'total').plot.bar(ax=ax2, title='Breakdown of Gun Sales by Type')
+```
+
+*What are the top 5 states in terms of gun purchases in the U.S. in 2006?*
+
+*What are the most bought gun types in those states?*
+
+```{python}
+# What are the overall monthly trends of gun purchases overall and in those top 5 states?
+# i.e month on x, sales on y, faceted by states
+
+df2_2006.groupby('month')['total'].sum().plot.line(title = 'Overall Monthly Trend of Gun Sales in the U.S. in 2006')
+```
+
+```{python}
+
+fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1, 5, figsize=(25, 5))
+crit_1 = df2_2006.state == 'Texas'
+crit_2 = df2_2006.state == 'Pennsylvania'
+crit_3 = df2_2006.state == 'California'
+crit_4 = df2_2006.state == 'Florida'
+crit_5 = df2_2006.state == 'Ohio'
+
+df2_2006[crit_1].groupby('month')['total'].sum().plot.line(
+    ax=ax1, title='Monthly Gun Sales Trends in Texas')
+df2_2006[crit_2].groupby('month')['total'].sum().plot.line(
+    ax=ax2, title='Monthly Gun Sales Trends in Pennsylvania')
+df2_2006[crit_3].groupby('month')['total'].sum().plot.line(
+    ax=ax3, title='Monthly Gun Sales Trends in California')
+df2_2006[crit_4].groupby('month')['total'].sum().plot.line(
+    ax=ax4, title='Monthly Gun Sales Trends in Florida')
+df2_2006[crit_5].groupby('month')['total'].sum().plot.line(
+    ax=ax5, title='Monthly Gun Sales Trends in Ohio')
+    
+```
+
+## 2016
+
+```{python}
+# reading in the data
+df2_2016 = pd.read_csv('Data/df2_2016.csv', index_col=0)
+df2_2016.head()
+```
+
+```{python}
+# deriving summary statistics
+df2_2016.describe().T
+```
+
+```{python}
+# plotting the kde of the variables to have a sense of the data distribution
+# check how to change line color
+fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(20, 4))
+
+df2_2016["handgun"].plot.kde(ax=ax1)
+ax1.set_title('KDE plot for handgun')
+
+df2_2016["long_gun"].plot.kde(ax=ax2)
+ax2.set_title('KDE plot for long_gun')
+
+df2_2016["multiple"].plot.kde(ax=ax3)
+ax3.set_title('KDE plot for multiple')
+
+df2_2016["month"].plot.kde(ax=ax4)
+ax4.set_title('KDE plot for month')
+
+plt.show()
+```
+
+### Year Level Questions
+
+-   How many guns were sold in the U.S. in 2016?
+
+-   What kind of gun was bought the most?
+
+-   What are the overall monthly trends of gun purchases in 2016?
+
+*How many guns were sold in the U.S. in 2016?*
+
+```{python}
+df2_2016[['handgun', 'long_gun', 'multiple']].sum().sum()
+```
+
+*what type of gun sold the most?*
+
+```{python}
+fig, ax = plt.subplots(figsize=(8,6))
+
+d = df2_2016[['handgun', 'long_gun', 'multiple']].sum().sort_values(ascending=False)
+
+df2_2016[['handgun', 'long_gun', 'multiple']].sum().plot.barh(table=d)
+plt.setp(ax.get_xticklabels(), y=.05)
+plt.setp(ax.get_xticklines(), visible=False)
+
+print(df2_2016[['handgun', 'long_gun', 'multiple']].sum().sort_values(ascending=False))
+```
+
+*Trend of gun sales throughout the year in 2016*
+
+```{python}
+df2_2016.groupby('month')[['handgun', 'long_gun', 'multiple']].sum().plot.line(title='Monthly Trends of Gun Sales in 2016')
+```
+
+### **State Level Questions**
+
+-   What are the top 5 states in terms of gun purchases in the U.S. in 2016?
+-   What are the most bought gun types in those states?
+-   What was the most purchased gun in those states?
+-   What are the overall monthly trends of gun purchases in those states?
+
+```{python}
+df2_2016.head()
+```
+
+```{python}
+df2_2016['total'] = df2_2016['handgun'] + df2_2016['long_gun'] + df2_2016['multiple']
+df2_2016.head()
+```
+
+*What are the top 5 states in terms of gun purchases in the U.S. in 2016?* *What are the most bought gun types in those states?*
+
+```{python}
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+df2_2016.groupby('state')['total'].sum().sort_values(ascending=False).head().plot.barh(ax=ax1, title='Top 5 States by Gun Sales')
+df2_2016.groupby('state')[['handgun', 'long_gun', 'multiple','total']].sum().nlargest(5, 'total').plot.bar(ax=ax2, title='Breakdown of Gun Sales by Type')
+```
+
+*What are the overall monthly trends of gun purchases?*
+
+```{python}
+
+df2_2016.groupby('month')['total'].sum().plot.line(title = 'Overall Monthly Trend of Gun Sales in the U.S. in 2016')
+```
+
+```{python}
+
+
+fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1,5, figsize=(25,5))
+crit_1 = df2_2016.state == 'Texas'
+crit_2 = df2_2016.state == 'California'
+crit_3 = df2_2016.state == 'Florida'
+crit_4 = df2_2016.state == 'Pennsylvania'
+crit_5 = df2_2016.state == 'Ohio'
+
+df2_2016[crit_1].groupby('month')['total'].sum().plot.line(ax=ax1, title='Monthly Gun Sales Trends in Texas')
+df2_2016[crit_2].groupby('month')['total'].sum().plot.line(ax=ax2, title='Monthly Gun Sales Trends in California')
+df2_2016[crit_3].groupby('month')['total'].sum().plot.line(ax=ax3, title='Monthly Gun Sales Trends in Florida')
+df2_2016[crit_4].groupby('month')['total'].sum().plot.line(ax=ax4, title='Monthly Gun Sales Trends in Pennsylvania')
+df2_2016[crit_5].groupby('month')['total'].sum().plot.line(ax=ax5, title='Monthly Gun Sales Trends in Ohio')
+    
+```
+
+*Which states have the highest growth in gun registrations over the span of a decade?* 
+
+**To answer this question, I will:**
+
+1.  Load the 2016 dataframe
+
+2.  Create a new column named `total` which is the sum of the three form of gun sales
+
+3.  Drop the individual form of gun sales as they are now irrelevant to the research question
+
+4.  Rename the columns for clarity
+
+5.  Follow the above procedure for the 2006 dataframe
+
+6.  Merge both dataframes on `state` 
+
+7.  Subtract `total_2016` from total_2006' to get a column for change
+
+8.  Create a percentage change column
+
+9.  Sort the dataframe by `%_change` and visualize the result
+
+```{python}
+# 2016 dataframe is loaded
+df2_2016.head()
+```
+
+```{python}
+df2_2016['total'] = df2_2016['handgun'] + df2_2016['long_gun'] + df2_2016['multiple']
+```
+
+```{python}
+# aggregating df2 on the gun sales columns
+df2_2016 = df2_2016.groupby('state')[['handgun','long_gun','multiple', 'total']].sum()
+```
+
+```{python}
+# dropping columns
+cols = ['handgun', 'long_gun', 'multiple']
+df2_2016.drop(columns=cols, inplace=True)
+df2_2016.head()
+```
+
+```{python}
+# renaming for clarity
+df2_2016.rename(columns=lambda x: x + "_2016", inplace=True)
+df2_2016.head()
+```
+
+Now I follow the sme procedures for the 2006 dataframe
+
+```{python}
+df2_2006.head()
+```
+
+```{python}
+df2_2006['total'] = df2_2006['handgun'] + df2_2006['long_gun'] + df2_2006['multiple']
+```
+
+```{python}
+df2_2006 = df2_2006.groupby('state')[['handgun','long_gun','multiple', 'total']].sum()
+```
+
+```{python}
+cols = ['handgun', 'long_gun', 'multiple']
+df2_2006.drop(columns=cols, inplace=True)
+df2_2006.head()
+```
+
+```{python}
+# rename columns for clarity
+df2_2006.rename(columns=lambda x: x + "_2006", inplace=True)
+df2_2006.head()
+```
+
+Now, I merge both dataframes on ‘state’
+
+```{python}
+# merging the dataframe
+combined_df = df2_2016.merge(df2_2006, on='state', how='inner')
+combined_df.head()
+```
+
+```{python}
+# add column for total_change
+combined_df['total_change'] = combined_df['total_2016'] - combined_df['total_2006']
+combined_df.head()
+```
+
+```{python}
+# adding a column for % change and rounding to 2 d.f.
+combined_df['%_change'] = ((combined_df['total_change'] / combined_df['total_2006']) * 100).round(2)
+combined_df.head()
+```
+
+```{python}
+# states with the greatest changes in gun sales from 2006 to 2016
+combined_df.sort_values(by='%_change', ascending=False)
+```
+
+Visualizing results
+
+```{python}
+combined_df['%_change'].head(10).plot.line(
+    x='state', y='%_change', title='', figsize=(20, 4))
+```
+
+## Which census data variables are most associated with gun sales data?
+
+*To answer this question, I proceed merge the dataframes*
+
+```{python}
+# reading in the census data
+df1 = pd.read_csv('Data/df_census_cleaned_v2.csv')
+df1.head()
+```
+
+### **Data Dictionary**
+
+| s/n | Variable                | Description                                                                 |
+|:-----------------------|:-----------------------|:-----------------------|
+| 0   | state                   | Each of the 50 states of the contiguous U.S.                                |
+| 1   | pop_2016                | Population estimates by July 1, 2016                                        |
+| 2   | female_pct              | Female persons, percent, by July 1, 2016                                    |
+| 3   | white_pct               | White alone, percent, by July 1, 2016                                       |
+| 4   | black_pct               | Black or African American alone, percent by July 1, 2016                    |
+| 5   | asian_pct               | Asian alone, percent, July 1, 2016                                          |
+| 6   | pe_hh                   | Persons per household, 2011-2015                                            |
+| 7   | pe_whi                  | Persons without health insurance, under age 65 years, percent               |
+| 8   | adults_below_65         | adults older than 18, younger than 65, percent, 2016                        |
+| 9   | high_school_grad_higher | High school graduate or higher, percent of persons age 25 years+, 2011-2015 |
+| 10  | bsc_higher              | Bachelor's degree or higher, percent of persons age 25 years+, 2011-2015    |
+| 11  | median_hu               | Median value of owner-occupied housing units, 2011-2015                     |
+| 12  | median_gross_rent       | Median gross rent, 2011-2015                                                |
+| 13  | poverty_pct             | Persons in poverty, percent                                                 |
+| 14  | median_hh_income        | Median household income (in 2015 dollars), 2011-2015                        |
+| 15  | per_cap_inc             | Per capita income in past 12 months (in 2015 dollars), 2011-2015            |
+| 16  | firms                   | All firms, 2012                                                             |
+
+```{python}
+# reading in the gun data 
+df2 = pd.read_csv('Data/df2_2016.csv', index_col=0)
+df2.head()
+```
+
+### **Data Dictionary**
+
+| s/n | Variable | Description                                                  |
+|:-----------------------|:-----------------------|:-----------------------|
+| 0   | state    | Each of the 55 states and territories of the .U.S.           |
+| 1   | handgun  | handgun checks, transformed into sales by a factor of 1.1    |
+| 2   | long_gun | long-gun checks, transformed into sales by a factor of 1.1   |
+| 3   | multiple | multiple gun checks, transformed into sales by a factor of 2 |
+| 4   | month    | months of 2016                                               |
+
+```{python}
+
+```
+
+```{python}
+# number of unique states in census dataframe
+df1.state.nunique()
+```
+
+```{python}
+# number of unique states in gun sales dataframe
+df2.state.nunique()
+```
+
+```{python}
+# getting the uncommon territories in both datasets
+s1 = df1.state
+s2 = df2.state.unique()
+common_states = s1[s1.isin(s2)]
+
+s3 = df2.query("state not in @common_states")
+s3.loc[:, 'state'].unique()
+```
+
+These territories are part of the commonwealth of the United States but are not part of the mainland.
+
+```{python}
+# creating 'total' column
+df2['total'] = df2['handgun'] + df2['long_gun'] + df2['multiple']
+```
+
+```{python}
+# aggregating df2 on the gun sales columns
+df2_agg = df2.groupby('state')[['handgun','long_gun','multiple', 'total']].sum()
+df2_agg
+```
+
+Merging on df1’s state column
+
+```{python}
+merged_df = df2_agg.merge(df1, on='state', how='inner')
+merged_df.head(20)
+```
+
+```{python}
+# checking for nans throughout the dataframe
+merged_df.isnull().sum().sum()
+```
+
+```{python}
+merged_df.info()
+```
+
+```{python}
+merged_df.shape
+```
+
+```{python}
+# saving for later
+merged_df.to_csv('Data/merged_cleaned_data.csv', index=False)
+```
+
+## Exploratory Data Analysis(Univariate)
+
+*(Merged dataframe)*
+
+### Let’s explore the first 5 columns, representing the gun sales data
+
+```{python}
+merged_df = pd.read_csv('Data/merged_cleaned_data.csv')
+merged_df.head()
+```
+
+```{python}
+merged_df.info()
+```
+
+```{python}
+# plotting
+sns.set_style('whitegrid')
+fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(20,4))
+
+
+merged_df.handgun.hist(bins=20, ax=ax1)
+merged_df.long_gun.hist(bins=20, ax=ax2)
+merged_df.multiple.hist(bins=20, ax=ax3)
+merged_df.total.hist(bins=20, ax=ax4)
+
+ax1.set(title='Distribution of Handgun Sales')
+ax2.set(title='Distribution of Long-gun Sales')
+ax3.set(title='Distribution of Multiple Sales')
+ax4.set(title='Distribution of Total Sales')
+
+sns.despine(right=True)
+sns.despine(offset=0, trim=False)
+```
+
+```{python}
+# summary statistics
+merged_df[['handgun', 'long_gun', 'multiple', 'total']].describe().T
+```
+
+As expected with data regarding sales, the data is heavily right-skewed; with most of gun sales on the low end, evidenced by the mean being greater than the median.
+
+### Let’s explore the next 5 columns, representing the population % by race
+
+```{python}
+sns.set_style('whitegrid')
+fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1, 5, figsize=(20,4))
+
+
+merged_df.pop_2016.hist(bins=20, ax=ax1)
+merged_df.female_pct.hist(bins=20, ax=ax2)
+merged_df.black_pct.hist(bins=20, ax=ax3)
+merged_df.white_pct.hist(bins=20, ax=ax4)
+merged_df.asian_pct.hist(bins=20, ax=ax5)
+
+ax1.set(title='Distribution of the Whole Population')
+ax2.set(title='Distribution of the % Female Population')
+ax3.set(title='Distribution of the % Black Population')
+ax4.set(title='Distribution of the %  White Population')
+ax5.set(title='Distribution of the % Asian Population')
+
+sns.despine(right=True)
+sns.despine(offset=0, trim=False)
+```
+
+### Let’s explore the next 5 columns, representing levels of education and persons per household and persons without health insurance
+
+```{python}
+sns.set_style('whitegrid')
+fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1, 5, figsize=(20,4))
+
+
+merged_df. pe_hh.hist(bins=20, ax=ax1)
+merged_df.pe_whi.hist(bins=20, ax=ax2)
+merged_df.adults_below_65.hist(bins=20, ax=ax3)
+merged_df.high_school_grad_higher.hist(bins=20, ax=ax4)
+merged_df.bsc_higher.hist(bins=20, ax=ax5)
+
+ax1.set(title='count of persons per household')
+ax2.set(title='count of persons without health insurance')
+ax3.set(title='adult population below 65')
+ax4.set(title='High School Graduates or Higher')
+ax5.set(title='Bachelor Degree Holders or Higher')
+
+sns.despine(right=True)
+sns.despine(offset=0, trim=False)
+```
+
+### Let’s explore the next 6 columns, representing economic data
+
+```{python}
+sns.set_style('whitegrid')
+fig, (ax1, ax2, ax3, ax4, ax5, ax6) = plt.subplots(1, 6, figsize=(20,4))
+
+
+merged_df.median_hu.hist(bins=20, ax=ax1)
+merged_df.median_gross_rent.hist(bins=20, ax=ax2)
+merged_df.poverty_pct .hist(bins=20, ax=ax3)
+merged_df.median_hh_income.hist(bins=20, ax=ax4)
+merged_df.per_cap_inc.hist(bins=20, ax=ax5)
+merged_df.firms.hist(bins=20, ax=ax6)
+
+ax1.set(title='Housing Units Value')
+ax2.set(title='Median Gross Rent')
+ax3.set(title='% Persons in Poverty')
+ax4.set(title='Median Household Income')
+ax5.set(title='Per Capita Income')
+ax6.set(title='All firms')
+
+sns.despine(right=True)
+sns.despine(offset=0, trim=False)
+```
+
+## **Covariate Analysis**
+
+I want to create a new calculated column: `gun_sales_per_capita`, which would be derived from the division of total gun sales by state populations. This would provide a more appropriate baseline for the comparison of gun sales between states
+
+```{python}
+merged_df['gun_sales_per_capita'] = merged_df['total'] / merged_df['pop_2016']
+```
+```{python}
+merged_df['gun_sales_per_capita'].describe()
+```
+```{python}
+# getting the correlations with gun per capita
+
+merged_df.drop(columns="state").corrwith(other=merged_df['gun_sales_per_capita'])
+```
+```{python}
+# visualizing the correlations
+
+fig, ax = plt.subplots(figsize=(15, 15))
+corr = merged_df.drop(columns="state").corr()
+
+mask = np.zeros_like(corr, dtype=bool)
+mask[np.triu_indices_from(mask)] = True
+
+sns.heatmap(corr, mask=mask, fmt=".2f", annot=True, ax=ax,
+            cmap="RdBu", vmin=-1, vmax=1, square=True)
+```
+### **Plotting the variables against `gun_sales_per_capita` to spot associations**
+
+```{python}
+sns.pairplot(merged_df, x_vars=['pop_2016', 'female_pct', 'white_pct', 'black_pct', 'asian_pct'], y_vars=['gun_sales_per_capita'], kind='reg')
+```
+```{python}
+sns.pairplot(merged_df, x_vars=['pe_hh', 'pe_whi','adults_below_65', 'high_school_grad_higher', 'bsc_higher'], y_vars=['gun_sales_per_capita'], kind='reg')
+```
+```{python}
+sns.pairplot(merged_df, x_vars=['median_hu', 'median_gross_rent','poverty_pct', 'median_hh_income', 'per_cap_inc', 'firms'], y_vars=['gun_sales_per_capita'], kind='reg')
+```
+*Which census data is most associated with high gun sales per capita*
+
+| Variable                                      | Positive/Negative Correlation |
+|:------------------------------------------|:----------------------------|
+| persons per household (pe_hh)                 | negative                      |
+| persons without health insurance (pe_whi)     | positive                      |
+| bachelor degree holder or higher (bsc_higher) | negative                      |
+| median housing unit costs (median_hu)         | negative                      |
+| median gross rent                             | negative                      |
+
+## Conclusions
+
+*Caveats!*\
+**The findings of these analysis are summarised below. These are tentative and do indicate any causal relationship between variables.**
+
+> -   *The most populous states in the United States in 2016 are California, Texas, Florida, New York and Illinois.*
+>
+> -   *The least populous states are Wyoming, Vermont, Alaska, North Dakota and South Dakota.*
+
+> -   *States with the highest median household income in 2016 are Maryland, Alaska, New Jersey, Connecticut and Hawaii.*
+>
+> -   *States with the lowest median household income in 2016 are Mississippi, Arkankas, West Virginia, Alabama, and Kentucky.*
+
+> -   *States with the highest black population in 2016 are Mississippi, Louisiana, Georgia, Maryland and South Carolina.*
+>
+> -   *States with the lowest black population in 2016 are Montana, Idaho, Vermont, Wyoming and Utah.*
+
+### **2006**
+
+> -   *Long guns were sold the most in 2006 with about 5,268,550 units sold.*
+
+> -   *In 2006, handgun sales varied between 200 thousand and 300 thousand units throughout the year. However, long-gun sales started strongly at around 400 thousand units in January, started sinking in March till a year-low of just below 300 thousand units before dramatically shooting up to about 800 thousand units at the end of the year*
+
+> -   *The top 5 states in terms of gun sales are Texas, Pennsylvania, California, Florida and Ohio.*
+
+> -   *Among these states, only in Florida were handgun sales greater than long-gun sales.*
+
+> -   *All these states experience a remarkable dip in sales in the middle of the year.*
+
+### **2015**
+
+> *9 years later in 2015, handguns became most bought gun types with a total of about 8 million units sold across all states in the U.S.*
+
+> *The same trend of a dip in sales around the middle of the year and a sharp rise in purchases towards the end of the year persists.*
+
+> *Texas remains the top state in terms of gun purchases.*
+
+### **2016**
+
+> *A year later in 2016, total gun sales reached a little short of 16 million units. Handguns led the way at more than 8 million units.*
+
+> *Gun sales started relatively high compared to the previous years. I note the double dip in sales with second dip occuring around September. This double dip was mostly prominent in Florida. Another trend of note is that long-gun sales almost superceded handgun sales country-wise in November.*
+
+> *Texas, California, Florida, Pennsylvania and Ohio remains the top states in terms of gun purchases*
+
+> -   *Guam, Illinois, New Jersey, Connecticut and Massachusetts show the highest percentage increase in gun sales over the span of a decade (2006 - 2016). Hawaii, Mariana Islands, Iowa and Nebraska actually had gun sales reduced.*
+
+> -   *Gun sales per capita is weakly negatively correlated with `persons per household`; `persons without health insurance` (positive); `bachelor degree holder or higher` (negative)*; *`median housing unit costs` (negative)*; *`median gross rent` (negative)*

@@ -1,0 +1,46 @@
+---
+title: "Visualising call centre data trends"
+subtitle: "... as part of PwC's Virtual Internship program"
+author: "Edun Joshua"
+date: "2023-03-16"
+toc: true
+categories: [Tableau, data visualisation]
+image: "dashboard.png"
+---
+
+## About The Project 🍪
+
+Live Demo: [here](https://public.tableau.com/app/profile/joshua1294/viz/pwc-call-centre-trends/Dashboard)
+
+<div>
+
+::: {#viz1704583120576 .tableauPlaceholder style="position: relative"}
+<noscript><a href='#'><img src="https://public.tableau.com/static/images/pw/pwc-call-centre-trends/Dashboard/1_rss.png" alt="Good Morning, Manager! " style="border: none"/></a></noscript>
+
+<object class="tableauViz" style="display:none;">
+
+<param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='pwc-call-centre-trends&#47;Dashboard' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;pw&#47;pwc-call-centre-trends&#47;Dashboard&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-GB' />
+
+</object>
+:::
+
+</div>
+
+```{=html}
+<script type='text/javascript'>                    var divElement = document.getElementById('viz1704583120576');                    var vizElement = divElement.getElementsByTagName('object')[0];                    if ( divElement.offsetWidth > 800 ) { vizElement.style.width='1300px';vizElement.style.height='827px';} else if ( divElement.offsetWidth > 500 ) { vizElement.style.width='1300px';vizElement.style.height='827px';} else { vizElement.style.width='100%';vizElement.style.height='1727px';}                     var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+```
+
+I designed this dashboard as part of a PwC Switzerland Virtual Internship Program.
+
+My design considerations included 5 KPIs I came up with from the dataset: Number of calls answered, Number of calls abandoned, Average speed taken to answer calls, Average cal duration and Average satisfaction rating. After defining the KPIs, I translated them to Tableau code and implemented them.
+
+I designed 3 filter element that allowed easy filtering by date, call topic and call agent.
+
+One KPI of note is the Agent performance. The agent performance quadrant allows performance to be measured across two dimensions, average calls answered by the agent and the average call duration of their calls. 
+
+The visual can be viewed and interacted with at [link](https://public.tableau.com/views/pwc-call-centre-trends/Dashboard?:language=en-GB&:display_count=n&:origin=viz_share_link)
+
+## Contact
+
+Edun Joshua Olubori - [connect on linkedin](https://www.linkedin.com/in/joshua-edun) - joshuaolubori\@gmail.com
+
