@@ -4,7 +4,7 @@ subtitle: "My take on the AdventureWorks dataset; featuring database creation, d
 author: "Edun Joshua"
 date: "2022-05-28"
 toc: true
-categories: [python, data visualisation]
+categories: [python, data visualisation, data engineering]
 image: "Adw ERD.png"
 ---
 
