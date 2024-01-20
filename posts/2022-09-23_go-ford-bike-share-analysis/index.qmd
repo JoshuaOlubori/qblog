@@ -1,0 +1,17 @@
+---
+title: "Deriving insights from bike traffic data"
+subtitle: "Second case study as part of my Udacity Nanodegree"
+author: "Edun Joshua"
+date: "2022-09-23"
+toc: true
+categories: [python, data visualisation, data wrangling]
+image: "image.png"
+eval: false
+---
+
+## Introduction
+I pushed python data wrangling and visualisation to the limit in this project. I hope you rate it highly. 
+```{=html}
+<iframe src="https://www.kaggle.com/embed/joshuaolubori/udacity-goford-bike-share-analysis?kernelSessionId=106326569" height="800" style="margin: 0 auto; width: 100%; max-width: 950px;" frameborder="0" scrolling="auto" title="Udacity_GoFord_Bike_Share_Analysis"></iframe>
+```
+This code is hosted on Kaggle. View this and more on my [Kaggle page](https://www.kaggle.com/code/joshuaolubori/udacity-goford-bike-share-analysis)
