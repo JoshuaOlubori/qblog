@@ -1,0 +1,19 @@
+---
+title: "Tweet Data Analysis"
+subtitle: "Hardcore python wrangling of Twitter data"
+author: "Edun Joshua"
+date: "2022-09-18"
+toc: true
+categories: [python, data visualisation, data wrangling]
+image: "image.png"
+eval: false
+---
+
+## Introduction
+As part of the Udacity Data Analysis with Python Nanodegree, I was the first to complete this project in my cohort. Feel free to review and offer your thoughts.
+```{=html}
+<iframe src="https://www.kaggle.com/embed/joshuaolubori/tweet-data-wrangling-and-analysis?kernelSessionId=105920798" height="800" style="margin: 0 auto; width: 100%; max-width: 950px;" frameborder="0" scrolling="auto" title="Tweet Data Wrangling and Analysis">
+
+</iframe>
+```
+This code is hosted on Kaggle. View this and more on my [Kaggle page](https://www.kaggle.com/code/joshuaolubori/tweet-data-wrangling-and-analysis)

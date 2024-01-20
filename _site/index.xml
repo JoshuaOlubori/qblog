@@ -32794,6 +32794,34 @@ font-style: inherit;">'reg'</span>)</span></code></pre></div>
   <media:content url="https://joshuaolubori.onrender.com/posts/2022-10-05_FBI-Gun-Data-EDA/dashboard.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
+  <title>Tweet Data Analysis</title>
+  <dc:creator>Edun Joshua</dc:creator>
+  <link>https://joshuaolubori.onrender.com/posts/2022-09-18_tweet-wrangling/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>As part of the Udacity Data Analysis with Python Nanodegree, I was the first to complete this project in my cohort. Feel free to review and offer your thoughts.</p>
+<iframe src="https://www.kaggle.com/embed/joshuaolubori/tweet-data-wrangling-and-analysis?kernelSessionId=105920798" height="800" style="margin: 0 auto; width: 100%; max-width: 950px;" frameborder="0" scrolling="auto" title="Tweet Data Wrangling and Analysis">
+
+</iframe>
+<p>This code is hosted on Kaggle. View this and more on my <a href="https://www.kaggle.com/code/joshuaolubori/tweet-data-wrangling-and-analysis">Kaggle page</a></p>
+
+
+</section>
+
+ ]]></description>
+  <category>python</category>
+  <category>data visualisation</category>
+  <category>data wrangling</category>
+  <guid>https://joshuaolubori.onrender.com/posts/2022-09-18_tweet-wrangling/index.html</guid>
+  <pubDate>Sat, 17 Sep 2022 23:00:00 GMT</pubDate>
+  <media:content url="https://joshuaolubori.onrender.com/posts/2022-09-18_tweet-wrangling/image.png" medium="image" type="image/png" height="102" width="144"/>
+</item>
+<item>
   <title>Sales Monitoring Dashboard</title>
   <dc:creator>Edun Joshua</dc:creator>
   <link>https://joshuaolubori.onrender.com/posts/2022_05_28_Adventure-works/index.html</link>
