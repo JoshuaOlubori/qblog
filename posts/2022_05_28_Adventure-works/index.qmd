@@ -6,9 +6,10 @@ date: "2022-05-28"
 toc: true
 categories: [python, data visualisation, data engineering]
 image: "Adw ERD.png"
+eval: false
 ---
 
-## About The Project 🍪
+## The Dashboard 🍪
 
 <div>
 
@@ -57,7 +58,7 @@ Client wants a dashboard monitoring sales of company's product
 The raw data exists in 9 CSV files representing 1 fact table and 8 dimension tables
 
 | Table                 | description (datatype)                                           |
-|-----------------------|------------------------------------------------------------------|
+|--------------------|----------------------------------------------------|
 | Budget                | details budget of each product and product categories per period |
 | BudgetPeriod          | date table for the budget table                                  |
 | customer              | each row records a customer information                          |
@@ -77,59 +78,41 @@ import csv
 import os
 
 def escape_quotes(value):
-    # Escape single quotes within a value by doubling them
     return value.replace("'", "''")
 
 def convert_csv_to_sql(csv_file):
     try:
-        # Extract table name from CSV file name
         table_name = os.path.splitext(os.path.basename(csv_file))[0].lower()
         
-        # Open the CSV file for reading
         with open(csv_file, 'r') as csvfile:
-            # Create a CSV reader object
             reader = csv.reader(csvfile)
             
-            # Extract the header row and column names
             headers = next(reader)
             columns = ', '.join(headers)
             
-            # Generate the output SQL file name
             sql_file = f"{table_name}.sql"
             
-            # Create the results folder if it doesn't exist
             os.makedirs('results', exist_ok=True)
             
-            # Update the SQL file path to include the results folder
             sql_file = os.path.join('results', sql_file)
             
-            # Create the SQL file for writing
             with open(sql_file, 'w') as sqlfile:
-                # Initialize a list to store values for each row
                 all_values = []
                 
-                # Iterate over the CSV rows
                 for row in reader:
-                    # Prepare the values for the insert statement, escaping single quotes
                     values = []
                     for header, value in zip(headers, row):
                         if header.lower() == 'id' or header.lower().endswith('_id') or header.lower() == 'quantity' or header.lower() == 'unit_price':
-                            # For 'id' columns and columns ending with '_id', insert the value as is (without quotes):
                             values.append(value)
                         elif value == '':
-                            # Insert NULL for blank values
                             values.append('NULL')
                         else:
-                            # Escape single quotes for other columns
                             values.append(f"'{escape_quotes(value)}'")
                     
-                    # Append the values for the current row to the list
                     all_values.append(f"({', '.join(values)})")
 
-                # Generate the final SQL insert statement with multiple value sets
                 sql_insert = f"INSERT INTO {table_name} ({columns}) VALUES {', '.join(all_values)};\n"
                 
-                # Write the SQL insert statement to the SQL file
                 sqlfile.write(sql_insert)
                 
                 print(f"Conversion completed successfully. SQL file '{sql_file}' generated.")
@@ -189,3 +172,5 @@ IF(RANKX(ALL('awdb dim_product'[product_name]), [Total Sales],,DESC)<=10,[Total 
 Total Sales = 
 SUM('awdb fact_sales'[SalesAmount])
 ```
+
+[Back to the top](https://joshuaolubori.onrender/posts/2022_05_28_Adventure-works/index.html#the-dashboard)

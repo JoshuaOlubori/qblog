@@ -15,7 +15,1109 @@
 <link>https://joshuaolubori.onrender.com/index.html</link>
 </image>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Wed, 29 Nov 2023 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 19 Jan 2024 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Aqua Vista College Database</title>
+  <dc:creator>Edun Joshua</dc:creator>
+  <link>https://joshuaolubori.onrender.com/posts/2024-01-20_Aqua-Vista/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="task-introduction" class="level2">
+<h2 class="anchored" data-anchor-id="task-introduction">Task Introduction</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://joshuaolubori.onrender.com/posts/2024-01-20_Aqua-Vista/Boscombe Timeline Diagram Graph.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+<p>Based on the case study (interview scripts and required reports) at the end of this brief, provide the following:</p>
+<ul>
+<li><p><strong>Conceptual ERD with justifications of design choices</strong></p></li>
+<li><p><strong>Logical Design utilising skeleton tables</strong></p>
+<ul>
+<li>Primary Keys are underlined, and Foreign Keys have an asterisk next to them. e.g.&nbsp;table_name(table_id, table_attribute, other_table_id*)</li>
+</ul></li>
+<li><p><strong>Indication of report creation</strong></p>
+<ul>
+<li>Indicate which tables from your design would be used, and what are the common values.</li>
+</ul></li>
+<li><p><strong>Outline of data accuracy strategy</strong></p>
+<ul>
+<li>What concrete measures would you take to ensure data can be analysed to aid prediction?</li>
+</ul></li>
+</ul>
+<p><u><strong>To achieve a distinction:</strong></u></p>
+<ul>
+<li><p>The Conceptual ERD fully covers the case study’s entities and relationships. There are justifications provided for the design choices based on the case study’s statements. The justifications are thought through, concrete and well-argued.</p></li>
+<li><p>The Logical Design is in the required format, and it is directly derived from and related to the produced Conceptual ERD. Where design choices needed to be taken, they are clearly indicated and justified. Problematic relationships, such as many-to-many relationships have been resolved correctly.</p></li>
+<li><p>A clear indication which entities/tables had to be included to produce the required reports, and which matching fields were used.</p></li>
+<li><p>A mature and concrete strategy to ensure data accuracy is provided which is relevant for the given case study.</p></li>
+</ul>
+</section>
+<section id="conceptual-erd" class="level2">
+<h2 class="anchored" data-anchor-id="conceptual-erd">Conceptual ERD</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://drive.google.com/file/d/1GN0GldyXjL1rbZR1xtUoeO48Zm1_WF1B/view?usp=sharing"><img src="https://joshuaolubori.onrender.com/posts/2024-01-20_Aqua-Vista/Boscombe Beach University (Conceptual) v3.jpeg" class="img-fluid figure-img"></a></p>
+<figcaption class="figure-caption">Aqua Vista College Database - Conceptual ERD. (Click to view full image online)</figcaption>
+</figure>
+</div>
+</section>
+<section id="logical-design" class="level2">
+<h2 class="anchored" data-anchor-id="logical-design">Logical Design</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://drive.google.com/file/d/13HxRuYCcAWOEFdGclFkyBaL3onfc-kpu/view?usp=sharing"><img src="https://joshuaolubori.onrender.com/posts/2024-01-20_Aqua-Vista/Boscombe Beach University (Logical) v2.jpeg" class="img-fluid figure-img"></a></p>
+<figcaption class="figure-caption">Aqua Vista College - Logical Design. (Click to view full image online)</figcaption>
+</figure>
+</div>
+</section>
+<section id="design-justifications" class="level2">
+<h2 class="anchored" data-anchor-id="design-justifications">Design Justifications</h2>
+<section id="office-allocation" class="level4">
+<h4 class="anchored" data-anchor-id="office-allocation">Office Allocation:</h4>
+<p>Implementing a dedicated “<code>Office</code>” entity and bridge table for academic staff assignments unlocks the following advantages: <strong>flexibility</strong> to track office occupancy dynamically with start and end dates, <strong>data efficiency</strong> by avoiding redundancy through centralized office details and shared/single occupancy flags, and <strong>clarity</strong> by decoupling physical locations from reporting structures and staff attributes, leading to a more interpretable model.</p>
+</section>
+<section id="line-management" class="level4">
+<h4 class="anchored" data-anchor-id="line-management">Line Management</h4>
+<p>Representing the Academic Staff reporting structure within the university is elegantly achieved through a self-referencing <code>AcademicStaff</code> entity. This leverages a natural one-to-one relationship referencing the line_manager_id attribute, allowing each staff member to have a designated manager while managers oversee multiple staff as needed. This avoids the redundancy of a dedicated line manager table, maintaining streamlined queries and ensuring consistent data. The self-referencing approach eliminates the need for additional joins, keeping the model clear and easily traversable.</p>
+</section>
+<section id="resolving-the-many-to-many-relationship-between-academicstaff-and-unit" class="level4">
+<h4 class="anchored" data-anchor-id="resolving-the-many-to-many-relationship-between-academicstaff-and-unit">Resolving the many-to-many relationship between AcademicStaff and Unit</h4>
+<p>The Head of Department interview revealed that: some academics teach several units, some none, and units can have multiple instructors. A dedicated bridge table elegantly untangles this many-to-many relationship.</p>
+<p>Beyond capturing the current teaching relationships, this design offer these benefits:</p>
+<ul>
+<li>Dynamic tracking: Start and end dates record teaching history, combating the “slowly changing dimensions” issue and aiding analysis of past assignments.</li>
+<li>Future-proof scalability: Easily extend the model to track different appointment types or add new analytical data.</li>
+<li>Efficient queries: The bridge table centralizes teaching data, making queries related to instructors or units much faster than sifting through individual records.</li>
+</ul>
+<p>This robust design allows valuable insights for analysis, reporting, and career progression tracking, while laying a flexible foundation for future changes.</p>
+</section>
+<section id="modelling-academic-staffs-research-interests" class="level4">
+<h4 class="anchored" data-anchor-id="modelling-academic-staffs-research-interests">Modelling Academic Staff’s Research Interests</h4>
+<p>Following the Head of Department’s emphasis - “all academic staff members are required to record their research interests” - research interests are modeled as a mandatory one-to-many relationship with academic staff. Every staff member must actively record their research interests, and this relationship is reflected by the Crow’s Foot notation in the relationship between the entities.</p>
+</section>
+<section id="subjects-and-units" class="level4">
+<h4 class="anchored" data-anchor-id="subjects-and-units">Subjects and Units</h4>
+<p>A many-to-many relationship exists between these two entities, as outlined in the requirements derived from the interview with the Head of Department. This relationship is effectively resolved by a bridge table, aligning with the fact that a <code>Unit</code> may encompass multiple <code>Subjects</code>, and conversely, a <code>Subject</code> can be associated with multiple <code>Units</code>.</p>
+<p>The Industry Liaison Lead validates that subjects are open to proposals from companies. To address this requirement, a <em>proposed_by_company</em> foreign key field is incorporated, establishing a connection with the Industry Partner entity. This ensures that the relationship between subjects and proposing companies is appropriately represented in the database structure.</p>
+</section>
+<section id="course-enrollment" class="level4">
+<h4 class="anchored" data-anchor-id="course-enrollment">Course Enrollment</h4>
+<p>The interview underscores that students dedicate themselves to a single course at a time, establishing a one-to-one relationship between a student and their presently enrolled course. Although students eventually undertake multiple courses throughout their program, this is done sequentially, indicating that they are not concurrently enrolled in several courses.</p>
+<p>This design facilitates the historical tracking of student enrollment. While the primary focus is on the current course, there arises a necessity to trace past courses undertaken by a student. Introducing a bridge table offers an efficient means of storing and retrieving historical enrollment data without cluttering the <code>Student</code> or <strong><code>Course</code></strong> entities.</p>
+<p>The bridge table offers flexibility to manage potential scenarios such as course changes or leaves of absence, ensuring a precise record of all courses a student has enrolled in during their program. The <em>course_completion_status</em> attribute enables this record-keeping through a check constraint represented as an ENUM datatype with values like “Completed,” “Ongoing,” and “Withdrawn.”</p>
+<p>Additional attributes may be incorporated into the bridge table for each enrollment record, including start and end dates, course completion status, grades, or even reasons for withdrawal if applicable. This supplementary information proves valuable for subsequent analysis and reporting purposes.</p>
+</section>
+<section id="unit-attendance-and-session" class="level4">
+<h4 class="anchored" data-anchor-id="unit-attendance-and-session">Unit, Attendance and Session</h4>
+<p>This approach incorporates a bridge table between students and sessions to record attendance. Reflecting the Head of Department’s statement that “A session can be a lecture, seminar, or lab associated with a unit,” an ENUM constraint on the <em>session_type</em> attribute ensures adherence to these three specified values.</p>
+<p>Moreover, as per the emphasis on sessions potentially being part of extra-curricular events with external speakers, the design introduces a distinct entity, “<em>extra-curricular_event</em>,” to capture this information. The relationship is non-mandatory, and the Crow’s Foot notation appropriately signifies this flexibility.</p>
+<p>Given that units encompass sessions and sessions relate to subjects, the design establishes a connection between the <em>session_id</em> attribute and the <em>subject_id</em> attribute through the <code>unit_subject</code> bridge table. This alignment is logical, considering each unit-subject combination functions as an independent entity, allowing for variations in their respective sessions.</p>
+<p>To address the requirement that a subject may not yet be part of any unit or session, the presence of an <em>approval_status</em> ENUM attribute effectively manages this condition.</p>
+</section>
+<section id="industrial-partnership" class="level4">
+<h4 class="anchored" data-anchor-id="industrial-partnership">Industrial Partnership</h4>
+<p>The interview with the Industrial Liaison Lead sheds light on the interaction between the school and industry partners. Industrial partners are embodied in an <code>Industry Partner</code> entity, contributing through the delivery of <code>Talks</code> on specific subjects. This is depicted as a one-to-many optional relationship with the <code>Talks</code> entity, along with a one-to-one relationship between <code>Talks</code> and <code>Subject</code>.</p>
+<p>In the discussion, the official affirms that companies can propose multiple subjects, and conversely, a subject can be proposed by multiple companies, establishing a resolved many-to-many relationship through the <code>industry_partners_subject</code> bridge table, linking Industry <code>Partner</code> to <code>Subject</code>. This bridge table serves to capture additional proposal details, including the proposal date and description.</p>
+<p>Recognizing that not all subjects are covered by industry partners, an optional relationship is indicated between <code>subject</code> and <code>industry_partner_subject</code> using Crow’s Foot notation. The <em>subject_type</em> has an ENUM type, offering values “traditional” and “proposed.”</p>
+<p>The <em>subject_type</em> attribute distinguishes a subject’s origin, marking it as either proposed by an industry partner or part of Aqua Vista’s traditional curriculum.</p>
+</section>
+<section id="talks-and-activity" class="level4">
+<h4 class="anchored" data-anchor-id="talks-and-activity">Talks and Activity</h4>
+<p>Talks may encompass various activities, and it is affirmed that recording these activities is crucial. As a solution, an activity entity has been established, featuring a <em>talk_id</em> foreign key referencing the Talks entity. Each talk or activity is associated with a designated contact person, fulfilling this requirement through the inclusion of a <em>contact_person_phone</em> attribute that stores the contact information of the designated person. I could not confirm if the contact person is a staff of the school, otherwise, I would relate this attribute to the academic_staff entity.</p>
+<p>Recognizing that not all partners engage in delivering talks, the model accommodates this by incorporating an optional one-to-many relationship between industry partners and talks. This ensures flexibility in representing instances where some industry partners may not be involved in delivering talks.</p>
+</section>
+</section>
+<section id="indication-of-report-creation" class="level2">
+<h2 class="anchored" data-anchor-id="indication-of-report-creation">Indication of report creation</h2>
+<section id="identifying-the-sessions-most-students-attended-out-of-all-subjects-delivered-by-an-external-company" class="level3">
+<h3 class="anchored" data-anchor-id="identifying-the-sessions-most-students-attended-out-of-all-subjects-delivered-by-an-external-company">Identifying the sessions most students attended out of all subjects delivered by an external company</h3>
+<p><strong>Tables:</strong></p>
+<ol type="1">
+<li><strong>Attendance:</strong> Tracks student participation, linking <strong>student_id</strong> to <strong>session_id</strong>.</li>
+<li><strong>Session:</strong> Holds information about individual sessions, including the associated <strong>unit_subject_id</strong>.</li>
+<li><strong>Unit_Subject:</strong> Bridges sessions and subjects, connecting <strong>session_id</strong> to <strong>unit_subject_id</strong>.</li>
+<li><strong>Subject:</strong> Captures subject details, including a unique <strong>subject_id</strong> and a “<strong>subject_type</strong>” flag indicating external involvement.</li>
+</ol>
+<p><strong>Common Values:</strong></p>
+<ul>
+<li><strong>SessionID:</strong> Unique identifier for each session, linking <code>Attendance</code> and <code>Session</code> data.</li>
+<li><strong>UnitSubjectID:</strong> Unique identifier for each <code>Unit-Subject</code>, acting as the bridge between <code>Session</code> and <code>Subject</code> tables.</li>
+<li><strong>SubjectID:</strong> Unique identifier for each <code>Subject</code>, enabling filtering for those externally proposed in the <code>Subject</code> table.</li>
+</ul>
+<p><strong>Methodology:</strong></p>
+<ol type="1">
+<li><strong>Filter Sessions:</strong> Using the <code>Subject</code> table’s “subject_type” flag as a filter, I select only sessions linked to subjects tagged as “<em>External</em>”</li>
+<li><strong>Join and Aggregate:</strong> By joining Attendance, Session, Unit_Subject_Junction, and Subject tables on their respective common values, we can count the number of students attending each session.</li>
+<li><strong>Identify Maximum Attendance:</strong> Finally, we sort the aggregated data by student attendance in descending order and locate the session with the highest attendance count, pinpointing the most popular session delivered by an external company.</li>
+</ol>
+<p>The following SQL query will deliver the report:</p>
+<blockquote class="blockquote">
+<p><code>SELECT s.SessionID, COUNT(a.StudentID) AS AttendanceCount</code></p>
+<p><code>FROM Attendance a JOIN Session s ON a.SessionID = s.SessionID</code></p>
+<p><code>JOIN Unit_Subject_Junction usj ON s.UnitSubjectID = usj.UnitSubjectID</code></p>
+<p><code>JOIN Subject sub ON usj.SubjectID = sub.SubjectID</code></p>
+<p><code>WHERE sub.subject_type = "External"GROUP BY s.SessionID ORDER BY AttendanceCount DESC LIMIT 1;</code></p>
+</blockquote>
+</section>
+<section id="identifying-the-unit-with-the-most-sessions-delivered-by-a-company-on-any-subject" class="level3">
+<h3 class="anchored" data-anchor-id="identifying-the-unit-with-the-most-sessions-delivered-by-a-company-on-any-subject">Identifying the unit with the most sessions delivered by a company on any subject</h3>
+<p>To reveal the unit hosting the most sessions delivered by companies across all subjects, the following entities are identified.</p>
+<p><strong>Tables:</strong></p>
+<ol type="1">
+<li><p><strong>Session</strong>: Captures session details, including the associated <strong>unit_subject_id</strong>.</p></li>
+<li><p><strong>Unit_Subject</strong>: Bridges sessions to units and subjects, connecting <strong>session_id</strong> to <strong>unit_subject_id</strong> and <strong>subject_id</strong>.</p></li>
+<li><p><strong>Unit</strong>: Holds unit information, including the unique <strong>unit_id</strong>.</p></li>
+<li><p><strong>Subject</strong>: Stores subject details, including the <strong>subject_type</strong> flag indicating company involvement.</p></li>
+</ol>
+<p><strong>Common Values:</strong></p>
+<ol type="1">
+<li><strong>UnitSubjectID</strong>: Unique identifier for each unit-subject, linking <code>Session</code> and <code>Unit_Subject</code> tables.</li>
+<li><strong>UnitID</strong>: Unique identifier for each Unit, connecting <code>Unit_Subject</code> and <code>Unit</code> tables.</li>
+<li><strong>SubjectID</strong>: Unique identifier for each subject, enabling filtering for those marked as externally proposed in the Subject table.</li>
+</ol>
+<p><strong>Methodology:</strong></p>
+<ol type="1">
+<li><p><strong>Filter Company-Delivered Sessions</strong>: Employ the <code>WHERE</code> clause to select only sessions linked to subjects where the <strong>subject_type</strong> flag is “Exernal”. This ensures we focus on sessions originating from external partnerships.</p></li>
+<li><p><strong>Join and Aggregate</strong>: By joining <code>Session</code>, <code>Unit_Subject</code>, and <code>Unit</code> tables on their respective common values, we associate sessions with their corresponding units and count the total number of sessions per unit.</p></li>
+<li><p><strong>Identify Top Unit</strong>: We order the aggregated data by session count in descending order. The unit at the top boasts the highest number of sessions delivered by a company, making it the champion of external collaborations.</p></li>
+</ol>
+<p>The following SQL query will deliver the report:</p>
+<blockquote class="blockquote">
+<p><code>SELECT u.unit_id, u.unit_name, COUNT(s.session_id) AS session_count</code></p>
+<p><code>FROM Session s JOIN Unit_Subject_Junction usj ON s.unit_subject_id = usj.unit_subject_id</code></p>
+<p><code>JOIN Unit u ON usj.unit_id = u.unit_id</code></p>
+<p><code>JOIN Subject sub ON usj.subject_id = sub.subject_id</code></p>
+<p><code>WHERE sub.subject_type = "External"</code></p>
+<p><code>GROUP BY u.unit_id, u.unit_name ORDER BY session_count DESC LIMIT 1;</code></p>
+</blockquote>
+</section>
+</section>
+<section id="identifying-the-academic-staff-with-the-most-research-interests" class="level2">
+<h2 class="anchored" data-anchor-id="identifying-the-academic-staff-with-the-most-research-interests">Identifying The Academic staff with the most Research Interests</h2>
+<p>To uncover the academic staff member with the most diverse research interests within your Aqua Vista College, the database design offers the insights through two tables:</p>
+<p><strong>Tables:</strong></p>
+<ul>
+<li><strong>academic_staff:</strong> This table holds core information about staff members, including their unique <code>staff_id</code> and <code>first_name</code>.</li>
+<li><strong>research_interests:</strong> This table captures details about staff members’ research pursuits, linking them to individual staff through the <code>staff_id</code> and providing descriptive <code>research_title</code> information.</li>
+</ul>
+<p><strong>The Bridge: Shared Values:</strong></p>
+<p><code>staff_id</code>. links these 2 tables together. This unique identifier, present in both tables, allows to seamlessly connect each staff member with their respective research interests.</p>
+<p><strong>Methodology:</strong></p>
+<ol type="1">
+<li><strong>Connecting the Dots:</strong> We’ll employ a JOIN operation to merge the <code>academic_staff</code> and <code>research_interests</code> tables on the <code>staff_id</code> column. This creates a unified view where each staff member is accompanied by their research areas.</li>
+<li><strong>Quantifying Passion:</strong> For each staff member, we’ll utilize the <code>COUNT()</code> function to determine the total number of research interests listed in the <code>research_interests</code> table associated with their <code>staff_id</code>. This effectively quantifies their research diversity.</li>
+<li><strong>Crowning the Champion:</strong> Finally, we’ll order the combined data by the <code>count</code> of research interests in descending order. The staff member at the top, boasting the highest count, emerges as the champion of diversified research pursuits within your institution.</li>
+</ol>
+<p>The following SQL query will deliver the report:</p>
+<blockquote class="blockquote">
+<p><code>SELECT as.staff_id, as.first_name, COUNT(ri.research_id) AS research_interest_count</code></p>
+<p><code>FROM academic_staff as JOIN research_interests ri ON as.staff_id = ri.staff_id</code></p>
+<p><code>GROUP BY as.staff_id, as.first_name</code></p>
+<p><code>ORDER BY research_interest_count DESC LIMIT 1;</code></p>
+</blockquote>
+</section>
+<section id="data-accuracy-strategy" class="level2">
+<h2 class="anchored" data-anchor-id="data-accuracy-strategy">Data Accuracy Strategy</h2>
+<section id="data-accuracy-strategy-for-institutional-research-and-teaching-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="data-accuracy-strategy-for-institutional-research-and-teaching-analysis">Data Accuracy Strategy for Institutional Research and Teaching Analysis:</h3>
+<p><strong><em>Objective: Establish the database reliably for analyzing research interests, teaching involvement, and other key academic elements.</em></strong></p>
+<p><strong>Concrete Measures:</strong></p>
+<p>Enum Constraints for Research Interests: Apply ENUM constraints, such as for the “category” field in the academic_staff table, restricting values to a predefined set (“lecturers” or “demonstrators”). Integrate drop-down menus in the front-end to facilitate user selection, minimizing ambiguity and ensuring consistency.</p>
+<p>Teaching Units: Implement lookups or autocomplete features for existing units in the front-end, preventing typographical errors and eliminating duplicate entries during data entry.</p>
+<p>Enforce Temporal Validity in Office Allocation: Enact data integrity rules to prohibit overlapping occupancy periods or exceeding office capacity, enhancing accuracy in office allocation records.</p>
+<p>Ensure Acyclic Relationships: Incorporate checks to validate acyclic relationships within the line-management hierarchy, preventing the formation of circular dependencies and ensuring a transparent organizational structure.</p>
+<p>Cascade Deletion: Employ cascading actions for the line_manager_id foreign key. By using “ON DELETE CASCADE” and “ON UPDATE CASCADE” in SQL, ensure that changes to staff members cascade appropriately, maintaining referential integrity.</p>
+<p>Periodic Audits: Conduct routine data consistency checks to identify and rectify duplicates or incomplete entries, enhancing overall data accuracy.</p>
+<p>Random Sampling: Implement manual verification through random sampling of research interests and teaching assignments against employee resumes or course schedules, providing an additional layer of accuracy validation.</p>
+<p>Peer Review: Foster departmental reviews of research areas and unit affiliations to encourage collective scrutiny and improvement of data accuracy.</p>
+</section>
+<section id="data-accuracy-strategy-for-enhancing-student-attendance-and-course-insights" class="level3">
+<h3 class="anchored" data-anchor-id="data-accuracy-strategy-for-enhancing-student-attendance-and-course-insights">Data Accuracy Strategy for Enhancing Student Attendance and Course Insights</h3>
+<p><strong><em>Objective: Establish a foundation of reliable data to facilitate accurate attendance tracking, course optimization, and predictive student success analysis.</em></strong></p>
+<p><strong>Concrete Measures:</strong></p>
+<p>Course and Unit Information: Use ENUM constraint to ensure that data entered into each field adheres to predefined standards. For instance, enforce constraints on fields like attendance_status to accept only valid values (e.g., “present,” “absent”).</p>
+<p>Implement validation rules to prevent duplicate entries and maintain course levels within defined ranges.</p>
+<p>Attendance Data: Use foreign key constraints in the physical model to restrict attendance entry to valid student IDs, session IDs, and dates, preventing errors and inconsistencies.</p>
+<p>Session Details: Ensure temporal validity (i.e.&nbsp;using the start_date and end_date attributes) by designing checks in the physical model to avoid conflicts and maintain data integrity.</p>
+</section>
+</section>
+<section id="sql-create-statements" class="level2">
+<h2 class="anchored" data-anchor-id="sql-create-statements">SQL CREATE statements</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"></span>
+<span id="cb1-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> course (</span>
+<span id="cb1-3">  course_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-4">  course_title <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">255</span>),</span>
+<span id="cb1-5">  course_name <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">255</span>),</span>
+<span id="cb1-6">  course_level <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>)</span>
+<span id="cb1-7">);</span>
+<span id="cb1-8"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> student (</span>
+<span id="cb1-9">  student_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-10">  first_name <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">255</span>),</span>
+<span id="cb1-11">  last_name <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">255</span>),</span>
+<span id="cb1-12">  date_of_birth <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">DATE</span>,</span>
+<span id="cb1-13">  email <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">255</span>),</span>
+<span id="cb1-14">  phone_number <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span></span>
+<span id="cb1-15">);</span>
+<span id="cb1-16"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> course_enrolment (</span>
+<span id="cb1-17">  student_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-18">  course_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-19">  course_completion_status ENUM(Completed, course_enrolment),</span>
+<span id="cb1-20">  grade ENUM(<span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"A"</span>, <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"B"</span>, <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"C"</span>, <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"D"</span>, <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"E"</span>, <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"F"</span>),</span>
+<span id="cb1-21">  phone_number <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-22">  start_date <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">DATE</span>,</span>
+<span id="cb1-23">  end_date <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">DATE</span>,</span>
+<span id="cb1-24">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_course_enrolment.course_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (course_id) </span>
+<span id="cb1-25">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> course(course_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">ON</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">UPDATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CASCADE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">ON</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DELETE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">RESTRICT</span>, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-- Update updated course_ids but do not allow deletions in the parent table,</span></span>
+<span id="cb1-26">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_course_enrolment.student_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (student_id) </span>
+<span id="cb1-27">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> student(student_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">ON</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">UPDATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CASCADE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">ON</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DELETE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">RESTRICT</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-- Update updated student_ids but do not allow deletions in the parent table</span></span>
+<span id="cb1-28">);</span>
+<span id="cb1-29"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> industry_partners (</span>
+<span id="cb1-30">  company_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-31">  company_name <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>),</span>
+<span id="cb1-32">);</span>
+<span id="cb1-33"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> talks (</span>
+<span id="cb1-34">  talk_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-35">  subject_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-36">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">date</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">DATE</span>,</span>
+<span id="cb1-37">  contact_person_phone <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-38">  company_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-39">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_talks.company_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (company_id) </span>
+<span id="cb1-40">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> industry_partners(company_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">ON</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">UPDATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CASCADE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">ON</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DELETE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CASCADE</span>, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-- Cascade updates and deletions to the parent table,</span></span>
+<span id="cb1-41">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_talks.subject_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (subject_id) </span>
+<span id="cb1-42">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> industry_partners(subject_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">ON</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">UPDATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CASCADE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">ON</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DELETE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CASCADE</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-- Cascade updates and deletions to the parent table</span></span>
+<span id="cb1-43">);</span>
+<span id="cb1-44"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> activity (</span>
+<span id="cb1-45">  activity_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-46">  talk_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-47">  activity_name <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">255</span>),</span>
+<span id="cb1-48">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_activity.talk_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (talk_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> talks(talk_id)</span>
+<span id="cb1-49">);</span>
+<span id="cb1-50"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> research_interest (</span>
+<span id="cb1-51">  research_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-52">  staff_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-53">  research_area <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>),</span>
+<span id="cb1-54">  research_title <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">255</span>),</span>
+<span id="cb1-55">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_research_interest.staff_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (staff_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> academic_staff(staff_id)</span>
+<span id="cb1-56">);</span>
+<span id="cb1-57"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> subject (</span>
+<span id="cb1-58">  subject_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-59">  subject_name <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>),</span>
+<span id="cb1-60">  description TEXT,</span>
+<span id="cb1-61">  approval_status ENUM(<span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"Approved"</span>, <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"Pending"</span>, <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">" Rejected"</span>) subject_type ENUM(Traditional, External) is_extra <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> curricular <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">BOOLEAN</span></span>
+<span id="cb1-62">);</span>
+<span id="cb1-63"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> unit (</span>
+<span id="cb1-64">  unit_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-65">  unit_title <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>)</span>
+<span id="cb1-66">);</span>
+<span id="cb1-67"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> unit_subject (</span>
+<span id="cb1-68">  unit_subject_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-69">  unit_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-70">  subject_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-71">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_unit_subject.unit_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (unit_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> unit(unit_id),</span>
+<span id="cb1-72">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_unit_subject.subject_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (subject_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> subject(subject_id)</span>
+<span id="cb1-73">);</span>
+<span id="cb1-74"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">session</span> (</span>
+<span id="cb1-75">  session_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-76">  unit_subject_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-77">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">date</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">DATE</span>,</span>
+<span id="cb1-78">  session_type ENUM(<span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"Lecture"</span>, <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"Seminar"</span>, <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"Lab"</span>),</span>
+<span id="cb1-79">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_session.unit_subject_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (unit_subject_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> unit_subject(unit_subject_id)</span>
+<span id="cb1-80">);</span>
+<span id="cb1-81"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> office (</span>
+<span id="cb1-82">  office_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-83">  office_name <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">255</span>),</span>
+<span id="cb1-84">  location <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">255</span>),</span>
+<span id="cb1-85">  capacity <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">NUMERIC</span></span>
+<span id="cb1-86">);</span>
+<span id="cb1-87"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> academic_staff (</span>
+<span id="cb1-88">  staff_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-89">  first_name <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">255</span>),</span>
+<span id="cb1-90">  last_name <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">255</span>),</span>
+<span id="cb1-91">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">category</span> ENUM(<span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"lecturers"</span>, <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"demonstrators"</span>),</span>
+<span id="cb1-92">  line_manager_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-93">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_academic_staff.staff_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (line_manager_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> academic_staff(staff_id)</span>
+<span id="cb1-94">);</span>
+<span id="cb1-95"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> attendance (</span>
+<span id="cb1-96">  attendance_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-97">  student_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-98">  session_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-99">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">date</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">DATE</span>,</span>
+<span id="cb1-100">  attendance_status ENUM(<span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"Present"</span>, <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"Absent"</span>, <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"Excused"</span>),</span>
+<span id="cb1-101">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_attendance.session_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (session_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">session</span>(session_id),</span>
+<span id="cb1-102">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_attendance.student_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (student_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> student(student_id)</span>
+<span id="cb1-103">);</span>
+<span id="cb1-104"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> office_allocation (</span>
+<span id="cb1-105">  staff_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-106">  office_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-107">  start_date <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">DATE</span>,</span>
+<span id="cb1-108">  end_date <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">DATE</span>,</span>
+<span id="cb1-109">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_office_allocation.staff_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (staff_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> academic_staff(staff_id),</span>
+<span id="cb1-110">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_office_allocation.office_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (office_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> office(office_id)</span>
+<span id="cb1-111">);</span>
+<span id="cb1-112"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> industry_partners_subject (</span>
+<span id="cb1-113">  company_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-114">  subject_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-115">  description TEXT,</span>
+<span id="cb1-116">  date_of_proposal <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">DATE</span>,</span>
+<span id="cb1-117">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_industry_partners_subject.subject_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (subject_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> subject(subject_id),</span>
+<span id="cb1-118">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_industry_partners_subject.company_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (company_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> industry_partners(company_id)</span>
+<span id="cb1-119">);</span>
+<span id="cb1-120"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> staff_unit_assignments (</span>
+<span id="cb1-121">  staff_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-122">  unit_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-123">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">role</span> ENUM(<span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"unit coordinator"</span>, <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"lecturer"</span>,<span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">"assistant"</span>),</span>
+<span id="cb1-124">  start_date <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">DATE</span>,</span>
+<span id="cb1-125">  end_date <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">DATE</span>,</span>
+<span id="cb1-126">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_staff_unit_assignments.unit_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (unit_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> unit(unit_id),</span>
+<span id="cb1-127">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_staff_unit_assignments.staff_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (staff_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> academic_staff(staff_id)</span>
+<span id="cb1-128">);</span>
+<span id="cb1-129"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CREATE</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">TABLE</span> extra<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>curricular_events (</span>
+<span id="cb1-130">  event_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">PRIMARY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">GENERATED</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">BY</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">DEFAULT</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">AS</span> IDENTITY,</span>
+<span id="cb1-131">,</span>
+<span id="cb1-132">  session_id <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">INTEGER</span>,</span>
+<span id="cb1-133">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">date</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">DATE</span>,</span>
+<span id="cb1-134">  external_speaker <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">VARCHAR</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">255</span>),</span>
+<span id="cb1-135">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">CONSTRAINT</span> FK_extra<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>curricular_events.session_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">FOREIGN</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">KEY</span> (session_id) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">REFERENCES</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">session</span>(session_id)</span>
+<span id="cb1-136">);</span></code></pre></div>
+</div>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>In summary, this project is a sophisticated and comprehensive approach to database design, incorporating various concepts for accuracy, flexibility, and efficiency. The use of ENUM constraints, foreign key relationships, and validation rules ensures consistent data across tables. Bridge tables resolve many-to-many relationships, enabling dynamic tracking, historical analysis, and scalability. Handling potential acyclic relationships, cascading actions, and periodic audits enhances data model integrity, creating a strong foundation for analytical insights. The project meets immediate requirements and establishes a groundwork for future adaptability, reflecting a nuanced understanding of Aqua Vista College’s operational intricacies. This solution ensures the database meets current needs and remains resilient to changing educational and analytical demands.</p>
+<p><a href="https://joshuaolubori.onrender.com/posts/2024-01-20_Aqua-Vista/#task-introduction">Back to top</a></p>
+
+
+</section>
+
+ ]]></description>
+  <category>SQL</category>
+  <category>data engineering</category>
+  <category>database design and management</category>
+  <guid>https://joshuaolubori.onrender.com/posts/2024-01-20_Aqua-Vista/index.html</guid>
+  <pubDate>Fri, 19 Jan 2024 23:00:00 GMT</pubDate>
+  <media:content url="https://joshuaolubori.onrender.com/posts/2024-01-20_Aqua-Vista/Boscombe Beach University (Logical) v2.jpeg" medium="image" type="image/jpeg"/>
+</item>
 <item>
   <title>The Causal-Behavioral Framework for Data Analysis</title>
   <dc:creator>Edun Joshua</dc:creator>
@@ -31815,36 +32917,27 @@ font-style: inherit;">import</span> os</span>
 <span id="cb1-4"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">def</span> escape_quotes(value):</span>
-<span id="cb1-5">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Escape single quotes within a value by doubling them</span></span>
-<span id="cb1-6">    <span class="cf" style="color: #003B4F;
+<span id="cb1-5">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">return</span> value.replace(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"'"</span>, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"''"</span>)</span>
-<span id="cb1-7"></span>
-<span id="cb1-8"><span class="kw" style="color: #003B4F;
+<span id="cb1-6"></span>
+<span id="cb1-7"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">def</span> convert_csv_to_sql(csv_file):</span>
-<span id="cb1-9">    <span class="cf" style="color: #003B4F;
+<span id="cb1-8">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">try</span>:</span>
-<span id="cb1-10">        <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Extract table name from CSV file name</span></span>
-<span id="cb1-11">        table_name <span class="op" style="color: #5E5E5E;
+<span id="cb1-9">        table_name <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> os.path.splitext(os.path.basename(csv_file))[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>].lower()</span>
-<span id="cb1-12">        </span>
-<span id="cb1-13">        <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Open the CSV file for reading</span></span>
-<span id="cb1-14">        <span class="cf" style="color: #003B4F;
+<span id="cb1-10">        </span>
+<span id="cb1-11">        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">with</span> <span class="bu" style="color: null;
 background-color: null;
@@ -31853,31 +32946,22 @@ background-color: null;
 font-style: inherit;">'r'</span>) <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">as</span> csvfile:</span>
-<span id="cb1-15">            <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Create a CSV reader object</span></span>
-<span id="cb1-16">            reader <span class="op" style="color: #5E5E5E;
+<span id="cb1-12">            reader <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> csv.reader(csvfile)</span>
-<span id="cb1-17">            </span>
-<span id="cb1-18">            <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Extract the header row and column names</span></span>
-<span id="cb1-19">            headers <span class="op" style="color: #5E5E5E;
+<span id="cb1-13">            </span>
+<span id="cb1-14">            headers <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">next</span>(reader)</span>
-<span id="cb1-20">            columns <span class="op" style="color: #5E5E5E;
+<span id="cb1-15">            columns <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">', '</span>.join(headers)</span>
-<span id="cb1-21">            </span>
-<span id="cb1-22">            <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Generate the output SQL file name</span></span>
-<span id="cb1-23">            sql_file <span class="op" style="color: #5E5E5E;
+<span id="cb1-16">            </span>
+<span id="cb1-17">            sql_file <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
 background-color: null;
@@ -31888,31 +32972,22 @@ background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">.sql"</span></span>
-<span id="cb1-24">            </span>
-<span id="cb1-25">            <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Create the results folder if it doesn't exist</span></span>
-<span id="cb1-26">            os.makedirs(<span class="st" style="color: #20794D;
+<span id="cb1-18">            </span>
+<span id="cb1-19">            os.makedirs(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'results'</span>, exist_ok<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">True</span>)</span>
-<span id="cb1-27">            </span>
-<span id="cb1-28">            <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Update the SQL file path to include the results folder</span></span>
-<span id="cb1-29">            sql_file <span class="op" style="color: #5E5E5E;
+<span id="cb1-20">            </span>
+<span id="cb1-21">            sql_file <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> os.path.join(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'results'</span>, sql_file)</span>
-<span id="cb1-30">            </span>
-<span id="cb1-31">            <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Create the SQL file for writing</span></span>
-<span id="cb1-32">            <span class="cf" style="color: #003B4F;
+<span id="cb1-22">            </span>
+<span id="cb1-23">            <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">with</span> <span class="bu" style="color: null;
 background-color: null;
@@ -31921,35 +32996,26 @@ background-color: null;
 font-style: inherit;">'w'</span>) <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">as</span> sqlfile:</span>
-<span id="cb1-33">                <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Initialize a list to store values for each row</span></span>
-<span id="cb1-34">                all_values <span class="op" style="color: #5E5E5E;
+<span id="cb1-24">                all_values <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> []</span>
-<span id="cb1-35">                </span>
-<span id="cb1-36">                <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Iterate over the CSV rows</span></span>
-<span id="cb1-37">                <span class="cf" style="color: #003B4F;
+<span id="cb1-25">                </span>
+<span id="cb1-26">                <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">for</span> row <span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">in</span> reader:</span>
-<span id="cb1-38">                    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Prepare the values for the insert statement, escaping single quotes</span></span>
-<span id="cb1-39">                    values <span class="op" style="color: #5E5E5E;
+<span id="cb1-27">                    values <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> []</span>
-<span id="cb1-40">                    <span class="cf" style="color: #003B4F;
+<span id="cb1-28">                    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">for</span> header, value <span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">zip</span>(headers, row):</span>
-<span id="cb1-41">                        <span class="cf" style="color: #003B4F;
+<span id="cb1-29">                        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">if</span> header.lower() <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -31972,30 +33038,21 @@ background-color: null;
 font-style: inherit;">==</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'unit_price'</span>:</span>
-<span id="cb1-42">                            <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># For 'id' columns and columns ending with '_id', insert the value as is (without quotes):</span></span>
-<span id="cb1-43">                            values.append(value)</span>
-<span id="cb1-44">                        <span class="cf" style="color: #003B4F;
+<span id="cb1-30">                            values.append(value)</span>
+<span id="cb1-31">                        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">elif</span> value <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">''</span>:</span>
-<span id="cb1-45">                            <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Insert NULL for blank values</span></span>
-<span id="cb1-46">                            values.append(<span class="st" style="color: #20794D;
+<span id="cb1-32">                            values.append(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'NULL'</span>)</span>
-<span id="cb1-47">                        <span class="cf" style="color: #003B4F;
+<span id="cb1-33">                        <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">else</span>:</span>
-<span id="cb1-48">                            <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Escape single quotes for other columns</span></span>
-<span id="cb1-49">                            values.append(<span class="ss" style="color: #20794D;
+<span id="cb1-34">                            values.append(<span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">f"'</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -32004,11 +33061,8 @@ background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'"</span>)</span>
-<span id="cb1-50">                    </span>
-<span id="cb1-51">                    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Append the values for the current row to the list</span></span>
-<span id="cb1-52">                    all_values.append(<span class="ss" style="color: #20794D;
+<span id="cb1-35">                    </span>
+<span id="cb1-36">                    all_values.append(<span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">f"(</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -32021,11 +33075,8 @@ background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">)"</span>)</span>
-<span id="cb1-53"></span>
-<span id="cb1-54">                <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Generate the final SQL insert statement with multiple value sets</span></span>
-<span id="cb1-55">                sql_insert <span class="op" style="color: #5E5E5E;
+<span id="cb1-37"></span>
+<span id="cb1-38">                sql_insert <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
 background-color: null;
@@ -32056,13 +33107,10 @@ background-color: null;
 font-style: inherit;">\n</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span></span>
-<span id="cb1-56">                </span>
-<span id="cb1-57">                <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Write the SQL insert statement to the SQL file</span></span>
-<span id="cb1-58">                sqlfile.write(sql_insert)</span>
-<span id="cb1-59">                </span>
-<span id="cb1-60">                <span class="bu" style="color: null;
+<span id="cb1-39">                </span>
+<span id="cb1-40">                sqlfile.write(sql_insert)</span>
+<span id="cb1-41">                </span>
+<span id="cb1-42">                <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
 background-color: null;
@@ -32073,26 +33121,26 @@ background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">' generated."</span>)</span>
-<span id="cb1-61">    </span>
-<span id="cb1-62">    <span class="cf" style="color: #003B4F;
+<span id="cb1-43">    </span>
+<span id="cb1-44">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">except</span> <span class="pp" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">FileNotFoundError</span>:</span>
-<span id="cb1-63">        <span class="bu" style="color: null;
+<span id="cb1-45">        <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"The specified CSV file does not exist."</span>)</span>
-<span id="cb1-64">    </span>
-<span id="cb1-65">    <span class="cf" style="color: #003B4F;
+<span id="cb1-46">    </span>
+<span id="cb1-47">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">except</span> <span class="pp" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">Exception</span> <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">as</span> e:</span>
-<span id="cb1-66">        <span class="bu" style="color: null;
+<span id="cb1-48">        <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
 background-color: null;
@@ -32105,9 +33153,9 @@ background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>)</span>
-<span id="cb1-67"></span>
-<span id="cb1-68"></span>
-<span id="cb1-69">files <span class="op" style="color: #5E5E5E;
+<span id="cb1-49"></span>
+<span id="cb1-50"></span>
+<span id="cb1-51">files <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [<span class="st" style="color: #20794D;
 background-color: null;
@@ -32122,18 +33170,18 @@ background-color: null;
 font-style: inherit;">"orders.csv"</span>,<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"product.csv"</span>]</span>
-<span id="cb1-70"></span>
-<span id="cb1-71"><span class="cf" style="color: #003B4F;
+<span id="cb1-52"></span>
+<span id="cb1-53"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">for</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">file</span> <span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">in</span> files:</span>
-<span id="cb1-72">    convert_csv_to_sql(<span class="bu" style="color: null;
+<span id="cb1-54">    convert_csv_to_sql(<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">file</span>)</span>
-<span id="cb1-73"><span class="bu" style="color: null;
+<span id="cb1-55"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
 background-color: null;
@@ -32142,16 +33190,6 @@ background-color: null;
 font-style: inherit;">\n</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">Conversion Completed"</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>The specified CSV file does not exist.
-The specified CSV file does not exist.
-The specified CSV file does not exist.
-The specified CSV file does not exist.
-The specified CSV file does not exist.
-The specified CSV file does not exist.
-
-Conversion Completed</code></pre>
-</div>
 </div>
 </section>
 <section id="loading-into-database" class="level3">
