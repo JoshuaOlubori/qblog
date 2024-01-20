@@ -25,13 +25,13 @@
 
 
 
-<section id="task-introduction" class="level2">
-<h2 class="anchored" data-anchor-id="task-introduction">Task Introduction</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://joshuaolubori.onrender.com/posts/2024-01-20_Aqua-Vista/Boscombe Timeline Diagram Graph.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
+<section id="task-introduction" class="level2">
+<h2 class="anchored" data-anchor-id="task-introduction">Task Introduction</h2>
 <p>Based on the case study (interview scripts and required reports) at the end of this brief, provide the following:</p>
 <ul>
 <li><p><strong>Conceptual ERD with justifications of design choices</strong></p></li>

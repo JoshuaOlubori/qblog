@@ -30,9 +30,9 @@ con <-
 
 ```
 
-## Task Introduction
-
 ![](Boscombe%20Timeline%20Diagram%20Graph.png){fig-align="center"}
+
+## Task Introduction
 
 Based on the case study (interview scripts and required reports) at the end of this brief, provide the following:
 
