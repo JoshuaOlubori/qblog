@@ -2,6 +2,7 @@
   {
     "listing": "/posts/index.html",
     "items": [
+      "/posts/2024-02-01_Onyx-January/index.html",
       "/posts/2024-01-20_Aqua-Vista/index.html",
       "/posts/2023-11-30_BDA-1/index.html",
       "/posts/2023-11-19_8weeks-sql-challenge-2/index.html",
@@ -22,6 +23,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/2024-02-01_Onyx-January/index.html",
       "/posts/2024-01-20_Aqua-Vista/index.html",
       "/posts/2023-11-30_BDA-1/index.html",
       "/posts/2023-11-19_8weeks-sql-challenge-2/index.html",
@@ -42,6 +44,7 @@
   {
     "listing": "/posts_index.html",
     "items": [
+      "/posts/2024-02-01_Onyx-January/index.html",
       "/posts/2024-01-20_Aqua-Vista/index.html",
       "/posts/2023-11-30_BDA-1/index.html",
       "/posts/2023-11-19_8weeks-sql-challenge-2/index.html",

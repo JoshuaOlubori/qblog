@@ -15,7 +15,68 @@
 <link>https://joshuaolubori.onrender.com/index.html</link>
 </image>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Fri, 19 Jan 2024 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 31 Jan 2024 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Pushing the Boundaries of Excel</title>
+  <dc:creator>Edun Joshua</dc:creator>
+  <link>https://joshuaolubori.onrender.com/posts/2024-02-01_Onyx-January/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p><img src="https://joshuaolubori.onrender.com/posts/2024-02-01_Onyx-January/dashboard.png" class="img-fluid" data-fig-align="center" alt="cover image"> Recently, I took on the challenge presented by Onyx Data’s January visualization challenge. Despite the availability of popular BI tools like Tableau and Power BI, I decided to push the limits of Excel and create an aesthetic dashboard.</p>
+<p>After missing out on the December edition due to laptop issues, I was determined to participate in the January challenge. The dataset provided by Onyx Data included various fields such as course ID, title, URL, pricing, subscribers, reviews, lectures, level, duration, publication timestamp, and subject category.</p>
+<p>To begin, I organized my data and created pivot tables on a separate sheet to keep them organized.</p>
+</section>
+<section id="data-summary" class="level2">
+<h2 class="anchored" data-anchor-id="data-summary">Data summary</h2>
+<p>course_id: A unique identifier for each course. course_title: The title of the course. url: URL of the course on Udemy. is_paid: Indicates whether the course is paid or free. price: The price of the course (if it’s a paid course). num_subscribers: The number of subscribers for the course. num_reviews: The number of reviews the course has received. num_lectures: The number of lectures in the course. level: The level of the course (e.g., All Levels, Intermediate Level). content_duration: The duration of the course content in hours. published_timestamp: The date and time when the course was published. subject: The subject category of the course.</p>
+</section>
+<section id="design-elements" class="level2">
+<h2 class="anchored" data-anchor-id="design-elements">Design Elements</h2>
+<section id="pivot-tables" class="level3">
+<h3 class="anchored" data-anchor-id="pivot-tables">Pivot tables</h3>
+<p>Every chart and metric in the dashboard was derived from pivot tables, ensuring a structured approach to data visualization. <img src="https://joshuaolubori.onrender.com/posts/2024-02-01_Onyx-January/pivot tables.png" class="img-fluid" alt="Pivot Tables"></p>
+</section>
+<section id="calculations-sheet" class="level3">
+<h3 class="anchored" data-anchor-id="calculations-sheet">Calculations sheet</h3>
+<p>Because for some reason, I could not pull single figures from the pivot tables directly into the dashboard, I had to link them from an intermediate calculations sheet. <img src="https://joshuaolubori.onrender.com/posts/2024-02-01_Onyx-January/calculations.png" class="img-fluid" alt="Calculations"></p>
+</section>
+<section id="gradients" class="level3">
+<h3 class="anchored" data-anchor-id="gradients">Gradients</h3>
+<p>Inspired by <a href="https://www.youtube.com/@OtherLevels">Other Level’s on YouTube</a>, I used gradients to add a 3D feel to the dashboard, enhancing its visual appeal. <img src="https://joshuaolubori.onrender.com/posts/2024-02-01_Onyx-January/gradients.png" class="img-fluid" alt="Gradients"></p>
+</section>
+<section id="custom-graphics" class="level3">
+<h3 class="anchored" data-anchor-id="custom-graphics">Custom graphics</h3>
+<p>Using Excel’s built-in shapes and applying creative styling, I added custom graphics to enhance the dashboard’s aesthetics. <img src="https://joshuaolubori.onrender.com/posts/2024-02-01_Onyx-January/custom graphics.png" class="img-fluid" alt="Custom graphics"></p>
+</section>
+<section id="slicers" class="level3">
+<h3 class="anchored" data-anchor-id="slicers">Slicers</h3>
+<p>There are two slicers in this dashboard. One general slicer that filter by month running vertically along the right side of the dashboard, and another bright orange slicer that slices by year and only affects the “Revenue and suscriber growth trends” and “Does a course’s price justifies its revenue?” charts. To style them, I had to create their own Slicer Styles <img src="https://joshuaolubori.onrender.com/posts/2024-02-01_Onyx-January/slicers.png" class="img-fluid" alt="Slicers"></p>
+<p>You can view the raw Excel file on Excel Online <a href="https://1drv.ms/x/s!AixyqU7UsljGhlrccNA2mc7wzepr?e=2y4aTg">here</a></p>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
+<p>Creating this dashboard was both challenging and rewarding. Despite the initial limitations of Excel, I was able to produce a visually appealing and functional dashboard that met the requirements of the challenge.</p>
+</section>
+</section>
+<section id="contact-me" class="level2">
+<h2 class="anchored" data-anchor-id="contact-me">Contact me</h2>
+<p>For more information or to connect, you can find me on LinkedIn <a href="https://www.linkedin.com/in/joshua-edun">here</a> or email me at <a href="joshuaolubori@gmail.com">joshuaolubori@gmail.com</a></p>
+
+
+</section>
+
+ ]]></description>
+  <category>Excel</category>
+  <category>data visualisation</category>
+  <guid>https://joshuaolubori.onrender.com/posts/2024-02-01_Onyx-January/index.html</guid>
+  <pubDate>Wed, 31 Jan 2024 23:00:00 GMT</pubDate>
+  <media:content url="https://joshuaolubori.onrender.com/posts/2024-02-01_Onyx-January/dashboard.png" medium="image" type="image/png" height="53" width="144"/>
+</item>
 <item>
   <title>Aqua Vista College Database</title>
   <dc:creator>Edun Joshua</dc:creator>

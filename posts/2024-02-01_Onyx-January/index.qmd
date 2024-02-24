@@ -1,0 +1,64 @@
+---
+title: "Pushing the Boundaries of Excel"
+subtitle: "A Stunning Dashboard with Pivot Tables and Charts"
+author: "Edun Joshua"
+date: "2024-02-01"
+toc: true
+categories: [Excel, data visualisation]
+image: "dashboard.png"
+---
+
+## Introduction
+
+![](dashboard.png){fig-alt="cover image" fig-align="center"}
+Recently, I took on the challenge presented by Onyx Data's January visualization challenge. Despite the availability of popular BI tools like Tableau and Power BI, I decided to push the limits of Excel and create an aesthetic dashboard.
+
+After missing out on the December edition due to laptop issues, I was determined to participate in the January challenge. The dataset provided by Onyx Data included various fields such as course ID, title, URL, pricing, subscribers, reviews, lectures, level, duration, publication timestamp, and subject category.
+
+To begin, I organized my data and created pivot tables on a separate sheet to keep them organized.
+
+## Data summary
+course_id: A unique identifier for each course.
+course_title: The title of the course.
+url: URL of the course on Udemy.
+is_paid: Indicates whether the course is paid or free.
+price: The price of the course (if it's a paid course).
+num_subscribers: The number of subscribers for the course.
+num_reviews: The number of reviews the course has received.
+num_lectures: The number of lectures in the course.
+level: The level of the course (e.g., All Levels, Intermediate Level).
+content_duration: The duration of the course content in hours.
+published_timestamp: The date and time when the course was published.
+subject: The subject category of the course.
+
+
+## Design Elements
+### Pivot tables
+Every chart and metric in the dashboard was derived from pivot tables, ensuring a structured approach to data visualization.
+![Pivot Tables](pivot tables.png)
+
+
+### Calculations sheet
+Because for some reason, I could not pull single figures from the pivot tables directly into the dashboard, I had to link them from an intermediate calculations sheet.
+![Calculations](calculations.png)
+
+### Gradients
+Inspired by [Other Level's on YouTube](https://www.youtube.com/@OtherLevels), I used gradients to add a 3D feel to the dashboard, enhancing its visual appeal.
+![Gradients](gradients.png)
+
+### Custom graphics
+Using Excel's built-in shapes and applying creative styling, I added custom graphics to enhance the dashboard's aesthetics.
+![Custom graphics](custom graphics.png)
+
+### Slicers
+There are two slicers in this dashboard. One general slicer that filter by month running vertically along the right side of the dashboard, and another bright orange slicer that slices by year and only affects the "Revenue and suscriber growth trends" and "Does a course's price justifies its revenue?" charts. To style them, I had to create their own Slicer Styles
+![Slicers](slicers.png)
+
+You can view the raw Excel file on Excel Online [here](https://1drv.ms/x/s!AixyqU7UsljGhlrccNA2mc7wzepr?e=2y4aTg)
+
+### Conclusion
+Creating this dashboard was both challenging and rewarding. Despite the initial limitations of Excel, I was able to produce a visually appealing and functional dashboard that met the requirements of the challenge.
+
+## Contact me
+For more information or to connect, you can find me on LinkedIn [here](https://www.linkedin.com/in/joshua-edun) or email me at [joshuaolubori@gmail.com](joshuaolubori@gmail.com)
+
