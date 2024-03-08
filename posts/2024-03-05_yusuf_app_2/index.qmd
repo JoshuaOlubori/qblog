@@ -12,7 +12,7 @@ eval: false
 ## Context
 :::
 
-In[ Part 1](https://medium.com/@joshuaolubori/developing-a-modern-data-pipeline-part-1-3421ea940478), we explored web scraping. Now, we switch to an API for the data retrieval. The API I used is [API-Football](https://rapidapi.com/api-sports/api/api-football/details) at rapidapi.com. You’ll need a subscription to access this API. See [Part 3](https://medium.com/@joshuaolubori/developing-a-modern-data-pipeline-part-3-d40dda115e8c) for the final implementation of the pipeline
+In[ Part 1](https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_1), we explored web scraping. Now, we switch to an API for the data retrieval. The API I used is [API-Football](https://rapidapi.com/api-sports/api/api-football/details) at rapidapi.com. You’ll need a subscription to access this API. See [Part 3](https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_3) for the final implementation of the pipeline
 
 ::: {style="color: #25D366;"}
 ## 1. Setting Up The Stage: Imports and Options

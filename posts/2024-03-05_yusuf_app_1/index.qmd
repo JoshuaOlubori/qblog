@@ -12,7 +12,7 @@ eval: false
 ## Context
 :::
 
-In January, a client approached me regarding an analytics project involving football data. This blog post chronicles the first iteration of my data gathering approach: a custom web scraper. I detail my code section by section, explaining its logic. See Part 3 for the final implementation of the pipeline.
+In January, a client approached me regarding an analytics project involving football data. This blog post chronicles the first iteration of my data gathering approach: a custom web scraper. I detail my code section by section, explaining its logic. See [Part 3](https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_3) for the final implementation of the pipeline.
 
 ::: {style="color: #25D366;"}
 ## 1. Setting Up The Stage: Imports and Options
@@ -168,4 +168,4 @@ driver.quit()
 
 Having explored the web scraping technique, we’ll shift to the API approach in the next part, as the client opted for a robust solution using an API (as previously suggested by me).
 
-Up next, [Part 2!](https://joshuaolubori.onrender/posts/2024-03-05_yusuf_app_2/) of the series.
+Up next, [Part 2!](https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_2/) of the series.

@@ -16,7 +16,7 @@ This third and final part of the project focuses on implementing and orchestrati
 
 Finally, we’ll explore the user-friendly Streamlit frontend that allows users to interact with and visualize the processed football fixture data, gaining valuable insights from the analysis. By bringing these elements together, this part finalizes the series, transforming the initial concept into a robust and functional data analysis system.
 
-Click here for [Part 1](https://joshuaolubori.onrender/posts/2024-03-05_yusuf_app_1/) and [Part 2](https://joshuaolubori.onrender/posts/2024-03-05_yusuf_app_2/) of the series.
+Click here for [Part 1](https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_1/) and [Part 2](https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_2/) of the series.
 
 This project was inspired by the [Astronomer Quick Start Repo](https://github.com/astronomer/airflow-quickstart) for getting started with Apache Airflow.
 
