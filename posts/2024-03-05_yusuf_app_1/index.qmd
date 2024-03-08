@@ -1,0 +1,171 @@
+---
+title: "Developing a Modern Data Pipeline — Part 1"
+subtitle: "A 3-part series featuring web-scraping, data pipelines, orchestration and containerisation"
+author: "Edun Joshua"
+date: "2024-03-05"
+categories: [data engineering, web-scraping]
+image: "image.png"
+eval: false
+---
+
+::: {style="color: #25D366;"}
+## Context
+:::
+
+In January, a client approached me regarding an analytics project involving football data. This blog post chronicles the first iteration of my data gathering approach: a custom web scraper. I detail my code section by section, explaining its logic. See Part 3 for the final implementation of the pipeline.
+
+::: {style="color: #25D366;"}
+## 1. Setting Up The Stage: Imports and Options
+:::
+
+```{python}
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+from bs4 import BeautifulSoup
+import pandas as pd
+```
+
+This section imports the necessary libraries for web scraping. Here’s a breakdown of their roles:
+
+-   **selenium**: Controls the browser and interacts with web elements.
+
+-   **BeautifulSoup**: Parses and navigates the downloaded HTML content.
+
+-   **pandas**: Creates and manipulates dataframes for efficient data storage.
+
+Next, the code defines Chrome `webdriver` options:
+
+```{python}
+# Define the Chrome webdriver options
+options = webdriver.ChromeOptions()
+options.add_argument("--headless")
+
+options.page_load_strategy = "none"
+```
+
+These lines configure the Chrome webdriver:
+
+-   --`headless`: Runs the browser in headless mode, making it invisible for better performance.
+
+-   `page_load_strategy`="none": Instructs Selenium to not wait for full page load, as the relevant content is dynamically generated after the initial load.
+
+Finally, a `webdriver` instance is created and directed to the target URL:
+
+```{python}
+driver = webdriver.Chrome(options=options)
+driver.get(url)
+```
+
+::: {style="color: #25D366;"}
+## 2. Infinite Scrolling and Button Handling
+:::
+
+This section utilizes Selenium to simulate user behavior and dynamically load additional content:
+
+```{python}
+html_content = ""
+
+while True:
+    try:
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+        button = driver.find_element(By.CLASS_NAME, "event__more--static")
+
+        driver.execute_script("arguments[0].click();", button)
+
+        time.sleep(2)
+
+        html_content += driver.page_source
+
+    except NoSuchElementException:
+        break
+```
+
+This loop continuously performs the following actions:
+
+1.  Scrolls down to the page bottom: This ensures the “Show more matches” button, if present, is loaded within the viewport.
+
+2.  Locates the button: It utilizes find_element with `By.CLASS_NAME` to search for the element with the class name "event\_\_more--static".
+
+3.  Clicks the button: It employs JavaScript execution (`execute_script`) to simulate a click on the button element.
+
+4.  Waits for content to load: A short delay (`time.sleep(2)`) allows the page to update with additional matches after clicking.
+
+5.  Appends content: The current HTML content is retrieved using `driver.page_source` and appended to the `html_content` string.
+
+6.  Handles button absence: The `try...except` block catches the `NoSuchElementException` if the button is no longer found, indicating all matches have been loaded, and subsequently breaks the loop.
+
+::: {style="color: #25D366;"}
+## 3. Data Extraction with BeautifulSoup
+:::
+
+Once all data is loaded, the loop terminates, and the script utilizes BeautifulSoup for parsing content:
+
+```{python}
+soup = BeautifulSoup(html_content, 'html.parser')
+
+match_containers = soup.find_all('div', class_='event__match event__match--static event__match--twoLine')
+
+dates = []
+home_teams = []
+home_scores = []
+away_scores = []
+away_teams = []
+
+match_containers = soup.find_all('div', class_=['event__match event__match--static event__match--twoLine', 'event__match event__match--static event__match--last event__match--twoLine'])
+
+for match in match_containers:
+    date_time_str = match.find('div', class_='event__time').text.strip()
+    date_time_str = f"2023-{date_time_str.replace('.', '-')}"
+
+    home_team = match.find('div', class_='event__participant--home').text.strip()
+    home_score = int(match.find('div', class_='event__score--home').text.strip())
+    away_score = int(match.find('div', class_='event__score--away').text.strip())
+    away_team = match.find('div', class_='event__participant--away').text.strip()
+
+    dates.append(date_time_str)
+    home_teams.append(home_team)
+    home_scores.append(home_score)
+    away_scores.append(away_score)
+    away_teams.append(away_team)
+```
+
+This section performs the following tasks:
+
+1.  Initializes empty lists: Creates lists to store extracted data — dates, home team names, home scores, away scores, and away team names.
+
+2.  Expands match container selection: Updates `find_all` to search for two class combinations, ensuring all potential match containers are captured.
+
+3.  Loops through each match: Iterates over each `match_container` element.
+
+4.  Extracts date and time: Locates the '`event__time`' element within the current match and extracts its text content using `.text.strip()` to remove leading/trailing whitespace. It then formats the date string for consistency.
+
+5.  Extracts team and score information: Similar to the date, the script finds elements with specific class names within the match container and extracts their text content for each team and score.
+
+6.  Appends data to lists: The extracted information for each match is added to the corresponding lists.
+
+::: {style="color: #25D366;"}
+## 4. Data Organization and Saving
+:::
+
+After scraping individual match details, the script organizes and saves the data:
+
+```{python}
+data = {'Date': dates, 'HomeTeam': home_teams, 'HomeScore': home_scores, 'AwayScore': away_scores, 'AwayTeam': away_teams}
+df = pd.DataFrame(data)
+
+league_name = url.split('/')[-3]
+
+output_file_name = f"{league_name}_results.csv"
+df.to_csv(output_file_name, index=False)
+
+print("DONE SCRAPING!")
+driver.quit()
+```
+
+Having explored the web scraping technique, we’ll shift to the API approach in the next part, as the client opted for a robust solution using an API (as previously suggested by me).
+
+Up next, [Part 2!](https://joshuaolubori.onrender/posts/2024-03-05_yusuf_app_2/) of the series.

@@ -15,7 +15,2202 @@
 <link>https://joshuaolubori.onrender.com/index.html</link>
 </image>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Wed, 31 Jan 2024 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 04 Mar 2024 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Developing a Modern Data Pipeline — Part 1</title>
+  <dc:creator>Edun Joshua</dc:creator>
+  <link>https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_1/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="context" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="context">Context</h2>
+</section>
+<p>In January, a client approached me regarding an analytics project involving football data. This blog post chronicles the first iteration of my data gathering approach: a custom web scraper. I detail my code section by section, explaining its logic. See Part 3 for the final implementation of the pipeline.</p>
+<section id="setting-up-the-stage-imports-and-options" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="setting-up-the-stage-imports-and-options">1. Setting Up The Stage: Imports and Options</h2>
+</section>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> selenium <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> webdriver</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> selenium.webdriver.common.by <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> By</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> selenium.webdriver.support.ui <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> WebDriverWait</span>
+<span id="cb1-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> selenium.webdriver.support <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> expected_conditions <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> EC</span>
+<span id="cb1-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> selenium.common.exceptions <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> TimeoutException</span>
+<span id="cb1-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> bs4 <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> BeautifulSoup</span>
+<span id="cb1-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> pd</span></code></pre></div>
+</div>
+<p>This section imports the necessary libraries for web scraping. Here’s a breakdown of their roles:</p>
+<ul>
+<li><p><strong>selenium</strong>: Controls the browser and interacts with web elements.</p></li>
+<li><p><strong>BeautifulSoup</strong>: Parses and navigates the downloaded HTML content.</p></li>
+<li><p><strong>pandas</strong>: Creates and manipulates dataframes for efficient data storage.</p></li>
+</ul>
+<p>Next, the code defines Chrome <code>webdriver</code> options:</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Define the Chrome webdriver options</span></span>
+<span id="cb2-2">options <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> webdriver.ChromeOptions()</span>
+<span id="cb2-3">options.add_argument(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"--headless"</span>)</span>
+<span id="cb2-4"></span>
+<span id="cb2-5">options.page_load_strategy <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"none"</span></span></code></pre></div>
+</div>
+<p>These lines configure the Chrome webdriver:</p>
+<ul>
+<li><p>–<code>headless</code>: Runs the browser in headless mode, making it invisible for better performance.</p></li>
+<li><p><code>page_load_strategy</code>=“none”: Instructs Selenium to not wait for full page load, as the relevant content is dynamically generated after the initial load.</p></li>
+</ul>
+<p>Finally, a <code>webdriver</code> instance is created and directed to the target URL:</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">driver <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> webdriver.Chrome(options<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>options)</span>
+<span id="cb3-2">driver.get(url)</span></code></pre></div>
+</div>
+<section id="infinite-scrolling-and-button-handling" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="infinite-scrolling-and-button-handling">2. Infinite Scrolling and Button Handling</h2>
+</section>
+<p>This section utilizes Selenium to simulate user behavior and dynamically load additional content:</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1">html_content <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span></span>
+<span id="cb4-2"></span>
+<span id="cb4-3"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">while</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>:</span>
+<span id="cb4-4">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">try</span>:</span>
+<span id="cb4-5">        driver.execute_script(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"window.scrollTo(0, document.body.scrollHeight);"</span>)</span>
+<span id="cb4-6"></span>
+<span id="cb4-7">        button <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> driver.find_element(By.CLASS_NAME, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"event__more--static"</span>)</span>
+<span id="cb4-8"></span>
+<span id="cb4-9">        driver.execute_script(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"arguments[0].click();"</span>, button)</span>
+<span id="cb4-10"></span>
+<span id="cb4-11">        time.sleep(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb4-12"></span>
+<span id="cb4-13">        html_content <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+=</span> driver.page_source</span>
+<span id="cb4-14"></span>
+<span id="cb4-15">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">except</span> NoSuchElementException:</span>
+<span id="cb4-16">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">break</span></span></code></pre></div>
+</div>
+<p>This loop continuously performs the following actions:</p>
+<ol type="1">
+<li><p>Scrolls down to the page bottom: This ensures the “Show more matches” button, if present, is loaded within the viewport.</p></li>
+<li><p>Locates the button: It utilizes find_element with <code>By.CLASS_NAME</code> to search for the element with the class name “event__more–static”.</p></li>
+<li><p>Clicks the button: It employs JavaScript execution (<code>execute_script</code>) to simulate a click on the button element.</p></li>
+<li><p>Waits for content to load: A short delay (<code>time.sleep(2)</code>) allows the page to update with additional matches after clicking.</p></li>
+<li><p>Appends content: The current HTML content is retrieved using <code>driver.page_source</code> and appended to the <code>html_content</code> string.</p></li>
+<li><p>Handles button absence: The <code>try...except</code> block catches the <code>NoSuchElementException</code> if the button is no longer found, indicating all matches have been loaded, and subsequently breaks the loop.</p></li>
+</ol>
+<section id="data-extraction-with-beautifulsoup" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="data-extraction-with-beautifulsoup">3. Data Extraction with BeautifulSoup</h2>
+</section>
+<p>Once all data is loaded, the loop terminates, and the script utilizes BeautifulSoup for parsing content:</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">soup <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> BeautifulSoup(html_content, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'html.parser'</span>)</span>
+<span id="cb5-2"></span>
+<span id="cb5-3">match_containers <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> soup.find_all(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'div'</span>, class_<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'event__match event__match--static event__match--twoLine'</span>)</span>
+<span id="cb5-4"></span>
+<span id="cb5-5">dates <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb5-6">home_teams <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb5-7">home_scores <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb5-8">away_scores <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb5-9">away_teams <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb5-10"></span>
+<span id="cb5-11">match_containers <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> soup.find_all(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'div'</span>, class_<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'event__match event__match--static event__match--twoLine'</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'event__match event__match--static event__match--last event__match--twoLine'</span>])</span>
+<span id="cb5-12"></span>
+<span id="cb5-13"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> match <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> match_containers:</span>
+<span id="cb5-14">    date_time_str <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> match.find(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'div'</span>, class_<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'event__time'</span>).text.strip()</span>
+<span id="cb5-15">    date_time_str <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"2023-</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>date_time_str<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>replace(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'.'</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'-'</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb5-16"></span>
+<span id="cb5-17">    home_team <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> match.find(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'div'</span>, class_<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'event__participant--home'</span>).text.strip()</span>
+<span id="cb5-18">    home_score <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>(match.find(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'div'</span>, class_<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'event__score--home'</span>).text.strip())</span>
+<span id="cb5-19">    away_score <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">int</span>(match.find(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'div'</span>, class_<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'event__score--away'</span>).text.strip())</span>
+<span id="cb5-20">    away_team <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> match.find(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'div'</span>, class_<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'event__participant--away'</span>).text.strip()</span>
+<span id="cb5-21"></span>
+<span id="cb5-22">    dates.append(date_time_str)</span>
+<span id="cb5-23">    home_teams.append(home_team)</span>
+<span id="cb5-24">    home_scores.append(home_score)</span>
+<span id="cb5-25">    away_scores.append(away_score)</span>
+<span id="cb5-26">    away_teams.append(away_team)</span></code></pre></div>
+</div>
+<p>This section performs the following tasks:</p>
+<ol type="1">
+<li><p>Initializes empty lists: Creates lists to store extracted data — dates, home team names, home scores, away scores, and away team names.</p></li>
+<li><p>Expands match container selection: Updates <code>find_all</code> to search for two class combinations, ensuring all potential match containers are captured.</p></li>
+<li><p>Loops through each match: Iterates over each <code>match_container</code> element.</p></li>
+<li><p>Extracts date and time: Locates the ‘<code>event__time</code>’ element within the current match and extracts its text content using <code>.text.strip()</code> to remove leading/trailing whitespace. It then formats the date string for consistency.</p></li>
+<li><p>Extracts team and score information: Similar to the date, the script finds elements with specific class names within the match container and extracts their text content for each team and score.</p></li>
+<li><p>Appends data to lists: The extracted information for each match is added to the corresponding lists.</p></li>
+</ol>
+<section id="data-organization-and-saving" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="data-organization-and-saving">4. Data Organization and Saving</h2>
+</section>
+<p>After scraping individual match details, the script organizes and saves the data:</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">data <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Date'</span>: dates, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'HomeTeam'</span>: home_teams, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'HomeScore'</span>: home_scores, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'AwayScore'</span>: away_scores, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'AwayTeam'</span>: away_teams}</span>
+<span id="cb6-2">df <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pd.DataFrame(data)</span>
+<span id="cb6-3"></span>
+<span id="cb6-4">league_name <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> url.split(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'/'</span>)[<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>]</span>
+<span id="cb6-5"></span>
+<span id="cb6-6">output_file_name <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>league_name<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">_results.csv"</span></span>
+<span id="cb6-7">df.to_csv(output_file_name, index<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>)</span>
+<span id="cb6-8"></span>
+<span id="cb6-9"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"DONE SCRAPING!"</span>)</span>
+<span id="cb6-10">driver.quit()</span></code></pre></div>
+</div>
+<p>Having explored the web scraping technique, we’ll shift to the API approach in the next part, as the client opted for a robust solution using an API (as previously suggested by me).</p>
+<p>Up next, <a href="https://joshuaolubori.onrender/posts/2024-03-05_yusuf_app_2/">Part 2</a> of the series.</p>
+
+
+
+ ]]></description>
+  <category>data engineering</category>
+  <category>web-scraping</category>
+  <guid>https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_1/index.html</guid>
+  <pubDate>Mon, 04 Mar 2024 23:00:00 GMT</pubDate>
+  <media:content url="https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_1/image.png" medium="image" type="image/png" height="41" width="144"/>
+</item>
+<item>
+  <title>Developing a Modern Data Pipeline — Part 2</title>
+  <dc:creator>Edun Joshua</dc:creator>
+  <link>https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_2/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="context" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="context">Context</h2>
+</section>
+<p>In<a href="https://medium.com/@joshuaolubori/developing-a-modern-data-pipeline-part-1-3421ea940478">&nbsp;Part 1</a>, we explored web scraping. Now, we switch to an API for the data retrieval. The API I used is&nbsp;<a href="https://rapidapi.com/api-sports/api/api-football/details">API-Football</a>&nbsp;at rapidapi.com. You’ll need a subscription to access this API. See&nbsp;<a href="https://medium.com/@joshuaolubori/developing-a-modern-data-pipeline-part-3-d40dda115e8c">Part 3</a>&nbsp;for the final implementation of the pipeline</p>
+<section id="setting-up-the-stage-imports-and-options" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="setting-up-the-stage-imports-and-options">1. Setting Up The Stage: Imports and Options</h2>
+</section>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> os</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> csv</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> requests</span>
+<span id="cb1-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> requests.exceptions <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> RequestException</span>
+<span id="cb1-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> urllib3.exceptions <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> NewConnectionError, ConnectTimeoutError</span>
+<span id="cb1-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> time <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> sleep</span>
+<span id="cb1-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> config <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> api_key, api_endpoint</span></code></pre></div>
+</div>
+<p>This section imports necessary libraries:</p>
+<ul>
+<li><p><strong>os</strong>: Provides functionalities for interacting with the operating system (creating folders).</p></li>
+<li><p><strong>csv</strong>: Enables working with CSV files (writing data).</p></li>
+<li><p><strong>requests</strong>: Facilitates making HTTP requests to the API.</p></li>
+<li><p><strong>time</strong>: Used for introducing a delay between API calls.</p></li>
+</ul>
+<p>Additionally, it imports the API key and endpoint from the <code>config</code> module.</p>
+<p>Next, the code defines two variables:</p>
+<ul>
+<li><p>league_ids: Contains a list of League IDs representing various football leagues the script will process.</p></li>
+<li><p>unique_league_ids: Employs set() to remove duplicates from the league_ids list, ensuring each league is processed only once.</p></li>
+</ul>
+<section id="data-organization-folders-and-paths" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="data-organization-folders-and-paths">2. Data Organization: Folders and Paths</h2>
+</section>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">top_level_folder <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"data"</span></span>
+<span id="cb2-2">os.makedirs(top_level_folder, exist_ok<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span></code></pre></div>
+</div>
+<p>This section creates a top-level folder named “data” to store the downloaded CSV files. The <code>os.makedirs</code> function ensures the folder is created even if it doesn’t exist, and the <code>exist_ok=True</code> argument prevents errors if the folder already exists.</p>
+<section id="api-interaction-and-data-extraction" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="api-interaction-and-data-extraction">3. API Interaction and Data Extraction</h2>
+</section>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">url <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> api_endpoint</span>
+<span id="cb3-2">headers <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {</span>
+<span id="cb3-3">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"X-RapidAPI-Key"</span>: api_key,</span>
+<span id="cb3-4">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"X-RapidAPI-Host"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"api-football-v1.p.rapidapi.com"</span></span>
+<span id="cb3-5">}</span>
+<span id="cb3-6"></span>
+<span id="cb3-7">total_calls <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(unique_league_ids)</span>
+<span id="cb3-8">current_call <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span></span>
+<span id="cb3-9"></span>
+<span id="cb3-10"></span>
+<span id="cb3-11"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> fetch_data(chosen_season<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"2023"</span>):</span>
+<span id="cb3-12">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">global</span> current_call</span>
+<span id="cb3-13">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> league_id <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> unique_league_ids:</span>
+<span id="cb3-14">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">try</span>:</span>
+<span id="cb3-15">            querystring <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"league"</span>: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>(league_id), <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"season"</span>: chosen_season}</span>
+<span id="cb3-16">            response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> requests.get(url, headers<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>headers, params<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>querystring)</span>
+<span id="cb3-17"></span>
+<span id="cb3-18">            <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Check if the response is successful</span></span>
+<span id="cb3-19">            response.raise_for_status()</span>
+<span id="cb3-20"></span>
+<span id="cb3-21">            data <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> response.json()[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'response'</span>]</span>
+<span id="cb3-22"></span>
+<span id="cb3-23">            <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ... (data processing and CSV creation) ...</span></span>
+<span id="cb3-24"></span>
+<span id="cb3-25">            current_call <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb3-26">            <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>csv_data[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'country'</span>]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>csv_data[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'league_name'</span>]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> called: (</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>current_call<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">/</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>total_calls<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">)"</span>)</span>
+<span id="cb3-27">            <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">CSV file saved at: </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>csv_file_path<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb3-28"></span>
+<span id="cb3-29">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">except</span> (NewConnectionError, ConnectTimeoutError) <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> e:</span>
+<span id="cb3-30">            <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ... (error handling) ...</span></span>
+<span id="cb3-31">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span></span>
+<span id="cb3-32"></span>
+<span id="cb3-33">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">except</span> RequestException <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> e:</span>
+<span id="cb3-34">            <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ... (error handling) ...</span></span>
+<span id="cb3-35"></span>
+<span id="cb3-36">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">except</span> <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">Exception</span> <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> e:</span>
+<span id="cb3-37">            <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ... (error handling) ...</span></span>
+<span id="cb3-38"></span>
+<span id="cb3-39">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Sleep for 3 seconds before the next API call</span></span>
+<span id="cb3-40">        sleep(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)</span></code></pre></div>
+</div>
+<p>The core functionality resides within the fetch_data function. Let’s explore its steps:</p>
+<ol type="1">
+<li><p><strong>Looping through League IDs</strong>: The <code>for</code> loop iterates through each league ID in the <code>unique_league_ids</code> set.</p></li>
+<li><p><strong>API Request</strong>: It constructs the API request URL with headers containing the API key and sends a GET request using <code>requests.get</code>.</p></li>
+<li><p><strong>Error Handling</strong>: The code utilizes a <code>try...except</code> block to handle potential exceptions:</p>
+<ul>
+<li><p>Connection errors (<code>NewConnectionError</code>, <code>ConnectTimeoutError</code>): Indicate issues with the internet connection. The script prints an error message and exits the program.</p></li>
+<li><p><code>RequestException</code>: Catches other request-related errors, printing an error message.</p></li>
+<li><p><code>Exception</code>: Handles any unexpected errors, printing an error message.</p></li>
+</ul></li>
+<li><p><strong>Successful Response</strong>: If the response is successful (<code>response.raise_for_status()</code>), the script proceeds:</p>
+<ul>
+<li>Extracting Data: It parses the JSON response and extracts the relevant data (<code>data = response.json()['response']</code>).</li>
+</ul></li>
+<li><p><strong>CSV Creation</strong>: The script constructs the CSV file:</p>
+<ul>
+<li><p>Folder Creation: It checks for a subfolder within “data” named after the league and country, creating it if necessary using <code>os.makedirs</code>.</p></li>
+<li><p>File Path: The CSV file path is constructed with the league name, season, and “.csv” extension.</p></li>
+<li><p>Writing Data: The script opens the CSV file in write mode and uses <code>csv.DictWriter</code> to write the header row and data rows from the processed data (<code>csv_data</code>).</p></li>
+</ul></li>
+<li><p><strong>Progress Tracking and Information</strong>:</p>
+<ul>
+<li><p>The script increments a counter (<code>current_call</code>) to track the API call progress.</p></li>
+<li><p>It prints a message indicating the successful API call with league details and the total progress.</p></li>
+<li><p>Finally, it prints the location where the CSV file is saved.</p></li>
+</ul></li>
+</ol>
+<p>In the&nbsp;<a href="https://medium.com/@joshuaolubori/developing-a-modern-data-pipeline-part-3-d40dda115e8c">final part</a>&nbsp;of this series, we’ll dockerise the application and integrate tools such as DuckDB, MinIO and Airflow for orchestration.</p>
+
+
+
+ ]]></description>
+  <category>data engineering</category>
+  <category>api</category>
+  <guid>https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_2/index.html</guid>
+  <pubDate>Mon, 04 Mar 2024 23:00:00 GMT</pubDate>
+  <media:content url="https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_2/image.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>Developing a Modern Data Pipeline — Part 3</title>
+  <dc:creator>Edun Joshua</dc:creator>
+  <link>https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_3/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="context" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="context">Context</h2>
+</section>
+<p>This third and final part of the project focuses on implementing and orchestrating the data pipeline. Here, we’ll delve into the code behind the scenes, exploring how Airflow DAGs orchestrate the various data processing steps, ensuring reliable execution and well-defined dependencies. We’ll also examine the data storage and transformation strategies, including the utilization of Minio for object storage and the Astro SDK for efficient in-database transformations within DuckDB.</p>
+<p>Finally, we’ll explore the user-friendly Streamlit frontend that allows users to interact with and visualize the processed football fixture data, gaining valuable insights from the analysis. By bringing these elements together, this part finalizes the series, transforming the initial concept into a robust and functional data analysis system.</p>
+<p>Click here for <a href="https://joshuaolubori.onrender/posts/2024-03-05_yusuf_app_1/">Part 1</a> and <a href="https://joshuaolubori.onrender/posts/2024-03-05_yusuf_app_1/">Part 2</a> of the series.</p>
+<p>This project was inspired by the <a href="https://github.com/astronomer/airflow-quickstart">Astronomer Quick Start Repo</a> for getting started with Apache Airflow.</p>
+<p>Here’s a breakdown of the chosen technologies:</p>
+<ul>
+<li><p><strong>Airflow:</strong> Orchestrates and schedules the data pipeline tasks seamlessly.</p></li>
+<li><p><strong>Docker:</strong> Encapsulates the application and its dependencies within lightweight containers, ensuring consistent execution across different environments.</p></li>
+<li><p><a href="https://www.astronomer.io/"><strong>Astronomer</strong></a><strong>:</strong> Simplifies Airflow management and deployment.</p></li>
+<li><p><a href="https://min.io/"><strong>MinIO</strong></a><strong>:</strong> Provides scalable and reliable object storage for data persistence.</p></li>
+<li><p><a href="https://duckdb.org/"><strong>DuckDB</strong></a><strong>:</strong> Acts as the embedded database for storing and querying the transformed data.</p></li>
+<li><p><strong>Streamlit:</strong> Enables the creation of a user-friendly web application for data visualization and exploration.</p></li>
+</ul>
+<div>
+<p><a href="https://github.com/JoshuaOlubori/football-data-analysis?source=post_page-----d40dda115e8c--------------------------------">https://github.com/JoshuaOlubori/football-data-analysis</a></p>
+</div>
+<section id="system-architecture" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="system-architecture">1. <strong>System architecture</strong></h2>
+</section>
+<ol type="1">
+<li><strong>EXTRACT</strong></li>
+</ol>
+<ul>
+<li><strong>Football API Integration:</strong> Similar to the previous iteration, we utilize Python to retrieve football fixture data from a designated API. The extracted data is stored locally in CSV format.</li>
+</ul>
+<p><strong>2. LOAD</strong></p>
+<ul>
+<li><strong>MinIO Object Storage:</strong> MinIO, a highly scalable and reliable object storage solution similar to Amazon S3, acts as the central repository for the extracted data. The local CSV file is uploaded to MinIO for persistent storage.</li>
+</ul>
+<p><strong>3. TRANSFORM</strong></p>
+<ul>
+<li><p><strong>DuckDB Integration:</strong> DuckDB, a powerful embedded database, serves as the in-memory storage for the data during the transformation process. The data is downloaded from MinIO and loaded into DuckDB for efficient filtering and manipulation.</p></li>
+<li><p><strong>Data Transformation:</strong> Leveraging the Astro Python SDK, the data within DuckDB undergoes transformation according to specific criteria detailed in <a href="https://medium.com/@joshuaolubori/developing-a-modern-data-pipeline-part-2-52b73fbff70b">part 2 of this series.</a></p></li>
+<li><p><strong>Transformed Data Storage:</strong> The transformed data is ultimately stored within DuckDB as a separate table, readily accessible for further analysis.</p></li>
+</ul>
+<p><strong>4. FRONTEND</strong></p>
+<ul>
+<li><strong>Streamlit Application:</strong> A dedicated Streamlit container hosts a user-friendly web application. This application interacts with DuckDB, retrieving and visualizing the transformed data, providing valuable insights into the football fixtures.</li>
+</ul>
+<hr>
+<section id="implementation-details" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="implementation-details">2. <strong>Implementation details</strong></h2>
+</section>
+<section id="initiating-the-dag-start.py" class="level2">
+<h2 class="anchored" data-anchor-id="initiating-the-dag-start.py"><strong>Initiating the DAG: <code>start.py</code></strong></h2>
+<ul>
+<li><p><code>start.py</code> defines the initial Airflow DAG using the <code>@dag</code> decorator.</p></li>
+<li><p>It sets the DAG to run only once manually and defines default arguments and descriptive metadata.</p></li>
+<li><p>The code creates a dedicated “duckdb” pool with one worker slot using a <code>BashOperator</code>.</p></li>
+<li><p>This pool ensures controlled execution of tasks querying DuckDB.</p></li>
+</ul>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""DAG that kicks off the pipeline by producing to the start dataset."""</span></span>
+<span id="cb1-2"></span>
+<span id="cb1-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --------------- #</span></span>
+<span id="cb1-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Package imports #</span></span>
+<span id="cb1-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --------------- #</span></span>
+<span id="cb1-6"></span>
+<span id="cb1-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> airflow <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Dataset</span>
+<span id="cb1-8"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> airflow.decorators <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> dag</span>
+<span id="cb1-9"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> airflow.operators.bash <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> BashOperator</span>
+<span id="cb1-10"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pendulum <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> datetime</span>
+<span id="cb1-11"></span>
+<span id="cb1-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># -------------------- #</span></span>
+<span id="cb1-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Local module imports #</span></span>
+<span id="cb1-14"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># -------------------- #</span></span>
+<span id="cb1-15"></span>
+<span id="cb1-16"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> include.global_variables <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> global_variables <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> gv</span>
+<span id="cb1-17"></span>
+<span id="cb1-18"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --- #</span></span>
+<span id="cb1-19"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># DAG #</span></span>
+<span id="cb1-20"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --- #</span></span>
+<span id="cb1-21"></span>
+<span id="cb1-22"></span>
+<span id="cb1-23"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@dag</span>(</span>
+<span id="cb1-24">    start_date<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>datetime(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2023</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>),</span>
+<span id="cb1-25">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># after being unpaused this DAG will run once, afterwards it can be run</span></span>
+<span id="cb1-26">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># manually with the play button in the Airflow UI</span></span>
+<span id="cb1-27">    schedule<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"@once"</span>,</span>
+<span id="cb1-28">    catchup<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>,</span>
+<span id="cb1-29">    default_args<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>gv.default_args,</span>
+<span id="cb1-30">    description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Run this DAG to start the pipeline!"</span>,</span>
+<span id="cb1-31">    tags<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"start"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"setup"</span>],</span>
+<span id="cb1-32">)</span>
+<span id="cb1-33"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> a_start():</span>
+<span id="cb1-34"></span>
+<span id="cb1-35">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># this task uses the BashOperator to run a bash command creating an Airflow</span></span>
+<span id="cb1-36">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># pool called 'duckdb' which contains one worker slot. All tasks running</span></span>
+<span id="cb1-37">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># queries against DuckDB will be assigned to this pool, preventing parallel</span></span>
+<span id="cb1-38">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># requests to DuckDB.</span></span>
+<span id="cb1-39">    create_duckdb_pool <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> BashOperator(</span>
+<span id="cb1-40">        task_id<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"bash_task"</span>,</span>
+<span id="cb1-41">        bash_command<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"airflow pools list | grep -q 'duckdb' || airflow pools set duckdb 1 'Pool for duckdb'"</span>,</span>
+<span id="cb1-42">        outlets<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[gv.DS_START],</span>
+<span id="cb1-43">    )</span>
+<span id="cb1-44"></span>
+<span id="cb1-45">start_dag <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> a_start()</span></code></pre></div>
+</div>
+</section>
+<section id="data-acquisition-extract.py" class="level2">
+<h2 class="anchored" data-anchor-id="data-acquisition-extract.py"><strong>Data Acquisition: <code>extract.py</code></strong></h2>
+<p>This DAG, defined in <code>extract.py</code>, extracts football fixture data from an API and combines them.</p>
+<p><strong><code>fetch_data</code> function:</strong></p>
+<ul>
+<li><p>Fetches data from the API using the <code>fetch_data</code> function, likely defined in <code>include.logic</code>.</p></li>
+<li><p>Optionally passes arguments like the chosen season (e.g., “2023”).</p></li>
+</ul>
+<p><strong><code>concatenate_csvs</code> function:</strong></p>
+<ul>
+<li><p>Combines multiple CSV files located in a specified directory (<code>gv.FIXTURES_DATA_FOLDER</code>) into a single file (<code>all_fixtures_combined.csv</code>)</p></li>
+<li><p>Uses <code>os.walk</code> to iterate through the directory and <code>pandas.concat</code> to combine the dataframes.</p></li>
+</ul>
+<p><strong>DAG Definition:</strong></p>
+<ul>
+<li><p>Similar to <code>start.py</code>, the DAG is defined using the <code>@dag</code> decorator with various parameters.</p></li>
+<li><p>This DAG depends on the <code>gv.DS_START</code> output, meaning it only runs after the initial DAG (<code>start.py</code>) finishes.</p></li>
+</ul>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""DAG that extracts fixtures data from an API, and concatenates them into a single file saved to the local disk."""</span></span>
+<span id="cb2-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --------------- #</span></span>
+<span id="cb2-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># PACKAGE IMPORTS #</span></span>
+<span id="cb2-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --------------- #</span></span>
+<span id="cb2-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pendulum <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> datetime</span>
+<span id="cb2-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> io</span>
+<span id="cb2-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> os</span>
+<span id="cb2-8"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> pd</span>
+<span id="cb2-9"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> airflow.decorators <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> dag</span>
+<span id="cb2-10"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> airflow.operators.python <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> PythonOperator</span>
+<span id="cb2-11"></span>
+<span id="cb2-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># -------------------- #</span></span>
+<span id="cb2-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Local module imports #</span></span>
+<span id="cb2-14"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># -------------------- #</span></span>
+<span id="cb2-15"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> include.global_variables <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> global_variables <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> gv</span>
+<span id="cb2-16"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> include.logic <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> fetch_data</span>
+<span id="cb2-17"></span>
+<span id="cb2-18"></span>
+<span id="cb2-19"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> concatenate_csvs(root_dir, output_file):</span>
+<span id="cb2-20">    csv_files <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb2-21">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> root, _, files <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> os.walk(root_dir):</span>
+<span id="cb2-22">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> files:</span>
+<span id="cb2-23">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>.endswith(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".csv"</span>):</span>
+<span id="cb2-24">                file_path <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> os.path.join(root, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>)</span>
+<span id="cb2-25">                csv_files.append(file_path)</span>
+<span id="cb2-26"></span>
+<span id="cb2-27">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">not</span> csv_files:</span>
+<span id="cb2-28">        gv.task_log.warning(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"No CSV files found in the specified directory."</span>)</span>
+<span id="cb2-29">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span></span>
+<span id="cb2-30"></span>
+<span id="cb2-31">    combined_df <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pd.concat([pd.read_csv(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> csv_files])</span>
+<span id="cb2-32">    combined_df.to_csv(os.path.join(root_dir, output_file), index<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>)</span>
+<span id="cb2-33"></span>
+<span id="cb2-34"></span>
+<span id="cb2-35"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --- #</span></span>
+<span id="cb2-36"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># DAG #</span></span>
+<span id="cb2-37"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --- #</span></span>
+<span id="cb2-38"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@dag</span>(</span>
+<span id="cb2-39">    start_date<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>datetime(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2023</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>),</span>
+<span id="cb2-40">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># this DAG runs as soon as the "start" Dataset has been produced to</span></span>
+<span id="cb2-41">    schedule<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[gv.DS_START],</span>
+<span id="cb2-42">    catchup<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>,</span>
+<span id="cb2-43">    default_args<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>gv.default_args,</span>
+<span id="cb2-44">    description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"extract fixtures data from API."</span>,</span>
+<span id="cb2-45">    tags<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"extract"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"API"</span>],</span>
+<span id="cb2-46">    render_template_as_native_obj<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>,</span>
+<span id="cb2-47">)</span>
+<span id="cb2-48"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> b_extraction():</span>
+<span id="cb2-49">    api_fetcher <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> PythonOperator(</span>
+<span id="cb2-50">            task_id <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"fetch_data"</span>,</span>
+<span id="cb2-51">            python_callable<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> fetch_data,</span>
+<span id="cb2-52">            op_kwargs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {</span>
+<span id="cb2-53">                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"chosen_season"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"2023"</span></span>
+<span id="cb2-54">            }</span>
+<span id="cb2-55">        )</span>
+<span id="cb2-56"></span>
+<span id="cb2-57"></span>
+<span id="cb2-58">    concatenator <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> PythonOperator(</span>
+<span id="cb2-59">            task_id <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"concat_csvs"</span>,</span>
+<span id="cb2-60">            python_callable<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> concatenate_csvs,</span>
+<span id="cb2-61">            op_kwargs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {</span>
+<span id="cb2-62">                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"root_dir"</span>: gv.FIXTURES_DATA_FOLDER,</span>
+<span id="cb2-63">                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"output_file"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"all_fixtures_combined.csv"</span></span>
+<span id="cb2-64"></span>
+<span id="cb2-65">            },</span>
+<span id="cb2-66">            outlets<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[gv.DS_INGEST]</span>
+<span id="cb2-67">        )</span>
+<span id="cb2-68"></span>
+<span id="cb2-69">    api_fetcher <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;&gt;</span> concatenator</span>
+<span id="cb2-70">b_extraction()</span></code></pre></div>
+</div>
+<hr>
+</section>
+<section id="data-storage-and-transfer-minio-and-airflow-operators" class="level1">
+<h1><strong>Data Storage and Transfer: MinIO and Airflow Operators</strong></h1>
+<p>This section covers how the data pipeline utilizes MinIO for object storage and interacts with it using custom Airflow operators.</p>
+<p><strong>Minio as Object Storage:</strong></p>
+<ul>
+<li><p>Minio serves as a central repository for storing the extracted and transformed football fixture data.</p></li>
+<li><p>It offers a <strong>scalable and reliable</strong> alternative to traditional file systems.</p></li>
+<li><p>Its <strong>S3 compatibility</strong> allows seamless integration with Airflow operators designed for S3.</p></li>
+</ul>
+<p><strong>Airflow Operators for MinIO Interactions:</strong></p>
+<p><strong><code>CreateBucket</code>:</strong> (Defined in <code>create_bucket.py</code>)</p>
+<ul>
+<li>Ensures a bucket named <code>gv.FIXTURES_BUCKET_NAME</code> exists in MinIO before uploading data.</li>
+</ul>
+<p><strong><code>LocalFilesystemToMinIOOperator</code>:</strong> (Defined in <code>custom_operators.minio.py</code>)</p>
+<ul>
+<li><p>Uploads local CSV files from <code>gv.FIXTURES_DATA_PATH</code> to the MinIO bucket.</p></li>
+<li><p>It utilizes dynamic task expansion, allowing you to add new files to the folder without modifying the DAG code.</p></li>
+</ul>
+<p><strong><code>MinIOListOperator</code>:</strong> (Defined in <code>custom_operators.minio.py</code>)</p>
+<ul>
+<li>Lists all objects within the <code>gv.FIXTURES_BUCKET_NAME</code> bucket.</li>
+</ul>
+<p><strong>Custom <code>load_fixtures_data</code> task:</strong> (Defined in <code>load_minio_to_duckdb.py</code>)</p>
+<ul>
+<li><p>Iterates through the listed objects in Minio.</p></li>
+<li><p>Downloads each object as a temporary CSV file.</p></li>
+<li><p>Uses <code>duckdb.connect</code> to establish a connection to the DuckDB database.</p></li>
+<li><p>Creates a new table in DuckDB using <code>CREATE TABLE</code> with the downloaded data loaded from the temporary CSV file.</p></li>
+<li><p>Deletes the temporary CSV file after loading the data.</p></li>
+</ul>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""DAG that loads fixtures ingests from local csv files into MinIO."""</span></span>
+<span id="cb3-2"></span>
+<span id="cb3-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --------------- #</span></span>
+<span id="cb3-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># PACKAGE IMPORTS #</span></span>
+<span id="cb3-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --------------- #</span></span>
+<span id="cb3-6"></span>
+<span id="cb3-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> airflow.decorators <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> dag</span>
+<span id="cb3-8"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pendulum <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> datetime</span>
+<span id="cb3-9"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> io</span>
+<span id="cb3-10"></span>
+<span id="cb3-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># -------------------- #</span></span>
+<span id="cb3-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Local module imports #</span></span>
+<span id="cb3-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># -------------------- #</span></span>
+<span id="cb3-14"></span>
+<span id="cb3-15"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> include.global_variables <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> global_variables <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> gv</span>
+<span id="cb3-16"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> include.custom_task_groups.create_bucket <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> CreateBucket</span>
+<span id="cb3-17"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> include.custom_operators.minio <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> LocalFilesystemToMinIOOperator</span>
+<span id="cb3-18"></span>
+<span id="cb3-19"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --- #</span></span>
+<span id="cb3-20"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># DAG #</span></span>
+<span id="cb3-21"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --- #</span></span>
+<span id="cb3-22"></span>
+<span id="cb3-23"></span>
+<span id="cb3-24"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@dag</span>(</span>
+<span id="cb3-25">    start_date<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>datetime(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2023</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>),</span>
+<span id="cb3-26">    schedule<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[gv.DS_INGEST],</span>
+<span id="cb3-27">    catchup<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>,</span>
+<span id="cb3-28">    default_args<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>gv.default_args,</span>
+<span id="cb3-29">    description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Ingests fixtures data from provided csv files to MinIO."</span>,</span>
+<span id="cb3-30">    tags<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ingestion"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"minio"</span>],</span>
+<span id="cb3-31">    render_template_as_native_obj<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>,</span>
+<span id="cb3-32">)</span>
+<span id="cb3-33"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> c_in_fixtures_data():</span>
+<span id="cb3-34"></span>
+<span id="cb3-35">    create_bucket_tg <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> CreateBucket(</span>
+<span id="cb3-36">        task_id<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"create_fixtures_bucket"</span>, bucket_name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>gv.FIXTURES_BUCKET_NAME</span>
+<span id="cb3-37">    )</span>
+<span id="cb3-38"></span>
+<span id="cb3-39">    ingest_fixtures_data <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> LocalFilesystemToMinIOOperator.partial(</span>
+<span id="cb3-40">        task_id<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ingest_fixtures_data"</span>,</span>
+<span id="cb3-41">        bucket_name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>gv.FIXTURES_BUCKET_NAME,</span>
+<span id="cb3-42">        outlets<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[gv.DS_FIXTURES_DATA_MINIO],</span>
+<span id="cb3-43">    ).expand_kwargs(</span>
+<span id="cb3-44">        [</span>
+<span id="cb3-45">            {</span>
+<span id="cb3-46">                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"local_file_path"</span>: gv.FIXTURES_DATA_PATH,</span>
+<span id="cb3-47">                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"object_name"</span>: gv.FIXTURES_DATA_PATH.split(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/"</span>)[<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>],</span>
+<span id="cb3-48">            },</span>
+<span id="cb3-49">        ]</span>
+<span id="cb3-50">    )</span>
+<span id="cb3-51"></span>
+<span id="cb3-52">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># set dependencies</span></span>
+<span id="cb3-53">    create_bucket_tg <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;&gt;</span> ingest_fixtures_data</span>
+<span id="cb3-54"></span>
+<span id="cb3-55"></span>
+<span id="cb3-56">c_in_fixtures_data()</span>
+<span id="cb3-57"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""DAG that loads fixtures from MinIO to DuckDB."""</span></span>
+<span id="cb3-58"></span>
+<span id="cb3-59"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --------------- #</span></span>
+<span id="cb3-60"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># PACKAGE IMPORTS #</span></span>
+<span id="cb3-61"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --------------- #</span></span>
+<span id="cb3-62"></span>
+<span id="cb3-63"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> airflow.decorators <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> dag, task</span>
+<span id="cb3-64"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pendulum <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> datetime, parse</span>
+<span id="cb3-65"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> duckdb</span>
+<span id="cb3-66"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> os</span>
+<span id="cb3-67"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> json</span>
+<span id="cb3-68"></span>
+<span id="cb3-69"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># -------------------- #</span></span>
+<span id="cb3-70"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Local module imports #</span></span>
+<span id="cb3-71"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># -------------------- #</span></span>
+<span id="cb3-72"></span>
+<span id="cb3-73"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> include.global_variables <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> global_variables <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> gv</span>
+<span id="cb3-74"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> include.custom_operators.minio <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> (</span>
+<span id="cb3-75">    MinIOListOperator,</span>
+<span id="cb3-76">    MinIODeleteObjectsOperator,</span>
+<span id="cb3-77">)</span>
+<span id="cb3-78"></span>
+<span id="cb3-79"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --- #</span></span>
+<span id="cb3-80"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># DAG #</span></span>
+<span id="cb3-81"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --- #</span></span>
+<span id="cb3-82"></span>
+<span id="cb3-83"></span>
+<span id="cb3-84"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@dag</span>(</span>
+<span id="cb3-85">    start_date<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>datetime(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2023</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>),</span>
+<span id="cb3-86">    schedule<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[gv.DS_FIXTURES_DATA_MINIO],</span>
+<span id="cb3-87">    catchup<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>,</span>
+<span id="cb3-88">    default_args<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>gv.default_args,</span>
+<span id="cb3-89">    description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Loads fixtures data from MinIO to DuckDB."</span>,</span>
+<span id="cb3-90">    tags<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"load"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"minio"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"duckdb"</span>],</span>
+<span id="cb3-91">    render_template_as_native_obj<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>,</span>
+<span id="cb3-92">)</span>
+<span id="cb3-93"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> d_load_data():</span>
+<span id="cb3-94"></span>
+<span id="cb3-95"></span>
+<span id="cb3-96">    list_files_fixtures_bucket <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> MinIOListOperator(</span>
+<span id="cb3-97">        task_id<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"list_files_fixtures_bucket"</span>, bucket_name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>gv.FIXTURES_BUCKET_NAME</span>
+<span id="cb3-98">    )</span>
+<span id="cb3-99"></span>
+<span id="cb3-100">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@task</span>(outlets<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[gv.DS_DUCKDB_IN_FIXTURES], pool<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"duckdb"</span>)</span>
+<span id="cb3-101">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> load_fixtures_data(obj):</span>
+<span id="cb3-102">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""Loads content of one fileobject in the MinIO fixtures bucket</span></span>
+<span id="cb3-103"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">        to DuckDB."""</span></span>
+<span id="cb3-104"></span>
+<span id="cb3-105">        minio_client <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> gv.get_minio_client()</span>
+<span id="cb3-106">        minio_client.fget_object(gv.FIXTURES_BUCKET_NAME, obj, file_path<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>obj)</span>
+<span id="cb3-107"></span>
+<span id="cb3-108">        cursor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> duckdb.<span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">connect</span>(gv.DUCKDB_INSTANCE_NAME)</span>
+<span id="cb3-109">        cursor.execute(</span>
+<span id="cb3-110">            <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"""DROP TABLE IF EXISTS </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>gv<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>FIXTURES_IN_TABLE_NAME<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">;"""</span></span>
+<span id="cb3-111">        )</span>
+<span id="cb3-112">        cursor.execute(</span>
+<span id="cb3-113">            <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"""CREATE TABLE IF NOT EXISTS </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>gv<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>FIXTURES_IN_TABLE_NAME<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> AS</span></span>
+<span id="cb3-114"><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">            SELECT * FROM read_csv_auto('</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>obj<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">');"""</span></span>
+<span id="cb3-115">        )</span>
+<span id="cb3-116">        cursor.commit()</span>
+<span id="cb3-117">        cursor.close()</span>
+<span id="cb3-118"></span>
+<span id="cb3-119">        os.remove(obj)</span>
+<span id="cb3-120"></span>
+<span id="cb3-121">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># set dependencies</span></span>
+<span id="cb3-122"></span>
+<span id="cb3-123">    fixtures_data <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> load_fixtures_data.expand(obj<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>list_files_fixtures_bucket.output)</span>
+<span id="cb3-124"></span>
+<span id="cb3-125">d_load_data()</span></code></pre></div>
+</div>
+<hr>
+</section>
+<section id="data-transformation-and-analysis-filtering-and-transformation-in-duckdb" class="level1">
+<h1><strong>Data Transformation and Analysis: Filtering and Transformation in DuckDB</strong></h1>
+<ol type="1">
+<li><strong><code>find_fixtures_c1</code> and <code>find_fixtures_c2</code> functions:</strong></li>
+</ol>
+<ul>
+<li>Defined using <code>@aql.dataframe</code> decorators, enabling interaction with DuckDB through the Astro SDK.</li>
+</ul>
+<p>They both:</p>
+<ul>
+<li><p>Access the data from the <code>gv.FIXTURES_IN_TABLE_NAME</code> table using <code>Table</code> objects.</p></li>
+<li><p>Print the ingested data to Airflow logs for debugging purposes.</p></li>
+</ul>
+<p><strong>2. Filtering:</strong></p>
+<ul>
+<li><p>The functions call custom logic (<code>apply_filtering_logic</code>) defined in <code>include.logic</code>, containing filtering criteria based on conditions specified by the client.</p></li>
+<li><p>The <code>lenzi</code> function checks if the resulting dataframe is empty. If empty, a predefined dataframe with a message (“no fixtures satisfy condition yet”) is returned to indicate no matches met the criteria.</p></li>
+</ul>
+<p><strong>3. Transformation:</strong></p>
+<ul>
+<li>The functions might also call another custom function (<code>won_last_5_matches</code>), potentially implementing calculations or transformations based on your analysis needs.</li>
+</ul>
+<p><strong>4. Storing transformed data:</strong></p>
+<ul>
+<li><p>The transformed dataframes are stored in separate DuckDB tables:</p></li>
+<li><p><code>gv.REPORTING_TABLE_NAME_1</code> and <code>gv.REPORTING_TABLE_NAME_2</code>, likely corresponding to the results of <code>find_fixtures_c1</code> and <code>find_fixtures_c2</code>, respectively.</p></li>
+<li><p>This is achieved by specifying the <code>output_table</code> argument within the <code>Table</code> object during function calls.</p></li>
+</ul>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"DAG that runs a transformation on data in DuckDB using the Astro SDK."</span></span>
+<span id="cb4-2"></span>
+<span id="cb4-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --------------- #</span></span>
+<span id="cb4-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># PACKAGE IMPORTS #</span></span>
+<span id="cb4-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --------------- #</span></span>
+<span id="cb4-6"></span>
+<span id="cb4-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> airflow.decorators <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> dag</span>
+<span id="cb4-8"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pendulum <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> datetime</span>
+<span id="cb4-9"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> pd</span>
+<span id="cb4-10"></span>
+<span id="cb4-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># import tools from the Astro SDK</span></span>
+<span id="cb4-12"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> astro <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> sql <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> aql</span>
+<span id="cb4-13"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> astro.sql.table <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Table</span>
+<span id="cb4-14"></span>
+<span id="cb4-15"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># -------------------- #</span></span>
+<span id="cb4-16"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Local module imports #</span></span>
+<span id="cb4-17"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># -------------------- #</span></span>
+<span id="cb4-18"></span>
+<span id="cb4-19"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> include.global_variables <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> global_variables <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> gv</span>
+<span id="cb4-20"></span>
+<span id="cb4-21"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> include.logic <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> apply_filtering_logic, won_last_5_matches</span>
+<span id="cb4-22"></span>
+<span id="cb4-23"></span>
+<span id="cb4-24"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> lenzi(df):</span>
+<span id="cb4-25">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""Function to check for empty dataframe</span></span>
+<span id="cb4-26"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    https://stackoverflow.com/questions/19828822/how-do-i-check-if-a-pandas-dataframe-is-empty</span></span>
+<span id="cb4-27"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    """</span></span>
+<span id="cb4-28">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(df.index) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span></span>
+<span id="cb4-29"></span>
+<span id="cb4-30"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># creating a dataframe to show if no fixtures obey filtering conditions</span></span>
+<span id="cb4-31">default_df <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pd.DataFrame(columns<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Date'</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'HomeTeam'</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'HomeScore'</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'AwayScore'</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'AwayTeam'</span>])</span>
+<span id="cb4-32"></span>
+<span id="cb4-33">row_data <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {</span>
+<span id="cb4-34">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Date'</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'no'</span>,</span>
+<span id="cb4-35">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'HomeTeam'</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'fixtures'</span>,</span>
+<span id="cb4-36">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'HomeScore'</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'satisfies'</span>,</span>
+<span id="cb4-37">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'AwayScore'</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'condition'</span>,</span>
+<span id="cb4-38">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'AwayTeam'</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">' yet'</span></span>
+<span id="cb4-39">}</span>
+<span id="cb4-40">default_df <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> default_df.append(row_data, ignore_index<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span>
+<span id="cb4-41"></span>
+<span id="cb4-42"></span>
+<span id="cb4-43"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ----------------- #</span></span>
+<span id="cb4-44"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Astro SDK Queries #</span></span>
+<span id="cb4-45"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ----------------- #</span></span>
+<span id="cb4-46"></span>
+<span id="cb4-47"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@aql.dataframe</span>(pool<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"duckdb"</span>)</span>
+<span id="cb4-48"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> find_fixtures_c1(in_table: pd.DataFrame):</span>
+<span id="cb4-49">    gv.task_log.info(in_table)</span>
+<span id="cb4-50"></span>
+<span id="cb4-51">    df <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> in_table</span>
+<span id="cb4-52">    output_df <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> apply_filtering_logic(df)</span>
+<span id="cb4-53">    </span>
+<span id="cb4-54">    gv.task_log.info(output_df)</span>
+<span id="cb4-55">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> lenzi(output_df) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>:</span>
+<span id="cb4-56">        gv.task_log.info(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"df is empty"</span>)</span>
+<span id="cb4-57">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> default_df</span>
+<span id="cb4-58"></span>
+<span id="cb4-59">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> output_df</span>
+<span id="cb4-60"></span>
+<span id="cb4-61"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@aql.dataframe</span>(pool<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"duckdb"</span>)</span>
+<span id="cb4-62"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> find_fixtures_c2(in_table: pd.DataFrame):</span>
+<span id="cb4-63">    gv.task_log.info(in_table)</span>
+<span id="cb4-64"></span>
+<span id="cb4-65">    df <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> in_table</span>
+<span id="cb4-66"></span>
+<span id="cb4-67">    output_df <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> won_last_5_matches(df)</span>
+<span id="cb4-68">    </span>
+<span id="cb4-69">    gv.task_log.info(output_df)</span>
+<span id="cb4-70">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> lenzi(output_df) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>:</span>
+<span id="cb4-71">        gv.task_log.info(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"df is empty"</span>)</span>
+<span id="cb4-72">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> default_df</span>
+<span id="cb4-73"></span>
+<span id="cb4-74">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> output_df</span>
+<span id="cb4-75"></span>
+<span id="cb4-76"></span>
+<span id="cb4-77"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --- #</span></span>
+<span id="cb4-78"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># DAG #</span></span>
+<span id="cb4-79"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --- #</span></span>
+<span id="cb4-80"></span>
+<span id="cb4-81"></span>
+<span id="cb4-82"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@dag</span>(</span>
+<span id="cb4-83">    start_date<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>datetime(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2023</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>),</span>
+<span id="cb4-84">    schedule<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[gv.DS_DUCKDB_IN_FIXTURES],</span>
+<span id="cb4-85">    catchup<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span>,</span>
+<span id="cb4-86">    default_args<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>gv.default_args,</span>
+<span id="cb4-87">    description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Runs transformations on fixtures data in DuckDB."</span>,</span>
+<span id="cb4-88">    tags<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"transformation"</span>],</span>
+<span id="cb4-89">)</span>
+<span id="cb4-90"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> e_transform_fixtures():</span>
+<span id="cb4-91"></span>
+<span id="cb4-92"></span>
+<span id="cb4-93">    find_fixtures_c1(</span>
+<span id="cb4-94">        in_table<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>Table(</span>
+<span id="cb4-95">            name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>gv.FIXTURES_IN_TABLE_NAME, conn_id<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>gv.CONN_ID_DUCKDB</span>
+<span id="cb4-96">        ),</span>
+<span id="cb4-97">        output_table<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>Table(</span>
+<span id="cb4-98">            name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>gv.REPORTING_TABLE_NAME_1, conn_id<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>gv.CONN_ID_DUCKDB</span>
+<span id="cb4-99">        ),</span>
+<span id="cb4-100">    )</span>
+<span id="cb4-101"></span>
+<span id="cb4-102">    find_fixtures_c2(</span>
+<span id="cb4-103">        in_table<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>Table(</span>
+<span id="cb4-104">            name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>gv.FIXTURES_IN_TABLE_NAME, conn_id<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>gv.CONN_ID_DUCKDB</span>
+<span id="cb4-105">        ),</span>
+<span id="cb4-106">        output_table<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>Table(</span>
+<span id="cb4-107">            name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>gv.REPORTING_TABLE_NAME_2, conn_id<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>gv.CONN_ID_DUCKDB</span>
+<span id="cb4-108">        ),</span>
+<span id="cb4-109">    )</span>
+<span id="cb4-110"></span>
+<span id="cb4-111"></span>
+<span id="cb4-112">e_transform_fixtures()</span></code></pre></div>
+</div>
+<hr>
+</section>
+<section id="frontend-with-streamlit-data-exploration-and-visualization" class="level1">
+<h1><strong>Frontend with Streamlit: Data Exploration and Visualization</strong></h1>
+<p><strong>Data Retrieval:</strong></p>
+<ul>
+<li><p>The app utilizes functions like <code>list_currently_available_tables</code> and <code>get_fixtures_1/2</code> to:</p></li>
+<li><p>List available tables in DuckDB (<code>reporting_table_1</code> and <code>reporting_table_2</code>).</p></li>
+<li><p>Fetch data from these tables using DuckDB queries and convert them into Pandas DataFrames.</p></li>
+</ul>
+<p><strong>User Interface:</strong></p>
+<ul>
+<li><p>The app displays a title, a welcome message, and uses expanders — a Streamlit component — to organize the content.</p></li>
+<li><p>It conditionally displays the retrieved Dataframes based on their availability in DuckDB.</p></li>
+</ul>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --------------- #</span></span>
+<span id="cb5-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># PACKAGE IMPORTS #</span></span>
+<span id="cb5-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># --------------- #</span></span>
+<span id="cb5-4"></span>
+<span id="cb5-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> streamlit <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> st</span>
+<span id="cb5-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> duckdb</span>
+<span id="cb5-7"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> pd</span>
+<span id="cb5-8"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> datetime <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> date, datetime</span>
+<span id="cb5-9"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> altair <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> alt</span>
+<span id="cb5-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># from global_variables import global_variables as gv</span></span>
+<span id="cb5-11"></span>
+<span id="cb5-12"></span>
+<span id="cb5-13"></span>
+<span id="cb5-14"></span>
+<span id="cb5-15">duck_db_instance_path <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (</span>
+<span id="cb5-16">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/app/include/dwh"</span>  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># when changing this value also change the db name in .env</span></span>
+<span id="cb5-17">)</span>
+<span id="cb5-18"></span>
+<span id="cb5-19"></span>
+<span id="cb5-20"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># -------------- #</span></span>
+<span id="cb5-21"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># DuckDB Queries #</span></span>
+<span id="cb5-22"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># -------------- #</span></span>
+<span id="cb5-23"></span>
+<span id="cb5-24"></span>
+<span id="cb5-25"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> list_currently_available_tables(db<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>duck_db_instance_path):</span>
+<span id="cb5-26">    cursor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> duckdb.<span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">connect</span>(db)</span>
+<span id="cb5-27">    tables <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> cursor.execute(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"SHOW TABLES;"</span>).fetchall()</span>
+<span id="cb5-28">    cursor.close()</span>
+<span id="cb5-29">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> [table[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> table <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> tables]</span>
+<span id="cb5-30"></span>
+<span id="cb5-31"></span>
+<span id="cb5-32"></span>
+<span id="cb5-33"></span>
+<span id="cb5-34"></span>
+<span id="cb5-35"></span>
+<span id="cb5-36"></span>
+<span id="cb5-37"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> get_fixtures_1(db<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>duck_db_instance_path):</span>
+<span id="cb5-38"></span>
+<span id="cb5-39">    cursor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> duckdb.<span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">connect</span>(db)</span>
+<span id="cb5-40">    fixtures_data <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> cursor.execute(</span>
+<span id="cb5-41">        <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"""SELECT * FROM reporting_table_1;"""</span></span>
+<span id="cb5-42">    ).fetchall()</span>
+<span id="cb5-43"></span>
+<span id="cb5-44">    fixtures_data_col_names <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> cursor.execute(</span>
+<span id="cb5-45">        <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"""SELECT column_name from information_schema.columns where table_name = 'reporting_table_1';"""</span></span>
+<span id="cb5-46">    ).fetchall()</span>
+<span id="cb5-47"></span>
+<span id="cb5-48">    df <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pd.DataFrame(</span>
+<span id="cb5-49">        fixtures_data, columns<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[x[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> x <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> fixtures_data_col_names]</span>
+<span id="cb5-50">    )</span>
+<span id="cb5-51">    cursor.close()</span>
+<span id="cb5-52"></span>
+<span id="cb5-53">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> df</span>
+<span id="cb5-54"></span>
+<span id="cb5-55"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> get_fixtures_2(db<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>duck_db_instance_path):</span>
+<span id="cb5-56"></span>
+<span id="cb5-57">    cursor <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> duckdb.<span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">connect</span>(db)</span>
+<span id="cb5-58">    fixtures_data <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> cursor.execute(</span>
+<span id="cb5-59">        <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"""SELECT * FROM reporting_table_2;"""</span></span>
+<span id="cb5-60">    ).fetchall()</span>
+<span id="cb5-61"></span>
+<span id="cb5-62">    fixtures_data_col_names <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> cursor.execute(</span>
+<span id="cb5-63">        <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"""SELECT column_name from information_schema.columns where table_name = 'reporting_table_2';"""</span></span>
+<span id="cb5-64">    ).fetchall()</span>
+<span id="cb5-65"></span>
+<span id="cb5-66">    df <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pd.DataFrame(</span>
+<span id="cb5-67">        fixtures_data, columns<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[x[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> x <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> fixtures_data_col_names]</span>
+<span id="cb5-68">    )</span>
+<span id="cb5-69">    cursor.close()</span>
+<span id="cb5-70"></span>
+<span id="cb5-71">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> df</span>
+<span id="cb5-72"></span>
+<span id="cb5-73"></span>
+<span id="cb5-74"></span>
+<span id="cb5-75"></span>
+<span id="cb5-76"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ------------ #</span></span>
+<span id="cb5-77"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Query DuckDB #</span></span>
+<span id="cb5-78"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ------------ #</span></span>
+<span id="cb5-79"></span>
+<span id="cb5-80"></span>
+<span id="cb5-81">tables <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> list_currently_available_tables()</span>
+<span id="cb5-82"></span>
+<span id="cb5-83"></span>
+<span id="cb5-84"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"reporting_table_1"</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> tables:</span>
+<span id="cb5-85">    fixtures_result_table_1 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_fixtures_1()</span>
+<span id="cb5-86"></span>
+<span id="cb5-87"></span>
+<span id="cb5-88"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"reporting_table_2"</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> tables:</span>
+<span id="cb5-89">    fixtures_result_table_2 <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> get_fixtures_2()</span>
+<span id="cb5-90"></span>
+<span id="cb5-91"></span>
+<span id="cb5-92"></span>
+<span id="cb5-93"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ------------- #</span></span>
+<span id="cb5-94"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># STREAMLIT APP #</span></span>
+<span id="cb5-95"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ------------- #</span></span>
+<span id="cb5-96"></span>
+<span id="cb5-97">st.title(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Fixtures Transformation Results"</span>)</span>
+<span id="cb5-98"></span>
+<span id="cb5-99">st.markdown(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Hello Joshua :wave: Welcome to your Streamlit App! :blush:"</span>)</span>
+<span id="cb5-100"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Get the DataFrame</span></span>
+<span id="cb5-101"></span>
+<span id="cb5-102"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Display the DataFrame as a table in Streamlit</span></span>
+<span id="cb5-103"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># st.dataframe(fixtures_result_table_1)</span></span>
+<span id="cb5-104"></span>
+<span id="cb5-105"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">with</span> st.expander(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Section 1: Fixtures in which either teams have won 3 games or more against common opponents in the league"</span>):</span>
+<span id="cb5-106">    st.dataframe(fixtures_result_table_1)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Optional styling</span></span>
+<span id="cb5-107"></span>
+<span id="cb5-108"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">with</span> st.expander(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Section 2: Fixtures in which either teams have won all 5 games in their last 5 league matches"</span>):</span>
+<span id="cb5-109">    st.dataframe(fixtures_result_table_2)</span></code></pre></div>
+</div>
+<p>I would have posted a link to allow users to access the app but I ran out of Github Codespaces compute credits. I will update this post with the link when my monthly quota resets.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>data engineering</category>
+  <category>api</category>
+  <guid>https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_3/index.html</guid>
+  <pubDate>Mon, 04 Mar 2024 23:00:00 GMT</pubDate>
+  <media:content url="https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_3/image.png" medium="image" type="image/png" height="82" width="144"/>
+</item>
 <item>
   <title>Pushing the Boundaries of Excel</title>
   <dc:creator>Edun Joshua</dc:creator>

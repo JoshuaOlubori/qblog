@@ -1,0 +1,142 @@
+---
+title: "Developing a Modern Data Pipeline — Part 2"
+subtitle: "A 3-part series featuring web-scraping, data pipelines, orchestration and containerisation"
+author: "Edun Joshua"
+date: "2024-03-05"
+categories: [data engineering, api]
+image: "image.jpg"
+eval: false
+---
+
+::: {style="color: #25D366;"}
+## Context
+:::
+
+In[ Part 1](https://medium.com/@joshuaolubori/developing-a-modern-data-pipeline-part-1-3421ea940478), we explored web scraping. Now, we switch to an API for the data retrieval. The API I used is [API-Football](https://rapidapi.com/api-sports/api/api-football/details) at rapidapi.com. You’ll need a subscription to access this API. See [Part 3](https://medium.com/@joshuaolubori/developing-a-modern-data-pipeline-part-3-d40dda115e8c) for the final implementation of the pipeline
+
+::: {style="color: #25D366;"}
+## 1. Setting Up The Stage: Imports and Options
+:::
+
+```{python}
+import os
+import csv
+import requests
+from requests.exceptions import RequestException
+from urllib3.exceptions import NewConnectionError, ConnectTimeoutError
+from time import sleep
+from config import api_key, api_endpoint
+```
+
+This section imports necessary libraries:
+
+-   **os**: Provides functionalities for interacting with the operating system (creating folders).
+
+-   **csv**: Enables working with CSV files (writing data).
+
+-   **requests**: Facilitates making HTTP requests to the API.
+
+-   **time**: Used for introducing a delay between API calls.
+
+Additionally, it imports the API key and endpoint from the `config` module.
+
+Next, the code defines two variables:
+
+-   league_ids: Contains a list of League IDs representing various football leagues the script will process.
+
+-   unique_league_ids: Employs set() to remove duplicates from the league_ids list, ensuring each league is processed only once.
+
+::: {style="color: #25D366;"}
+## 2. Data Organization: Folders and Paths
+:::
+
+```{python}
+top_level_folder = "data"
+os.makedirs(top_level_folder, exist_ok=True)
+```
+
+This section creates a top-level folder named “data” to store the downloaded CSV files. The `os.makedirs` function ensures the folder is created even if it doesn't exist, and the `exist_ok=True` argument prevents errors if the folder already exists.
+
+::: {style="color: #25D366;"}
+## 3. API Interaction and Data Extraction
+:::
+
+```{python}
+url = api_endpoint
+headers = {
+    "X-RapidAPI-Key": api_key,
+    "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
+}
+
+total_calls = len(unique_league_ids)
+current_call = 0
+
+
+def fetch_data(chosen_season="2023"):
+    global current_call
+    for league_id in unique_league_ids:
+        try:
+            querystring = {"league": str(league_id), "season": chosen_season}
+            response = requests.get(url, headers=headers, params=querystring)
+
+            # Check if the response is successful
+            response.raise_for_status()
+
+            data = response.json()['response']
+
+            # ... (data processing and CSV creation) ...
+
+            current_call += 1
+            print(f"{csv_data[0]['country']} {csv_data[0]['league_name']} called: ({current_call}/{total_calls})")
+            print(f"\nCSV file saved at: {csv_file_path}")
+
+        except (NewConnectionError, ConnectTimeoutError) as e:
+            # ... (error handling) ...
+            return
+
+        except RequestException as e:
+            # ... (error handling) ...
+
+        except Exception as e:
+            # ... (error handling) ...
+
+        # Sleep for 3 seconds before the next API call
+        sleep(3)
+```
+
+The core functionality resides within the fetch_data function. Let's explore its steps:
+
+1.  **Looping through League IDs**: The `for` loop iterates through each league ID in the `unique_league_ids` set.
+
+2.  **API Request**: It constructs the API request URL with headers containing the API key and sends a GET request using `requests.get`.
+
+3.  **Error Handling**: The code utilizes a `try...except` block to handle potential exceptions:
+
+    -   Connection errors (`NewConnectionError`, `ConnectTimeoutError`): Indicate issues with the internet connection. The script prints an error message and exits the program.
+
+    -   `RequestException`: Catches other request-related errors, printing an error message.
+
+    -   `Exception`: Handles any unexpected errors, printing an error message.
+
+4.  **Successful Response**: If the response is successful (`response.raise_for_status()`), the script proceeds:
+
+    -   Extracting Data: It parses the JSON response and extracts the relevant data (`data = response.json()['response']`).
+
+5.  **CSV Creation**: The script constructs the CSV file:
+   
+    -   Folder Creation: It checks for a subfolder within “data” named after the league and country, creating it if necessary using `os.makedirs`.
+
+    -   File Path: The CSV file path is constructed with the league name, season, and “.csv” extension.
+
+    -   Writing Data: The script opens the CSV file in write mode and uses `csv.DictWriter` to write the header row and data rows from the processed data (`csv_data`).
+
+
+6.  **Progress Tracking and Information**:
+
+    -   The script increments a counter (`current_call`) to track the API call progress.
+
+    -   It prints a message indicating the successful API call with league details and the total progress.
+
+    -   Finally, it prints the location where the CSV file is saved.
+
+In the [final part](https://medium.com/@joshuaolubori/developing-a-modern-data-pipeline-part-3-d40dda115e8c) of this series, we’ll dockerise the application and integrate tools such as DuckDB, MinIO and Airflow for orchestration.
