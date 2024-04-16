@@ -187,10 +187,10 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 
 
 <section id="context" class="level2" style="color: #25D366;">
-<h2 class="anchored" data-anchor-id="context">Context</h2>
+<h2 style="color: #25D366;" class="anchored" data-anchor-id="context">Context</h2>
 </section>
-<p>This third and final part of the project focuses on implementing and orchestrating the data pipeline. Here, we’ll delve into the code behind the scenes, exploring how Airflow DAGs orchestrate the various data processing steps, ensuring reliable execution and well-defined dependencies. We’ll also examine the data storage and transformation strategies, including the utilization of Minio for object storage and the Astro SDK for efficient in-database transformations within DuckDB.</p>
-<p>Finally, we’ll explore the user-friendly Streamlit frontend that allows users to interact with and visualize the processed football fixture data, gaining valuable insights from the analysis. By bringing these elements together, this part finalizes the series, transforming the initial concept into a robust and functional data analysis system.</p>
+<p>This third and final part of the project is about orchestrating the data pipeline. We’ll examine the data storage and transformation strategies, including the utilization of Minio for object storage and the Astro SDK for efficient in-database transformations within DuckDB.</p>
+<p>Finally, we’ll explore the user-friendly Streamlit frontend that allows users to interact with and visualize the processed football fixture data. By bringing these elements together, this part concludes the series, transforming the initial concept into a robust data pipeline.</p>
 <p>Click here for <a href="https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_1/">Part 1</a> and <a href="https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_2/">Part 2</a> of the series.</p>
 <p>This project was inspired by the <a href="https://github.com/astronomer/airflow-quickstart">Astronomer Quick Start Repo</a> for getting started with Apache Airflow.</p>
 <p>Here’s a breakdown of the chosen technologies:</p>
@@ -202,6 +202,14 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <li><p><a href="https://duckdb.org/"><strong>DuckDB</strong></a><strong>:</strong> Acts as the embedded database for storing and querying the transformed data.</p></li>
 <li><p><strong>Streamlit:</strong> Enables the creation of a user-friendly web application for data visualization and exploration.</p></li>
 </ul>
+<section id="demo" class="level2" style="color: #25D366;">
+<h2 style="color: #25D366;" class="anchored" data-anchor-id="demo">Demo</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Ftb_analysis_demo.gif" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</section>
 <section id="system-architecture" class="level2" style="color: #25D366;">
 <h2 class="anchored" data-anchor-id="system-architecture">1. <strong>System architecture</strong></h2>
 </section>
@@ -209,7 +217,7 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <li><strong>EXTRACT</strong></li>
 </ol>
 <ul>
-<li><strong>Football API Integration:</strong> Similar to the previous iteration, we utilize Python to retrieve football fixture data from a designated API. The extracted data is stored locally in CSV format.</li>
+<li><strong>Football API Integration:</strong> Similar to the previous iteration, we utilize Python to retrieve football fixture data from the RapidAPI. The extracted data is stored locally in CSV format.</li>
 </ul>
 <p><strong>2. LOAD</strong></p>
 <ul>
@@ -218,12 +226,12 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <p><strong>3. TRANSFORM</strong></p>
 <ul>
 <li><p><strong>DuckDB Integration:</strong> DuckDB, a powerful embedded database, serves as the in-memory storage for the data during the transformation process. The data is downloaded from MinIO and loaded into DuckDB for efficient filtering and manipulation.</p></li>
-<li><p><strong>Data Transformation:</strong> Leveraging the Astro Python SDK, the data within DuckDB undergoes transformation according to specific criteria detailed in <a href="https://medium.com/@joshuaolubori/developing-a-modern-data-pipeline-part-2-52b73fbff70b">part 2 of this series.</a></p></li>
+<li><p><strong>Data Transformation:</strong> By using the Astro Python SDK, the data within DuckDB undergoes transformation according to specific criteria detailed in <a href="https://medium.com/@joshuaolubori/developing-a-modern-data-pipeline-part-2-52b73fbff70b">part 2 of this series.</a></p></li>
 <li><p><strong>Transformed Data Storage:</strong> The transformed data is ultimately stored within DuckDB as a separate table, readily accessible for further analysis.</p></li>
 </ul>
 <p><strong>4. FRONTEND</strong></p>
 <ul>
-<li><strong>Streamlit Application:</strong> A dedicated Streamlit container hosts a user-friendly web application. This application interacts with DuckDB, retrieving and visualizing the transformed data, providing valuable insights into the football fixtures.</li>
+<li><strong>Streamlit Application:</strong> A dedicated Streamlit container hosts a user-friendly web application. This application interacts with DuckDB, retrieving and visualizing the transformed data.</li>
 </ul>
 <hr>
 <section id="implementation-details" class="level2" style="color: #25D366;">
@@ -234,8 +242,7 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <ul>
 <li><p><code>start.py</code> defines the initial Airflow DAG using the <code>@dag</code> decorator.</p></li>
 <li><p>It sets the DAG to run only once manually and defines default arguments and descriptive metadata.</p></li>
-<li><p>The code creates a dedicated “duckdb” pool with one worker slot using a <code>BashOperator</code>.</p></li>
-<li><p>This pool ensures controlled execution of tasks querying DuckDB.</p></li>
+<li><p>The code creates a dedicated “duckdb” pool with one worker slot using a <code>BashOperator</code>. This pool ensures controlled execution of tasks querying DuckDB.</p></li>
 </ul>
 <div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""DAG that kicks off the pipeline by producing to the start dataset."""</span></span>
@@ -285,12 +292,12 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>start_dag <span class="op">=</span> a_start()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="data-acquisition-extract.py" class="level2">
-<h2 class="anchored" data-anchor-id="data-acquisition-extract.py"><strong>Data Acquisition: <code>extract.py</code></strong></h2>
+<section id="data-acquisition-extract.py" class="level2" style="color: #25D366;">
+<h2 style="color: #25D366;" class="anchored" data-anchor-id="data-acquisition-extract.py"><strong>Data Acquisition: <code>extract.py</code></strong></h2>
 <p>This DAG, defined in <code>extract.py</code>, extracts football fixture data from an API and combines them.</p>
 <p><strong><code>fetch_data</code> function:</strong></p>
 <ul>
-<li><p>Fetches data from the API using the <code>fetch_data</code> function, likely defined in <code>include.logic</code>.</p></li>
+<li><p>Fetches data from the API using the <code>fetch_data</code> function, defined in <code>include.logic</code>.</p></li>
 <li><p>Optionally passes arguments like the chosen season (e.g., “2023”).</p></li>
 </ul>
 <p><strong><code>concatenate_csvs</code> function:</strong></p>
@@ -377,8 +384,9 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 </div>
 <hr>
 </section>
-<section id="data-storage-and-transfer-minio-and-airflow-operators" class="level1">
-<h1><strong>Data Storage and Transfer: MinIO and Airflow Operators</strong></h1>
+<section id="data-storage-and-transfer-minio-and-airflow-operators" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="data-storage-and-transfer-minio-and-airflow-operators"><strong>Data Storage and Transfer: MinIO and Airflow Operators</strong></h2>
+</section>
 <p>This section covers how the data pipeline utilizes MinIO for object storage and interacts with it using custom Airflow operators.</p>
 <p><strong>Minio as Object Storage:</strong></p>
 <ul>
@@ -387,27 +395,29 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <li><p>Its <strong>S3 compatibility</strong> allows seamless integration with Airflow operators designed for S3.</p></li>
 </ul>
 <p><strong>Airflow Operators for MinIO Interactions:</strong></p>
-<p><strong><code>CreateBucket</code>:</strong> (Defined in <code>create_bucket.py</code>)</p>
+<ol type="1">
+<li><p><strong><code>CreateBucket</code>:</strong> (Defined in <code>create_bucket.py</code>)</p>
 <ul>
 <li>Ensures a bucket named <code>gv.FIXTURES_BUCKET_NAME</code> exists in MinIO before uploading data.</li>
-</ul>
-<p><strong><code>LocalFilesystemToMinIOOperator</code>:</strong> (Defined in <code>custom_operators.minio.py</code>)</p>
+</ul></li>
+<li><p><strong><code>LocalFilesystemToMinIOOperator</code>:</strong> (Defined in <code>custom_operators.minio.py</code>)</p>
 <ul>
 <li><p>Uploads local CSV files from <code>gv.FIXTURES_DATA_PATH</code> to the MinIO bucket.</p></li>
-<li><p>It utilizes dynamic task expansion, allowing you to add new files to the folder without modifying the DAG code.</p></li>
-</ul>
-<p><strong><code>MinIOListOperator</code>:</strong> (Defined in <code>custom_operators.minio.py</code>)</p>
+<li><p>It utilizes dynamic task expansion, allowing the addition of new files to the folder without modifying the DAG code.</p></li>
+</ul></li>
+<li><p><strong><code>MinIOListOperator</code>:</strong> (Defined in <code>custom_operators.minio.py</code>)</p>
 <ul>
 <li>Lists all objects within the <code>gv.FIXTURES_BUCKET_NAME</code> bucket.</li>
-</ul>
-<p><strong>Custom <code>load_fixtures_data</code> task:</strong> (Defined in <code>load_minio_to_duckdb.py</code>)</p>
+</ul></li>
+<li><p><strong>Custom <code>load_fixtures_data</code> task:</strong> (Defined in <code>load_minio_to_duckdb.py</code>)</p>
 <ul>
 <li><p>Iterates through the listed objects in Minio.</p></li>
 <li><p>Downloads each object as a temporary CSV file.</p></li>
 <li><p>Uses <code>duckdb.connect</code> to establish a connection to the DuckDB database.</p></li>
 <li><p>Creates a new table in DuckDB using <code>CREATE TABLE</code> with the downloaded data loaded from the temporary CSV file.</p></li>
 <li><p>Deletes the temporary CSV file after loading the data.</p></li>
-</ul>
+</ul></li>
+</ol>
 <div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""DAG that loads fixtures ingests from local csv files into MinIO."""</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -536,9 +546,9 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a>d_load_data()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
+<section id="data-transformation-and-analysis-filtering-and-transformation-in-duckdb" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="data-transformation-and-analysis-filtering-and-transformation-in-duckdb"><strong>Data Transformation and Analysis: Filtering and Transformation in DuckDB</strong></h2>
 </section>
-<section id="data-transformation-and-analysis-filtering-and-transformation-in-duckdb" class="level1">
-<h1><strong>Data Transformation and Analysis: Filtering and Transformation in DuckDB</strong></h1>
 <ol type="1">
 <li><strong><code>find_fixtures_c1</code> and <code>find_fixtures_c2</code> functions:</strong></li>
 </ol>
@@ -552,17 +562,17 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 </ul>
 <p><strong>2. Filtering:</strong></p>
 <ul>
-<li><p>The functions call custom logic (<code>apply_filtering_logic</code>) defined in <code>include.logic</code>, containing filtering criteria based on conditions specified by the client.</p></li>
+<li><p>The functions call custom logic (<code>apply_filtering_logic</code>) defined in <code>include.logic</code>, containing filtering criteria based on conditions specified by the client. The logic of the functions, as of now, are proprietary and disclosure will be considered upon request by an interested reader.</p></li>
 <li><p>The <code>lenzi</code> function checks if the resulting dataframe is empty. If empty, a predefined dataframe with a message (“no fixtures satisfy condition yet”) is returned to indicate no matches met the criteria.</p></li>
 </ul>
 <p><strong>3. Transformation:</strong></p>
 <ul>
-<li>The functions might also call another custom function (<code>won_last_5_matches</code>), potentially implementing calculations or transformations based on your analysis needs.</li>
+<li>The functions call another custom function (<code>won_last_5_matches</code>), that implements another set of filtering logic on the dataset.</li>
 </ul>
 <p><strong>4. Storing transformed data:</strong></p>
 <ul>
 <li><p>The transformed dataframes are stored in separate DuckDB tables:</p></li>
-<li><p><code>gv.REPORTING_TABLE_NAME_1</code> and <code>gv.REPORTING_TABLE_NAME_2</code>, likely corresponding to the results of <code>find_fixtures_c1</code> and <code>find_fixtures_c2</code>, respectively.</p></li>
+<li><p><code>gv.REPORTING_TABLE_NAME_1</code> and <code>gv.REPORTING_TABLE_NAME_2</code>, correspond to the results of <code>find_fixtures_c1</code> and <code>find_fixtures_c2</code>, respectively.</p></li>
 <li><p>This is achieved by specifying the <code>output_table</code> argument within the <code>Table</code> object during function calls.</p></li>
 </ul>
 <div class="cell" data-execution_count="4">
@@ -680,19 +690,20 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a>e_transform_fixtures()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
+<section id="frontend-with-streamlit-data-exploration-and-visualization" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="frontend-with-streamlit-data-exploration-and-visualization"><strong>Frontend with Streamlit: Data Exploration and Visualization</strong></h2>
 </section>
-<section id="frontend-with-streamlit-data-exploration-and-visualization" class="level1">
-<h1><strong>Frontend with Streamlit: Data Exploration and Visualization</strong></h1>
 <p><strong>Data Retrieval:</strong></p>
-<ul>
-<li><p>The app utilizes functions like <code>list_currently_available_tables</code> and <code>get_fixtures_1/2</code> to:</p></li>
+<p>The app uses functions like <code>list_currently_available_tables</code> and <code>get_fixtures_1/2</code> to:</p>
+<ol type="1">
+<li><p>Ensures a bucket named <code>gv.FIXTURES_BUCKET_NAME</code> exists in MinIO before uploading data.</p></li>
 <li><p>List available tables in DuckDB (<code>reporting_table_1</code> and <code>reporting_table_2</code>).</p></li>
 <li><p>Fetch data from these tables using DuckDB queries and convert them into Pandas DataFrames.</p></li>
-</ul>
+</ol>
 <p><strong>User Interface:</strong></p>
 <ul>
 <li><p>The app displays a title, a welcome message, and uses expanders — a Streamlit component — to organize the content.</p></li>
-<li><p>It conditionally displays the retrieved Dataframes based on their availability in DuckDB.</p></li>
+<li><p>Conditionally displays the retrieved Dataframes based on their availability in DuckDB.</p></li>
 </ul>
 <div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --------------- #</span></span>
@@ -729,86 +740,86 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_fixtures_1(db<span class="op">=</span>duck_db_instance_path):</span>
 <span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_fixtures_1(db<span class="op">=</span>duck_db_instance_path):</span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    cursor <span class="op">=</span> duckdb.<span class="ex">connect</span>(db)</span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    fixtures_data <span class="op">=</span> cursor.execute(</span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"""SELECT * FROM reporting_table_1;"""</span></span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>    ).fetchall()</span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    fixtures_data_col_names <span class="op">=</span> cursor.execute(</span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"""SELECT column_name from information_schema.columns where table_name = 'reporting_table_1';"""</span></span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    ).fetchall()</span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame(</span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>        fixtures_data, columns<span class="op">=</span>[x[<span class="dv">0</span>] <span class="cf">for</span> x <span class="kw">in</span> fixtures_data_col_names]</span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>    cursor.close()</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    cursor <span class="op">=</span> duckdb.<span class="ex">connect</span>(db)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    fixtures_data <span class="op">=</span> cursor.execute(</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"""SELECT * FROM reporting_table_1;"""</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    ).fetchall()</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>    fixtures_data_col_names <span class="op">=</span> cursor.execute(</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"""SELECT column_name from information_schema.columns where table_name = 'reporting_table_1';"""</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    ).fetchall()</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>        fixtures_data, columns<span class="op">=</span>[x[<span class="dv">0</span>] <span class="cf">for</span> x <span class="kw">in</span> fixtures_data_col_names]</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>    cursor.close()</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df</span>
 <span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_fixtures_2(db<span class="op">=</span>duck_db_instance_path):</span>
 <span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_fixtures_2(db<span class="op">=</span>duck_db_instance_path):</span>
-<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>    cursor <span class="op">=</span> duckdb.<span class="ex">connect</span>(db)</span>
-<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>    fixtures_data <span class="op">=</span> cursor.execute(</span>
-<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"""SELECT * FROM reporting_table_2;"""</span></span>
-<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>    ).fetchall()</span>
-<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>    fixtures_data_col_names <span class="op">=</span> cursor.execute(</span>
-<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"""SELECT column_name from information_schema.columns where table_name = 'reporting_table_2';"""</span></span>
-<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>    ).fetchall()</span>
-<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame(</span>
-<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>        fixtures_data, columns<span class="op">=</span>[x[<span class="dv">0</span>] <span class="cf">for</span> x <span class="kw">in</span> fixtures_data_col_names]</span>
-<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>    cursor.close()</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    cursor <span class="op">=</span> duckdb.<span class="ex">connect</span>(db)</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>    fixtures_data <span class="op">=</span> cursor.execute(</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"""SELECT * FROM reporting_table_2;"""</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>    ).fetchall()</span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>    fixtures_data_col_names <span class="op">=</span> cursor.execute(</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"""SELECT column_name from information_schema.columns where table_name = 'reporting_table_2';"""</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>    ).fetchall()</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>        fixtures_data, columns<span class="op">=</span>[x[<span class="dv">0</span>] <span class="cf">for</span> x <span class="kw">in</span> fixtures_data_col_names]</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>    cursor.close()</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df</span>
 <span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df</span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------ #</span></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="co"># Query DuckDB #</span></span>
 <span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------ #</span></span>
-<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a><span class="co"># Query DuckDB #</span></span>
-<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------ #</span></span>
-<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>tables <span class="op">=</span> list_currently_available_tables()</span>
 <span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>tables <span class="op">=</span> list_currently_available_tables()</span>
-<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"reporting_table_1"</span> <span class="kw">in</span> tables:</span>
-<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>    fixtures_result_table_1 <span class="op">=</span> get_fixtures_1()</span>
-<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"reporting_table_2"</span> <span class="kw">in</span> tables:</span>
-<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>    fixtures_result_table_2 <span class="op">=</span> get_fixtures_2()</span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"reporting_table_1"</span> <span class="kw">in</span> tables:</span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a>    fixtures_result_table_1 <span class="op">=</span> get_fixtures_1()</span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"reporting_table_2"</span> <span class="kw">in</span> tables:</span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>    fixtures_result_table_2 <span class="op">=</span> get_fixtures_2()</span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------- #</span></span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a><span class="co"># STREAMLIT APP #</span></span>
 <span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------- #</span></span>
-<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a><span class="co"># STREAMLIT APP #</span></span>
-<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------- #</span></span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>st.title(<span class="st">"Fixtures Transformation Results"</span>)</span>
 <span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>st.title(<span class="st">"Fixtures Transformation Results"</span>)</span>
-<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>st.markdown(<span class="ss">f"Hello Joshua :wave: Welcome to your Streamlit App! :blush:"</span>)</span>
-<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the DataFrame</span></span>
-<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the DataFrame as a table in Streamlit</span></span>
-<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a><span class="co"># st.dataframe(fixtures_result_table_1)</span></span>
-<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> st.expander(<span class="st">"Section 1: Fixtures in which either teams have won 3 games or more against common opponents in the league"</span>):</span>
-<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>    st.dataframe(fixtures_result_table_1)  <span class="co"># Optional styling</span></span>
-<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> st.expander(<span class="st">"Section 2: Fixtures in which either teams have won all 5 games in their last 5 league matches"</span>):</span>
-<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a>    st.dataframe(fixtures_result_table_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>st.markdown(<span class="ss">f"Hello Joshua :wave: Welcome to your Streamlit App! :blush:"</span>)</span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the DataFrame</span></span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the DataFrame as a table in Streamlit</span></span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a><span class="co"># st.dataframe(fixtures_result_table_1)</span></span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> st.expander(<span class="st">"Section 1: Fixtures in which either teams have won 3 games or more against common opponents in the league"</span>):</span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>    st.dataframe(fixtures_result_table_1)  <span class="co"># Optional styling</span></span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> st.expander(<span class="st">"Section 2: Fixtures in which either teams have won all 5 games in their last 5 league matches"</span>):</span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a>    st.dataframe(fixtures_result_table_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>I would have posted a link to allow users to access the app but I ran out of Github Codespaces compute credits. I will update this post with the link when my monthly quota resets.</p>
-
-
+<section id="conclusion" class="level2" style="color: #25D366;">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
 </section>
+<p>This project is my introduction to the world of pipeline orchestration. I cannot wait to implement more orchestrated data jobs in the future!</p>
+
+
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
