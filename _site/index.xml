@@ -673,9 +673,16 @@ font-style: inherit;">3</span>)</span></code></pre></div>
 
 
 
+<div style="color: #25D366;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_3/image.png" class="img-fluid figure-img" alt="cover image"></p>
+</figure>
+</div>
 <section id="context" class="level2" style="color: #25D366;">
 <h2 style="color: #25D366;" class="anchored" data-anchor-id="context">Context</h2>
 </section>
+</div>
 <p>This third and final part of the project is about orchestrating the data pipeline. We’ll examine the data storage and transformation strategies, including the utilization of Minio for object storage and the Astro SDK for efficient in-database transformations within DuckDB.</p>
 <p>Finally, we’ll explore the user-friendly Streamlit frontend that allows users to interact with and visualize the processed football fixture data. By bringing these elements together, this part concludes the series, transforming the initial concept into a robust data pipeline.</p>
 <p>Click here for <a href="https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_1/">Part 1</a> and <a href="https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_2/">Part 2</a> of the series.</p>
@@ -694,6 +701,7 @@ font-style: inherit;">3</span>)</span></code></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_3/Ftb_analysis_demo.gif" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Viewing the app on my mobile device</figcaption>
 </figure>
 </div>
 </section>
@@ -726,6 +734,12 @@ font-style: inherit;">3</span>)</span></code></pre></div>
 </section>
 <section id="initiating-the-dag-start.py" class="level2">
 <h2 class="anchored" data-anchor-id="initiating-the-dag-start.py"><strong>Initiating the DAG: <code>start.py</code></strong></h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_3/airflow-dashboard.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">the project’s airflow dashboard</figcaption>
+</figure>
+</div>
 <ul>
 <li><p><code>start.py</code> defines the initial Airflow DAG using the <code>@dag</code> decorator.</p></li>
 <li><p>It sets the DAG to run only once manually and defines default arguments and descriptive metadata.</p></li>
@@ -1139,6 +1153,12 @@ font-style: inherit;">&gt;&gt;</span> concatenator</span>
 </section>
 <section id="data-storage-and-transfer-minio-and-airflow-operators" class="level2" style="color: #25D366;">
 <h2 class="anchored" data-anchor-id="data-storage-and-transfer-minio-and-airflow-operators"><strong>Data Storage and Transfer: MinIO and Airflow Operators</strong></h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://joshuaolubori.onrender.com/posts/2024-03-05_yusuf_app_3/minio_ui.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">The MinIO provides a user interface for engineers to view buckets and their contents</figcaption>
+</figure>
+</div>
 </section>
 <p>This section covers how the data pipeline utilizes MinIO for object storage and interacts with it using custom Airflow operators.</p>
 <p><strong>Minio as Object Storage:</strong></p>

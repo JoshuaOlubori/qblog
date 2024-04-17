@@ -1110,7 +1110,7 @@
     "href": "posts/2024-03-05_yusuf_app_3/index.html#initiating-the-dag-start.py",
     "title": "Developing a Modern Data Pipeline — Part 3",
     "section": "Initiating the DAG: start.py",
-    "text": "Initiating the DAG: start.py\n\nstart.py defines the initial Airflow DAG using the @dag decorator.\nIt sets the DAG to run only once manually and defines default arguments and descriptive metadata.\nThe code creates a dedicated “duckdb” pool with one worker slot using a BashOperator. This pool ensures controlled execution of tasks querying DuckDB.\n\n\n\"\"\"DAG that kicks off the pipeline by producing to the start dataset.\"\"\"\n\n# --------------- #\n# Package imports #\n# --------------- #\n\nfrom airflow import Dataset\nfrom airflow.decorators import dag\nfrom airflow.operators.bash import BashOperator\nfrom pendulum import datetime\n\n# -------------------- #\n# Local module imports #\n# -------------------- #\n\nfrom include.global_variables import global_variables as gv\n\n# --- #\n# DAG #\n# --- #\n\n\n@dag(\n    start_date=datetime(2023, 1, 1),\n    # after being unpaused this DAG will run once, afterwards it can be run\n    # manually with the play button in the Airflow UI\n    schedule=\"@once\",\n    catchup=False,\n    default_args=gv.default_args,\n    description=\"Run this DAG to start the pipeline!\",\n    tags=[\"start\", \"setup\"],\n)\ndef a_start():\n\n    # this task uses the BashOperator to run a bash command creating an Airflow\n    # pool called 'duckdb' which contains one worker slot. All tasks running\n    # queries against DuckDB will be assigned to this pool, preventing parallel\n    # requests to DuckDB.\n    create_duckdb_pool = BashOperator(\n        task_id=\"bash_task\",\n        bash_command=\"airflow pools list | grep -q 'duckdb' || airflow pools set duckdb 1 'Pool for duckdb'\",\n        outlets=[gv.DS_START],\n    )\n\nstart_dag = a_start()"
+    "text": "Initiating the DAG: start.py\n\n\n\nthe project’s airflow dashboard\n\n\n\nstart.py defines the initial Airflow DAG using the @dag decorator.\nIt sets the DAG to run only once manually and defines default arguments and descriptive metadata.\nThe code creates a dedicated “duckdb” pool with one worker slot using a BashOperator. This pool ensures controlled execution of tasks querying DuckDB.\n\n\n\"\"\"DAG that kicks off the pipeline by producing to the start dataset.\"\"\"\n\n# --------------- #\n# Package imports #\n# --------------- #\n\nfrom airflow import Dataset\nfrom airflow.decorators import dag\nfrom airflow.operators.bash import BashOperator\nfrom pendulum import datetime\n\n# -------------------- #\n# Local module imports #\n# -------------------- #\n\nfrom include.global_variables import global_variables as gv\n\n# --- #\n# DAG #\n# --- #\n\n\n@dag(\n    start_date=datetime(2023, 1, 1),\n    # after being unpaused this DAG will run once, afterwards it can be run\n    # manually with the play button in the Airflow UI\n    schedule=\"@once\",\n    catchup=False,\n    default_args=gv.default_args,\n    description=\"Run this DAG to start the pipeline!\",\n    tags=[\"start\", \"setup\"],\n)\ndef a_start():\n\n    # this task uses the BashOperator to run a bash command creating an Airflow\n    # pool called 'duckdb' which contains one worker slot. All tasks running\n    # queries against DuckDB will be assigned to this pool, preventing parallel\n    # requests to DuckDB.\n    create_duckdb_pool = BashOperator(\n        task_id=\"bash_task\",\n        bash_command=\"airflow pools list | grep -q 'duckdb' || airflow pools set duckdb 1 'Pool for duckdb'\",\n        outlets=[gv.DS_START],\n    )\n\nstart_dag = a_start()"
   },
   {
     "objectID": "posts/2024-03-05_yusuf_app_3/index.html#data-acquisition-extract.py",
@@ -1124,14 +1124,14 @@
     "href": "posts/2024-03-05_yusuf_app_3/index.html#demo",
     "title": "Developing a Modern Data Pipeline — Part 3",
     "section": "Demo",
-    "text": "Demo"
+    "text": "Demo\n\n\n\nViewing the app on my mobile device"
   },
   {
     "objectID": "posts/2024-03-05_yusuf_app_3/index.html#data-storage-and-transfer-minio-and-airflow-operators",
     "href": "posts/2024-03-05_yusuf_app_3/index.html#data-storage-and-transfer-minio-and-airflow-operators",
     "title": "Developing a Modern Data Pipeline — Part 3",
     "section": "Data Storage and Transfer: MinIO and Airflow Operators",
-    "text": "Data Storage and Transfer: MinIO and Airflow Operators"
+    "text": "Data Storage and Transfer: MinIO and Airflow Operators\n\n\n\nThe MinIO provides a user interface for engineers to view buckets and their contents"
   },
   {
     "objectID": "posts/2024-03-05_yusuf_app_3/index.html#data-transformation-and-analysis-filtering-and-transformation-in-duckdb",

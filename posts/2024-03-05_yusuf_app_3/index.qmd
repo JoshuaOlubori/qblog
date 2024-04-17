@@ -9,6 +9,8 @@ eval: false
 ---
 
 ::: {style="color: #25D366;"}
+![](image.png){fig-alt="cover image" fig-align="center"}
+
 ## Context {style="color: #25D366;"}
 :::
 
@@ -36,7 +38,7 @@ Here’s a breakdown of the chosen technologies:
 
 ## Demo {style="color: #25D366;"}
 
-![](Ftb_analysis_demo.gif){fig-align="center"}
+![Viewing the app on my mobile device](Ftb_analysis_demo.gif){fig-align="center"}
 
 ::: {style="color: #25D366;"}
 ## 1. **System architecture**
@@ -69,6 +71,8 @@ Here’s a breakdown of the chosen technologies:
 :::
 
 ## **Initiating the DAG: `start.py`**
+
+![the project's airflow dashboard](airflow-dashboard.png){fig-align="center"}
 
 -   `start.py` defines the initial Airflow DAG using the `@dag` decorator.
 
@@ -223,6 +227,8 @@ b_extraction()
 
 ::: {style="color: #25D366;"}
 ## **Data Storage and Transfer: MinIO and Airflow Operators**
+
+![The MinIO provides a user interface for engineers to view buckets and their contents](minio_ui.png){fig-align="center"}
 :::
 
 This section covers how the data pipeline utilizes MinIO for object storage and interacts with it using custom Airflow operators.
@@ -672,6 +678,7 @@ with st.expander("Section 2: Fixtures in which either teams have won all 5 games
     st.dataframe(fixtures_result_table_2)
 
 ```
+
 ::: {style="color: #25D366;"}
 ## Conclusion
 :::
