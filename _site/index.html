@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.5.53">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -46,6 +46,7 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -90,14 +91,41 @@ gtag('js', new Date());
 gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 </script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <link rel="stylesheet" href="styles.css">
-<link rel="alternate" type="application/rss+xml" title="Chamber of (data) secrets" href="index.xml"><meta property="og:title" content="Chamber of (data) secrets">
+<link rel="alternate" type="application/rss+xml" title="Chamber of (data) secrets" href="index.xml" data-external="1"><meta property="og:title" content="Chamber of (data) secrets">
 <meta property="og:description" content="A blog by Edun Joshua">
 <meta property="og:image" content="https://joshuaolubori.onrender.com/profile.JPEG">
-<meta property="og:site-name" content="Chamber of (data) secrets">
+<meta property="og:site_name" content="Chamber of (data) secrets">
 <meta name="twitter:title" content="Chamber of (data) secrets">
 <meta name="twitter:description" content="A blog by Edun Joshua">
 <meta name="twitter:image" content="https://joshuaolubori.onrender.com/profile.JPEG">
@@ -108,30 +136,30 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" rel="" target="" aria-current="page">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./posts_index.html" rel="" target="">
- <span class="menu-text">Posts</span></a>
+    <a class="nav-link" href="./posts_index.html"> 
+<span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./about.html" rel="" target="">
- <span class="menu-text">About</span></a>
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools ms-auto">
-</div>
           </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -145,7 +173,7 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
   </div>
     
   
-  <div class="quarto-title-meta">
+  <div class="quarto-title-meta column-page-left">
 
       
     
@@ -158,9 +186,10 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(19)</span></div><div class="category" data-category="Excel">Excel <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SQL">SQL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Tableau">Tableau <span class="quarto-category-count">(2)</span></div><div class="category" data-category="api">api <span class="quarto-category-count">(2)</span></div><div class="category" data-category="causal regression modelling">causal regression modelling <span class="quarto-category-count">(2)</span></div><div class="category" data-category="data engineering">data engineering <span class="quarto-category-count">(5)</span></div><div class="category" data-category="data visualisation">data visualisation <span class="quarto-category-count">(8)</span></div><div class="category" data-category="data wrangling">data wrangling <span class="quarto-category-count">(3)</span></div><div class="category" data-category="database design and management">database design and management <span class="quarto-category-count">(1)</span></div><div class="category" data-category="power bi">power bi <span class="quarto-category-count">(1)</span></div><div class="category" data-category="python">python <span class="quarto-category-count">(5)</span></div><div class="category" data-category="sql">sql <span class="quarto-category-count">(4)</span></div><div class="category" data-category="statistics">statistics <span class="quarto-category-count">(1)</span></div><div class="category" data-category="stats">stats <span class="quarto-category-count">(1)</span></div><div class="category" data-category="web-scraping">web-scraping <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(19)</span></div><div class="category" data-category="Excel">Excel <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Tableau">Tableau <span class="quarto-category-count">(2)</span></div><div class="category" data-category="api">api <span class="quarto-category-count">(2)</span></div><div class="category" data-category="causal regression modelling">causal regression modelling <span class="quarto-category-count">(2)</span></div><div class="category" data-category="data engineering">data engineering <span class="quarto-category-count">(5)</span></div><div class="category" data-category="data visualisation">data visualisation <span class="quarto-category-count">(8)</span></div><div class="category" data-category="data wrangling">data wrangling <span class="quarto-category-count">(3)</span></div><div class="category" data-category="database design and management">database design and management <span class="quarto-category-count">(1)</span></div><div class="category" data-category="power bi">power bi <span class="quarto-category-count">(1)</span></div><div class="category" data-category="python">python <span class="quarto-category-count">(5)</span></div><div class="category" data-category="sql">sql <span class="quarto-category-count">(5)</span></div><div class="category" data-category="statistics">statistics <span class="quarto-category-count">(1)</span></div><div class="category" data-category="stats">stats <span class="quarto-category-count">(1)</span></div><div class="category" data-category="web-scraping">web-scraping <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+
 
 
 
@@ -175,11 +204,11 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 
 <div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
 <div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="data engineering,web-scraping" data-listing-date-sort="1709593200000" data-listing-file-modified-sort="1709877410875" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
+<div class="g-col-1" data-index="0" data-categories="data engineering,web-scraping" data-listing-date-sort="1709596800000" data-listing-file-modified-sort="1723136245240" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="743">
 <a href="./posts/2024-03-05_yusuf_app_1/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2024-03-05_yusuf_app_1/image.png" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2024-03-05_yusuf_app_1/image.png" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -194,7 +223,7 @@ web-scraping
 </div>
 </div>
 <div class="card-text listing-description">
-In January, a client approached me regarding an analytics project involving…
+In January, a client approached me regarding an analytics project involving football data. This blog post chronicles the first iteration of my data gathering approach: a…
 </div>
 <div class="card-attribution card-text-small justify">
 <div class="listing-author">
@@ -208,11 +237,11 @@ Mar 5, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="1" data-categories="data engineering,api" data-listing-date-sort="1709593200000" data-listing-file-modified-sort="1709877600099" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
+<div class="g-col-1" data-index="1" data-categories="data engineering,api" data-listing-date-sort="1709596800000" data-listing-file-modified-sort="1723136245244" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="849">
 <a href="./posts/2024-03-05_yusuf_app_2/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2024-03-05_yusuf_app_2/image.jpg" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2024-03-05_yusuf_app_2/image.jpg" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -227,7 +256,7 @@ api
 </div>
 </div>
 <div class="card-text listing-description">
-In&nbsp;Part 1, we explored web scraping. Now, we switch to an API for the data retrieval. The API I used is&nbsp;API-Football&nbsp;at…
+In&nbsp;Part 1, we explored web scraping. Now, we switch to an API for the data retrieval. The API I used is&nbsp;API-Football&nbsp;at rapidapi.com. You’ll need a subscription to access…
 </div>
 <div class="card-attribution card-text-small justify">
 <div class="listing-author">
@@ -241,11 +270,11 @@ Mar 5, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="2" data-categories="data engineering,api" data-listing-date-sort="1709593200000" data-listing-file-modified-sort="1713348100541" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16">
+<div class="g-col-1" data-index="2" data-categories="data engineering,api" data-listing-date-sort="1709596800000" data-listing-file-modified-sort="1723136245280" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3116">
 <a href="./posts/2024-03-05_yusuf_app_3/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2024-03-05_yusuf_app_3/image.png" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2024-03-05_yusuf_app_3/image.png" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -260,7 +289,7 @@ api
 </div>
 </div>
 <div class="card-text listing-description">
-This third and final part of the project is about orchestrating the data pipeline. We’ll examine…
+This third and final part of the project is about orchestrating the data pipeline. We’ll examine the data storage and transformation strategies, including the utilization of…
 </div>
 <div class="card-attribution card-text-small justify">
 <div class="listing-author">
@@ -274,11 +303,11 @@ Mar 5, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="3" data-categories="Excel,data visualisation" data-listing-date-sort="1706742000000" data-listing-file-modified-sort="1708818944394" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
+<div class="g-col-1" data-index="3" data-categories="Excel,data visualisation" data-listing-date-sort="1706745600000" data-listing-file-modified-sort="1723136245240" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="410">
 <a href="./posts/2024-02-01_Onyx-January/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2024-02-01_Onyx-January/dashboard.png" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2024-02-01_Onyx-January/dashboard.png" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -293,7 +322,7 @@ data visualisation
 </div>
 </div>
 <div class="card-text listing-description">
- Recently, I took on the challenge presented by Onyx Data’s…
+ Recently, I took on the challenge presented by Onyx Data’s January visualization challenge. Despite the availability of popular BI tools like Tableau and Power BI, I…
 </div>
 <div class="card-attribution card-text-small justify">
 <div class="listing-author">
@@ -307,19 +336,19 @@ Feb 1, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="4" data-categories="SQL,data engineering,database design and management" data-listing-date-sort="1705705200000" data-listing-file-modified-sort="1705735628337" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17">
+<div class="g-col-1" data-index="4" data-categories="sql,data engineering,database design and management" data-listing-date-sort="1705708800000" data-listing-file-modified-sort="1723136372147" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="17" data-listing-word-count-sort="3300">
 <a href="./posts/2024-01-20_Aqua-Vista/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2024-01-20_Aqua-Vista/Boscombe Beach University (Logical) v2.jpeg" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2024-01-20_Aqua-Vista/Boscombe Beach University (Logical) v2.jpeg" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
 Aqua Vista College Database
 </h5>
 <div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('SQL'); return false;">
-SQL
+<div class="listing-category" onclick="window.quartoListingCategory('sql'); return false;">
+sql
 </div>
 <div class="listing-category" onclick="window.quartoListingCategory('data engineering'); return false;">
 data engineering
@@ -343,11 +372,11 @@ Jan 20, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="5" data-categories="causal regression modelling,statistics" data-listing-date-sort="1701298800000" data-listing-file-modified-sort="1705138223740" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7">
+<div class="g-col-1" data-index="5" data-categories="causal regression modelling,statistics" data-listing-date-sort="1701302400000" data-listing-file-modified-sort="1723136245232" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1213">
 <a href="./posts/2023-11-30_BDA-1/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2023-11-30_BDA-1/images/framework.PNG" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2023-11-30_BDA-1/images/framework.PNG" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -362,7 +391,7 @@ statistics
 </div>
 </div>
 <div class="card-text listing-description">
-Please Note: The ideas presented in this article are not my own original thoughts. This material is merely a condensed version of my study notes based on Florent…
+Please Note: The ideas presented in this article are not my own original thoughts. This material is merely a condensed version of my study notes based on Florent Buisson’s…
 </div>
 <div class="card-attribution card-text-small justify">
 <div class="listing-author">
@@ -376,11 +405,11 @@ Nov 30, 2023
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="6" data-categories="sql" data-listing-date-sort="1700348400000" data-listing-file-modified-sort="1731994583133" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15">
+<div class="g-col-1" data-index="6" data-categories="sql" data-listing-date-sort="1700352000000" data-listing-file-modified-sort="1723136245228" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2825">
 <a href="./posts/2023-11-19_8weeks-sql-challenge-2/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2023-11-19_8weeks-sql-challenge-2/image.PNG" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2023-11-19_8weeks-sql-challenge-2/image.PNG" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -406,11 +435,11 @@ Nov 19, 2023
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="7" data-categories="sql" data-listing-date-sort="1700348400000" data-listing-file-modified-sort="1731994527037" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6">
+<div class="g-col-1" data-index="7" data-categories="sql" data-listing-date-sort="1700352000000" data-listing-file-modified-sort="1723136245228" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1113">
 <a href="./posts/2023-11-19_8weeks-sql-challenge-3/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2023-11-19_8weeks-sql-challenge-3/image.PNG" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2023-11-19_8weeks-sql-challenge-3/image.PNG" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -436,11 +465,11 @@ Nov 19, 2023
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="8" data-categories="sql" data-listing-date-sort="1700348400000" data-listing-file-modified-sort="1701152421960" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
+<div class="g-col-1" data-index="8" data-categories="sql" data-listing-date-sort="1700352000000" data-listing-file-modified-sort="1723136245228" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="719">
 <a href="./posts/2023-11-19_8weeks-sql-challenge-4/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2023-11-19_8weeks-sql-challenge-4/image.PNG" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2023-11-19_8weeks-sql-challenge-4/image.PNG" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -466,11 +495,11 @@ Nov 19, 2023
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="9" data-categories="sql" data-listing-date-sort="1700262000000" data-listing-file-modified-sort="1731992039084" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13">
+<div class="g-col-1" data-index="9" data-categories="sql" data-listing-date-sort="1700265600000" data-listing-file-modified-sort="1723136245212" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2401">
 <a href="./posts/2023-11-18_8weeks-sql-challenge-1/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2023-11-18_8weeks-sql-challenge-1/image.jpg" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2023-11-18_8weeks-sql-challenge-1/image.jpg" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -482,7 +511,7 @@ sql
 </div>
 </div>
 <div class="card-text listing-description">
-A restaurant, Danny’s Diner, sells 3 foods: sushi, curry and ramen. Danny’s Diner is in need of your assistance to help the…
+A restaurant, Danny’s Diner, sells 3 foods: sushi, curry and ramen. Danny’s Diner is in need of your assistance to help the restaurant stay afloat - the restaurant has…
 </div>
 <div class="card-attribution card-text-small justify">
 <div class="listing-author">
@@ -496,11 +525,11 @@ Nov 18, 2023
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="10" data-categories="stats,causal regression modelling" data-listing-date-sort="1700262000000" data-listing-file-modified-sort="1702513875068" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16">
+<div class="g-col-1" data-index="10" data-categories="stats,causal regression modelling" data-listing-date-sort="1700265600000" data-listing-file-modified-sort="1723136245216" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3030">
 <a href="./posts/2023-11-18_sleep-disorders/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2023-11-18_sleep-disorders/image.jpg" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2023-11-18_sleep-disorders/image.jpg" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -529,11 +558,11 @@ Nov 18, 2023
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="11" data-categories="Tableau,data visualisation" data-listing-date-sort="1679526000000" data-listing-file-modified-sort="1704591316187" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
+<div class="g-col-1" data-index="11" data-categories="Tableau,data visualisation" data-listing-date-sort="1679529600000" data-listing-file-modified-sort="1723136245232" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="747">
 <a href="./posts/2023_03_23_toptal-analytics/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2023_03_23_toptal-analytics/dashboard.png" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2023_03_23_toptal-analytics/dashboard.png" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -562,11 +591,11 @@ Mar 23, 2023
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="12" data-categories="Tableau,data visualisation" data-listing-date-sort="1678921200000" data-listing-file-modified-sort="1704584099985" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
+<div class="g-col-1" data-index="12" data-categories="Tableau,data visualisation" data-listing-date-sort="1678924800000" data-listing-file-modified-sort="1723136245232" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="353">
 <a href="./posts/2023_03_16_pwc-call-centre-trends/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2023_03_16_pwc-call-centre-trends/dashboard.png" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2023_03_16_pwc-call-centre-trends/dashboard.png" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -595,11 +624,11 @@ Mar 16, 2023
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="13" data-categories="python,data wrangling" data-listing-date-sort="1664924400000" data-listing-file-modified-sort="1704594327321" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="44">
+<div class="g-col-1" data-index="13" data-categories="python,data wrangling" data-listing-date-sort="1664928000000" data-listing-file-modified-sort="1723136245204" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="44" data-listing-word-count-sort="8789">
 <a href="./posts/2022-10-05_FBI-Gun-Data-EDA/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2022-10-05_FBI-Gun-Data-EDA/dashboard.jpg" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2022-10-05_FBI-Gun-Data-EDA/dashboard.jpg" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -628,11 +657,11 @@ Oct 5, 2022
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="14" data-categories="python,data visualisation,data wrangling" data-listing-date-sort="1663887600000" data-listing-file-modified-sort="1705737819379" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="g-col-1" data-index="14" data-categories="python,data visualisation,data wrangling" data-listing-date-sort="1663891200000" data-listing-file-modified-sort="1723136245180" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="45">
 <a href="./posts/2022-09-23_go-ford-bike-share-analysis/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2022-09-23_go-ford-bike-share-analysis/image.png" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2022-09-23_go-ford-bike-share-analysis/image.png" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -664,11 +693,11 @@ Sep 23, 2022
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="15" data-categories="python,data visualisation,data wrangling" data-listing-date-sort="1663455600000" data-listing-file-modified-sort="1705736892288" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="g-col-1" data-index="15" data-categories="python,data visualisation,data wrangling" data-listing-date-sort="1663459200000" data-listing-file-modified-sort="1723136245180" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="58">
 <a href="./posts/2022-09-18_tweet-wrangling/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2022-09-18_tweet-wrangling/image.png" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2022-09-18_tweet-wrangling/image.png" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -700,11 +729,11 @@ Sep 18, 2022
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="16" data-categories="python,data visualisation,data engineering" data-listing-date-sort="1653692400000" data-listing-file-modified-sort="1705734091575" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8">
+<div class="g-col-1" data-index="16" data-categories="python,data visualisation,data engineering" data-listing-date-sort="1653696000000" data-listing-file-modified-sort="1723136245208" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1472">
 <a href="./posts/2022_05_28_Adventure-works/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2022_05_28_Adventure-works/Adw ERD.png" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2022_05_28_Adventure-works/Adw ERD.png" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -736,11 +765,11 @@ May 28, 2022
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="17" data-categories="python,data visualisation" data-listing-date-sort="1653692400000" data-listing-file-modified-sort="1704675778892" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
+<div class="g-col-1" data-index="17" data-categories="python,data visualisation" data-listing-date-sort="1653696000000" data-listing-file-modified-sort="1723136245212" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="970">
 <a href="./posts/2022_05_28_COVID-NGA-analysis/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2022_05_28_COVID-NGA-analysis/dashboard.png" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2022_05_28_COVID-NGA-analysis/dashboard.png" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -769,11 +798,11 @@ May 28, 2022
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="18" data-categories="power bi,data visualisation" data-listing-date-sort="1653692400000" data-listing-file-modified-sort="1702033870606" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8">
+<div class="g-col-1" data-index="18" data-categories="power bi,data visualisation" data-listing-date-sort="1653696000000" data-listing-file-modified-sort="1723136245212" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1472">
 <a href="./posts/2022_05_28_UK-accidents/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="./posts/2022_05_28_UK-accidents/report.png" class="thumbnail-image card-img" style="height: 250px;">
+<img loading="lazy" src="./posts/2022_05_28_UK-accidents/report.png" class="thumbnail-image card-img" style="height: 250px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
@@ -789,6 +818,17 @@ data visualisation
 </div>
 <div class="card-text listing-description">
 
+
+<div>
+<iframe title="uk_accident_report" width="600" height="373.5" src="https://app.powerbi.com/
+view?
+r=eyJrIjoiYjZiNDYwMTctY2EwOC00NGQ2LWJmOGEtMzVlN2I2YTFlZTEwIiwidCI6ImRmODY3OWN
+kLWE4MGUtNDVkOC05OWFjLWM4M2VkN2ZmOTVhMCJ9&amp;embedImagePlaceholder=true" frameborder="0" allowfullscreen="true">
+</div>
+</section>
+<section id="requirement-gathering" class="level2">
+<h2>Requirement Gathering</h2>
+<p>Client wants to create a dashboard on road accidents for the year…</iframe></div>
 </div>
 <div class="card-attribution card-text-small justify">
 <div class="listing-author">
@@ -842,18 +882,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -885,11 +914,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/joshuaolubori\.onrender\.com");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -899,8 +967,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -912,7 +989,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -956,6 +1156,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -981,6 +1182,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1043,7 +1270,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">Blog made with 💚 and <a href="https://quarto.org/">Quarto</a>, by Edun Joshua. License: <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>.</div>   
+    <div class="nav-footer-left">
+<p>Blog made with 💚 and <a href="https://quarto.org/">Quarto</a>, by Edun Joshua. License: <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>.</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
@@ -1052,6 +1281,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+
 
 
 

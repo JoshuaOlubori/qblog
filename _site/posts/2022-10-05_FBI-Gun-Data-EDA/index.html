@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.5.53">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Edun Joshua">
 <meta name="dcterms.date" content="2022-10-05">
 
-<title>Chamber of (data) secrets - Project: Analyzing Trends in Gun Sales Data across the U.S.</title>
+<title>Project: Analyzing Trends in Gun Sales Data across the U.S. – Chamber of (data) secrets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -35,7 +35,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -80,6 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -100,11 +101,11 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="Chamber of (data) secrets - Project: Analyzing Trends in Gun Sales Data across the U.S.">
+<meta property="og:title" content="Project: Analyzing Trends in Gun Sales Data across the U.S. – Chamber of (data) secrets">
 <meta property="og:description" content="An project for Udacity’s Nanodegree">
 <meta property="og:image" content="https://joshuaolubori.onrender.com/posts/2022-10-05_FBI-Gun-Data-EDA/dashboard.jpg">
-<meta property="og:site-name" content="Chamber of (data) secrets">
-<meta name="twitter:title" content="Chamber of (data) secrets - Project: Analyzing Trends in Gun Sales Data across the U.S.">
+<meta property="og:site_name" content="Chamber of (data) secrets">
+<meta name="twitter:title" content="Project: Analyzing Trends in Gun Sales Data across the U.S. – Chamber of (data) secrets">
 <meta name="twitter:description" content="An project for Udacity’s Nanodegree">
 <meta name="twitter:image" content="https://joshuaolubori.onrender.com/posts/2022-10-05_FBI-Gun-Data-EDA/dashboard.jpg">
 <meta name="twitter:creator" content="@olubori_joshua">
@@ -114,30 +115,30 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../posts_index.html" rel="" target="">
- <span class="menu-text">Posts</span></a>
+    <a class="nav-link" href="../../posts_index.html"> 
+<span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html" rel="" target="">
- <span class="menu-text">About</span></a>
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools ms-auto">
-</div>
           </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -252,6 +253,7 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 
 
 
+
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>The data comes from the FBI’s National Instant Criminal Background Check System. The NICS is used by to determine whether a prospective buyer is eligible to buy firearms or explosives. Gun shops call into this system to ensure that each customer does not have a criminal record or isn’t otherwise ineligible to make a purchase. The data has been supplemented with state level data from census.gov.</p>
@@ -274,7 +276,7 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <li><p>multiple (number of check calls)</p></li>
 </ul>
 <p>The census data is a wide-table format data with 66 variables measuring quantities for 50 U.S. states. I have selected only 18 variables that I deem relevant to this analysis. The starred variables are just a few of the variables that are present in the raw data that I will not include in this analysis.</p>
-<table class="table">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
 <col style="width: 50%">
@@ -427,7 +429,7 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -617,7 +619,7 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -783,7 +785,7 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -953,7 +955,7 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1116,7 +1118,7 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1279,7 +1281,7 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1473,7 +1475,7 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1679,7 +1681,7 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1831,7 +1833,7 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -1995,7 +1997,7 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -2221,7 +2223,7 @@ dtype: int64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -2365,7 +2367,7 @@ dtype: int64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -2517,7 +2519,7 @@ dtype: int64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -2664,7 +2666,7 @@ dtype: int64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -2845,7 +2847,7 @@ memory usage: 7.2+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -2988,7 +2990,7 @@ memory usage: 7.2+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -3198,7 +3200,7 @@ memory usage: 7.2+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -3377,7 +3379,7 @@ memory usage: 7.2+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -3634,7 +3636,7 @@ Name: date, Length: 12485, dtype: int32</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -3672,7 +3674,7 @@ Name: date, Length: 12485, dtype: int32</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -3743,7 +3745,7 @@ Name: date, Length: 12485, dtype: int32</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -3845,7 +3847,7 @@ memory usage: 487.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -3989,7 +3991,7 @@ memory usage: 487.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -4077,7 +4079,7 @@ memory usage: 487.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -4227,7 +4229,7 @@ memory usage: 487.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -4404,7 +4406,7 @@ memory usage: 487.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -4553,7 +4555,7 @@ memory usage: 487.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -4690,7 +4692,7 @@ memory usage: 487.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -4827,7 +4829,7 @@ memory usage: 487.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -4999,7 +5001,7 @@ memory usage: 7.0+ KB</code></pre>
 </section>
 <section id="data-dictionary" class="level2">
 <h2 class="anchored" data-anchor-id="data-dictionary">Data Dictionary</h2>
-<table class="table">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 26%">
 <col style="width: 26%">
@@ -5107,7 +5109,7 @@ memory usage: 7.0+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -5310,7 +5312,11 @@ memory usage: 7.0+ KB</code></pre>
 <span id="cb100-19"><a href="#cb100-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb100-20"><a href="#cb100-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-70-output-1.png" width="1541" height="372"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-70-output-1.png" width="1541" height="372" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Upon viewing the kde plot, there seems to be some unusually low values for the percentages columns. This was a result of some of the percentage columns being formatted as decimals After inspection, I identified the offending rows as rows[30:42]. To correct these rows, I simply target rows having values less than a benchmark below which the values cannot possibly be valid and multiply by 100</p>
@@ -5674,7 +5680,7 @@ Name: bsc_higher, dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -5878,7 +5884,11 @@ Name: bsc_higher, dtype: float64</code></pre>
 <span id="cb132-20"><a href="#cb132-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb132-21"><a href="#cb132-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-91-output-1.png" width="1541" height="372"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-91-output-1.png" width="1541" height="372" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Now, the min values have no unusual numbers<br>
@@ -5903,7 +5913,7 @@ Proceeding to EDA…</p>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -5982,7 +5992,7 @@ Proceeding to EDA…</p>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -6060,7 +6070,7 @@ Proceeding to EDA…</p>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -6145,7 +6155,7 @@ Proceeding to EDA…</p>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -6216,7 +6226,7 @@ Proceeding to EDA…</p>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -6287,7 +6297,7 @@ Proceeding to EDA…</p>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -6379,7 +6389,7 @@ dtype: int64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -6618,7 +6628,7 @@ memory usage: 682.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -6686,7 +6696,7 @@ memory usage: 682.8+ KB</code></pre>
 </section>
 <section id="data-dictionary-1" class="level2">
 <h2 class="anchored" data-anchor-id="data-dictionary-1">Data Dictionary</h2>
-<table class="table">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 25%">
 <col style="width: 25%">
@@ -6739,7 +6749,7 @@ memory usage: 682.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -6835,7 +6845,7 @@ memory usage: 682.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -6922,7 +6932,7 @@ memory usage: 682.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -6981,7 +6991,7 @@ memory usage: 682.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -7045,7 +7055,7 @@ memory usage: 682.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -7109,7 +7119,7 @@ memory usage: 682.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -7195,7 +7205,7 @@ memory usage: 682.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -7259,7 +7269,7 @@ memory usage: 682.8+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -7346,7 +7356,11 @@ memory usage: 682.8+ KB</code></pre>
 <span id="cb163-19"><a href="#cb163-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb163-20"><a href="#cb163-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-118-output-1.png" width="1582" height="356"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-118-output-1.png" width="1582" height="356" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <section id="year-level-questions" class="level3">
@@ -7382,7 +7396,11 @@ multiple     260234.0
 dtype: float64</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-120-output-2.png" width="680" height="527"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-120-output-2.png" width="680" height="527" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p><em>What is the trend of gun sales throughout the year in 2006?</em></p>
@@ -7392,7 +7410,11 @@ dtype: float64</code></pre>
 <pre><code>&lt;Axes: title={'center': 'Monthly Trends of Gun Sales in 2006'}, xlabel='month'&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-121-output-2.png" width="594" height="447"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-121-output-2.png" width="594" height="447" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -7410,7 +7432,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -7475,7 +7497,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -7549,7 +7571,11 @@ dtype: float64</code></pre>
 <pre><code>&lt;Axes: title={'center': 'Breakdown of Gun Sales by Type'}, xlabel='state'&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-124-output-2.png" width="1018" height="514"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-124-output-2.png" width="1018" height="514" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p><em>What are the top 5 states in terms of gun purchases in the U.S. in 2006?</em></p>
@@ -7563,7 +7589,11 @@ dtype: float64</code></pre>
 <pre><code>&lt;Axes: title={'center': 'Overall Monthly Trend of Gun Sales in the U.S. in 2006'}, xlabel='month'&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-125-output-2.png" width="568" height="447"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-125-output-2.png" width="568" height="447" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell" data-execution_count="125">
@@ -7588,7 +7618,11 @@ dtype: float64</code></pre>
 <pre><code>&lt;Axes: title={'center': 'Monthly Gun Sales Trends in Ohio'}, xlabel='month'&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-126-output-2.png" width="1933" height="447"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-126-output-2.png" width="1933" height="447" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -7603,7 +7637,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -7668,7 +7702,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -7752,7 +7786,11 @@ dtype: float64</code></pre>
 <span id="cb180-16"><a href="#cb180-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb180-17"><a href="#cb180-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-129-output-1.png" width="1541" height="356"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-129-output-1.png" width="1541" height="356" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <section id="year-level-questions-1" class="level3">
@@ -7787,7 +7825,11 @@ multiple     515446.0
 dtype: float64</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-131-output-2.png" width="680" height="527"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-131-output-2.png" width="680" height="527" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p><em>Trend of gun sales throughout the year in 2016</em></p>
@@ -7797,7 +7839,11 @@ dtype: float64</code></pre>
 <pre><code>&lt;Axes: title={'center': 'Monthly Trends of Gun Sales in 2016'}, xlabel='month'&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-132-output-2.png" width="594" height="447"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-132-output-2.png" width="594" height="447" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -7815,7 +7861,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -7880,7 +7926,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -7954,7 +8000,11 @@ dtype: float64</code></pre>
 <pre><code>&lt;Axes: title={'center': 'Breakdown of Gun Sales by Type'}, xlabel='state'&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-135-output-2.png" width="1018" height="514"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-135-output-2.png" width="1018" height="514" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p><em>What are the overall monthly trends of gun purchases?</em></p>
@@ -7964,7 +8014,11 @@ dtype: float64</code></pre>
 <pre><code>&lt;Axes: title={'center': 'Overall Monthly Trend of Gun Sales in the U.S. in 2016'}, xlabel='month'&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-136-output-2.png" width="568" height="447"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-136-output-2.png" width="568" height="447" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell" data-execution_count="136">
@@ -7984,7 +8038,11 @@ dtype: float64</code></pre>
 <pre><code>&lt;Axes: title={'center': 'Monthly Gun Sales Trends in Ohio'}, xlabel='month'&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-137-output-2.png" width="1933" height="447"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-137-output-2.png" width="1933" height="447" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p><em>Which states have the highest growth in gun registrations over the span of a decade?</em>&nbsp;</p>
@@ -8007,7 +8065,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -8087,7 +8145,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -8133,7 +8191,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -8178,7 +8236,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -8256,7 +8314,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -8302,7 +8360,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -8349,7 +8407,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -8402,7 +8460,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -8462,7 +8520,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -8528,7 +8586,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -8945,7 +9003,11 @@ dtype: float64</code></pre>
 <pre><code>&lt;Axes: xlabel='state'&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-152-output-2.png" width="1539" height="354"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-152-output-2.png" width="1539" height="354" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -8961,7 +9023,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -9093,7 +9155,7 @@ dtype: float64</code></pre>
 </div>
 <section id="data-dictionary-2" class="level3">
 <h3 class="anchored" data-anchor-id="data-dictionary-2"><strong>Data Dictionary</strong></h3>
-<table class="table">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
 <col style="width: 33%">
@@ -9202,7 +9264,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -9263,7 +9325,7 @@ dtype: float64</code></pre>
 </section>
 <section id="data-dictionary-3" class="level3">
 <h3 class="anchored" data-anchor-id="data-dictionary-3"><strong>Data Dictionary</strong></h3>
-<table class="table">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
 <col style="width: 33%">
@@ -9344,7 +9406,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -9761,7 +9823,7 @@ dtype: float64</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -10340,7 +10402,7 @@ memory usage: 8.3+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -10547,7 +10609,11 @@ memory usage: 8.3+ KB</code></pre>
 <span id="cb232-16"><a href="#cb232-16" aria-hidden="true" tabindex="-1"></a>sns.despine(right<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb232-17"><a href="#cb232-17" aria-hidden="true" tabindex="-1"></a>sns.despine(offset<span class="op">=</span><span class="dv">0</span>, trim<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-167-output-1.png" width="1524" height="372"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-167-output-1.png" width="1524" height="372" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell" data-execution_count="167">
@@ -10557,7 +10623,7 @@ memory usage: 8.3+ KB</code></pre>
 <div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -10646,7 +10712,11 @@ memory usage: 8.3+ KB</code></pre>
 <span id="cb234-17"><a href="#cb234-17" aria-hidden="true" tabindex="-1"></a>sns.despine(right<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb234-18"><a href="#cb234-18" aria-hidden="true" tabindex="-1"></a>sns.despine(offset<span class="op">=</span><span class="dv">0</span>, trim<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-169-output-1.png" width="1537" height="372"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-169-output-1.png" width="1537" height="372" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -10672,7 +10742,11 @@ memory usage: 8.3+ KB</code></pre>
 <span id="cb235-17"><a href="#cb235-17" aria-hidden="true" tabindex="-1"></a>sns.despine(right<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb235-18"><a href="#cb235-18" aria-hidden="true" tabindex="-1"></a>sns.despine(offset<span class="op">=</span><span class="dv">0</span>, trim<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-170-output-1.png" width="1531" height="356"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-170-output-1.png" width="1531" height="356" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -10700,7 +10774,11 @@ memory usage: 8.3+ KB</code></pre>
 <span id="cb236-19"><a href="#cb236-19" aria-hidden="true" tabindex="-1"></a>sns.despine(right<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb236-20"><a href="#cb236-20" aria-hidden="true" tabindex="-1"></a>sns.despine(offset<span class="op">=</span><span class="dv">0</span>, trim<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-171-output-1.png" width="1531" height="372"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-171-output-1.png" width="1531" height="372" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -10769,7 +10847,11 @@ dtype: float64</code></pre>
 <pre><code>&lt;Axes: &gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-175-output-2.png" width="1225" height="1184"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-175-output-2.png" width="1225" height="1184" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <section id="plotting-the-variables-against-gun_sales_per_capita-to-spot-associations" class="level3">
@@ -10777,23 +10859,35 @@ dtype: float64</code></pre>
 <div class="cell" data-execution_count="175">
 <div class="sourceCode cell-code" id="cb244"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb244-1"><a href="#cb244-1" aria-hidden="true" tabindex="-1"></a>sns.pairplot(merged_df, x_vars<span class="op">=</span>[<span class="st">'pop_2016'</span>, <span class="st">'female_pct'</span>, <span class="st">'white_pct'</span>, <span class="st">'black_pct'</span>, <span class="st">'asian_pct'</span>], y_vars<span class="op">=</span>[<span class="st">'gun_sales_per_capita'</span>], kind<span class="op">=</span><span class="st">'reg'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-176-output-1.png" width="1181" height="241"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-176-output-1.png" width="1181" height="241" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell" data-execution_count="176">
 <div class="sourceCode cell-code" id="cb245"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb245-1"><a href="#cb245-1" aria-hidden="true" tabindex="-1"></a>sns.pairplot(merged_df, x_vars<span class="op">=</span>[<span class="st">'pe_hh'</span>, <span class="st">'pe_whi'</span>,<span class="st">'adults_below_65'</span>, <span class="st">'high_school_grad_higher'</span>, <span class="st">'bsc_higher'</span>], y_vars<span class="op">=</span>[<span class="st">'gun_sales_per_capita'</span>], kind<span class="op">=</span><span class="st">'reg'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-177-output-1.png" width="1181" height="241"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-177-output-1.png" width="1181" height="241" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell" data-execution_count="177">
 <div class="sourceCode cell-code" id="cb246"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb246-1"><a href="#cb246-1" aria-hidden="true" tabindex="-1"></a>sns.pairplot(merged_df, x_vars<span class="op">=</span>[<span class="st">'median_hu'</span>, <span class="st">'median_gross_rent'</span>,<span class="st">'poverty_pct'</span>, <span class="st">'median_hh_income'</span>, <span class="st">'per_cap_inc'</span>, <span class="st">'firms'</span>], y_vars<span class="op">=</span>[<span class="st">'gun_sales_per_capita'</span>], kind<span class="op">=</span><span class="st">'reg'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-178-output-1.png" width="1417" height="241"></p>
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-178-output-1.png" width="1417" height="241" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p><em>Which census data is most associated with high gun sales per capita</em></p>
-<table class="table">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 59%">
 <col style="width: 40%">
@@ -10953,18 +11047,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -10996,11 +11079,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/joshuaolubori\.onrender\.com");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -11010,8 +11132,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -11023,7 +11154,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -11067,6 +11321,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -11092,6 +11347,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -11153,10 +11434,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <script src="https://giscus.app/client.js" data-repo="JoshuaOlubori/qblog" data-repo-id="R_kgDOKvhXew" data-category="General" data-category-id="DIC_kwDOKvhXe84CbFeH" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
 </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark">
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">Blog made with 💚 and <a href="https://quarto.org/">Quarto</a>, by Edun Joshua. License: <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>.</div>   
+    <div class="nav-footer-left">
+<p>Blog made with 💚 and <a href="https://quarto.org/">Quarto</a>, by Edun Joshua. License: <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>.</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
@@ -11165,6 +11450,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+
 
 
 

@@ -7,7 +7,7 @@ execute:
 author: "Edun Joshua"
 date: "2024-01-20"
 toc: true
-categories: [SQL, data engineering, database design and management]
+categories: [sql, data engineering, database design and management]
 image: "Boscombe Beach University (Logical) v2.jpeg"
 ---
 

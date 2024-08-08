@@ -15,6 +15,9 @@
       "posts/*.qmd",
       "**/*/index.qmd",
       "posts/*/index.qmd"
+    ],
+    "posts/index.qmd": [
+      "**/*/index.qmd"
     ]
   }
 }
