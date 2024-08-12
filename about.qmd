@@ -1,6 +1,6 @@
 ---
 title: "About"
-image: profile.JPEG
+image: profile_full_cut.jpeg
 comments: false
 about:
   template: jolla
