@@ -1,0 +1,70 @@
+---
+title: "Healthcare Analysis with PowerBI"
+subtitle: "Featuring advanced Power BI features like bookmarks, binning and mobile view"
+author: "Edun Joshua"
+date: "2024-04-10"
+toc: true
+categories: [power bi, data visualisation]
+image: "report.jpg"
+---
+
+## About The Project 🍪
+
+<div>
+
+```{=html}
+<iframe title="healthcare" width="600" height="373.5" src="https://app.powerbi.com/view?r=eyJrIjoiYjIxNDMzNzQtMGNkYi00ZTQxLTgzMWQtZGJlYzBlY2FiNDZlIiwidCI6ImRmODY3OWNkLWE4MGUtNDVkOC05OWFjLWM4M2VkN2ZmOTVhMCJ9&embedImagePlaceholder=true" frameborder="0" allowFullScreen="true">
+</iframe>
+```
+
+</div>
+
+::: callout-note
+## Note that the Key Influencers feature is not supported in Power BI reports published to the web, resulting in a blank visual in this report. However, the images above demonstrate how the Key Influencers visuals appear in the original dashboard.
+:::
+
+
+## Requirement Gathering
+
+In this case study, I'll be working with HealthStat, a fictitious consulting company, to uncover insights on potential hospital efficiency opportunities. The goal is to analyze a state-wide hospital dataset and create an engaging Power BI dashboard to visualize key insights, focusing on the efficiency domain, specifically minimizing waste and reducing length of stay (LOS).
+
+By applying Power BI skills to real-world data, I'll explore how to leverage data analytics to improve hospital operations, reduce costs, and enhance patient care. The analysis will explore factors impacting LOS, such as patient age, health status, and procedure type, and create informative visuals to support data-driven business decisions for improving efficiency.
+
+#### Primary KPIs
+
+-   Total Discharge
+
+-   Length of Stay
+
+#### Features
+
+-   Data model
+
+    ![Data model as viewed on PowerBI Service](data-model.jpg)
+
+-   Home page
+
+    ![Introductory home page introduces the user, featuring functional navigational buttons](home.jpg)
+
+-   Length of Stay analysis page
+
+    ![A single page dedicated to exploring the LOS metric across various hospitals, analysing key influencers and its association with discharges](los.jpg)
+
+-   Cost of Discharge page
+
+    ![Visualing the cost of discharge for the hospitals in NY, featuring a quadrant to segment hospitals based on their average cost of discharge and average LOS](cod.jpg)
+
+-   Hospital Profile page
+
+    ![A general overview on the KPIs for individual hospitals, providing a bird's eye view on how particular hospitals fare](hospital_profile.jpg)
+
+## Data cleansing and Modeling 🧹
+
+The raw data was delivered in a single csv file. I identified identify entities and used Power Query to isolate them as dimensions, deduplicating them and loading them as separate tables.
+
+
+## Contact
+
+Edun Joshua Olubori - [connect on linkedin](https://www.linkedin.com/in/joshua-edun) - joshuaolubori\@gmail.com
+
+Live Demo: [here](https://app.powerbi.com/view?r=eyJrIjoiYjIxNDMzNzQtMGNkYi00ZTQxLTgzMWQtZGJlYzBlY2FiNDZlIiwidCI6ImRmODY3OWNkLWE4MGUtNDVkOC05OWFjLWM4M2VkN2ZmOTVhMCJ9&embedImagePlaceholder=true)

@@ -14,7 +14,7 @@ website:
       card-style: summary_large_image
   navbar:
     title: false
-    background: "#eee"
+    background: "#25D366"
     left:
       - href: index.qmd
         text: Home

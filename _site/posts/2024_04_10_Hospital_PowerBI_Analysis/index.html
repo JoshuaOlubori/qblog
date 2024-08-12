@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Edun Joshua">
+<meta name="dcterms.date" content="2024-04-10">
 
-<title>About – Chamber of (data) secrets</title>
+<title>Healthcare Analysis with PowerBI – Chamber of (data) secrets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,17 +25,18 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -60,22 +63,22 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
 </script>
 
 
-<link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="About – Chamber of (data) secrets">
-<meta property="og:description" content="A data science blog by Edun Joshua">
-<meta property="og:image" content="https://joshuaolubori.onrender.com/profile_full_cut.jpeg">
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Healthcare Analysis with PowerBI – Chamber of (data) secrets">
+<meta property="og:description" content="Featuring advanced Power BI features like bookmarks, binning and mobile view">
+<meta property="og:image" content="https://joshuaolubori.onrender.com/posts/2024_04_10_Hospital_PowerBI_Analysis/report.jpg">
 <meta property="og:site_name" content="Chamber of (data) secrets">
-<meta name="twitter:title" content="About – Chamber of (data) secrets">
-<meta name="twitter:description" content="A data science blog by Edun Joshua">
-<meta name="twitter:image" content="https://joshuaolubori.onrender.com/profile_full_cut.jpeg">
+<meta name="twitter:title" content="Healthcare Analysis with PowerBI – Chamber of (data) secrets">
+<meta name="twitter:description" content="Featuring advanced Power BI features like bookmarks, binning and mobile view">
+<meta name="twitter:image" content="https://joshuaolubori.onrender.com/posts/2024_04_10_Hospital_PowerBI_Analysis/report.jpg">
 <meta name="twitter:creator" content="@olubori_joshua">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -84,15 +87,15 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./posts_index.html"> 
+    <a class="nav-link" href="../../posts_index.html"> 
 <span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./about.html" aria-current="page"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
 </ul>
@@ -103,55 +106,146 @@ gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Healthcare Analysis with PowerBI</h1>
+            <p class="subtitle lead">Featuring advanced Power BI features like bookmarks, binning and mobile view</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">power bi</div>
+                <div class="quarto-category">data visualisation</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Edun Joshua </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 10, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#about-the-project" id="toc-about-the-project" class="nav-link active" data-scroll-target="#about-the-project">About The Project 🍪</a></li>
+  <li><a href="#requirement-gathering" id="toc-requirement-gathering" class="nav-link" data-scroll-target="#requirement-gathering">Requirement Gathering</a></li>
+  <li><a href="#data-cleansing-and-modeling" id="toc-data-cleansing-and-modeling" class="nav-link" data-scroll-target="#data-cleansing-and-modeling">Data cleansing and Modeling 🧹</a></li>
+  <li><a href="#contact" id="toc-contact" class="nav-link" data-scroll-target="#contact">Contact</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<div class="quarto-about-jolla">
-  <img src="profile_full_cut.jpeg" class="about-image
-  round " style="height: 15em; width: 15em;">
- <header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">About</h1>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="about-the-project" class="level2">
+<h2 class="anchored" data-anchor-id="about-the-project">About The Project 🍪</h2>
+<div>
+<iframe title="healthcare" width="600" height="373.5" src="https://app.powerbi.com/view?r=eyJrIjoiYjIxNDMzNzQtMGNkYi00ZTQxLTgzMWQtZGJlYzBlY2FiNDZlIiwidCI6ImRmODY3OWNkLWE4MGUtNDVkOC05OWFjLWM4M2VkN2ZmOTVhMCJ9&amp;embedImagePlaceholder=true" frameborder="0" allowfullscreen="true">
+</iframe>
 </div>
-<div class="quarto-title-meta">
-  </div>
-</header><main class="content" id="quarto-document-content">
-<p>Edun Joshua is a data engineer at EDMS — Dentallytics™ and an environmental engineering student. Data science is a reprieve from the existential crises that haunt him.</p>
-<section id="education" class="level2">
-<h2 data-anchor-id="education">Education</h2>
-<p>Federal University of Agriculture, Abeokuta | Alabata, Ogun State</p>
-<p>B.Eng. in Environmental Engineering | March 2017 - March 2023</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note that the Key Influencers feature is not supported in Power BI reports published to the web, resulting in a blank visual in this report. However, the images above demonstrate how the Key Influencers visuals appear in the original dashboard.
+</div>
+</div>
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+</section>
+<section id="requirement-gathering" class="level2">
+<h2 class="anchored" data-anchor-id="requirement-gathering">Requirement Gathering</h2>
+<p>In this case study, I’ll be working with HealthStat, a fictitious consulting company, to uncover insights on potential hospital efficiency opportunities. The goal is to analyze a state-wide hospital dataset and create an engaging Power BI dashboard to visualize key insights, focusing on the efficiency domain, specifically minimizing waste and reducing length of stay (LOS).</p>
+<p>By applying Power BI skills to real-world data, I’ll explore how to leverage data analytics to improve hospital operations, reduce costs, and enhance patient care. The analysis will explore factors impacting LOS, such as patient age, health status, and procedure type, and create informative visuals to support data-driven business decisions for improving efficiency.</p>
+<section id="primary-kpis" class="level4">
+<h4 class="anchored" data-anchor-id="primary-kpis">Primary KPIs</h4>
+<ul>
+<li><p>Total Discharge</p></li>
+<li><p>Length of Stay</p></li>
+</ul>
+</section>
+<section id="features" class="level4">
+<h4 class="anchored" data-anchor-id="features">Features</h4>
+<ul>
+<li><p>Data model</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="data-model.jpg" class="img-fluid figure-img"></p>
+<figcaption>Data model as viewed on PowerBI Service</figcaption>
+</figure>
+</div></li>
+<li><p>Home page</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="home.jpg" class="img-fluid figure-img"></p>
+<figcaption>Introductory home page introduces the user, featuring functional navigational buttons</figcaption>
+</figure>
+</div></li>
+<li><p>Length of Stay analysis page</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="los.jpg" class="img-fluid figure-img"></p>
+<figcaption>A single page dedicated to exploring the LOS metric across various hospitals, analysing key influencers and its association with discharges</figcaption>
+</figure>
+</div></li>
+<li><p>Cost of Discharge page</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="cod.jpg" class="img-fluid figure-img"></p>
+<figcaption>Visualing the cost of discharge for the hospitals in NY, featuring a quadrant to segment hospitals based on their average cost of discharge and average LOS</figcaption>
+</figure>
+</div></li>
+<li><p>Hospital Profile page</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="hospital_profile.jpg" class="img-fluid figure-img"></p>
+<figcaption>A general overview on the KPIs for individual hospitals, providing a bird’s eye view on how particular hospitals fare</figcaption>
+</figure>
+</div></li>
+</ul>
+</section>
+</section>
+<section id="data-cleansing-and-modeling" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleansing-and-modeling">Data cleansing and Modeling 🧹</h2>
+<p>The raw data was delivered in a single csv file. I identified identify entities and used Power Query to isolate them as dimensions, deduplicating them and loading them as separate tables.</p>
+</section>
+<section id="contact" class="level2">
+<h2 class="anchored" data-anchor-id="contact">Contact</h2>
+<p>Edun Joshua Olubori - <a href="https://www.linkedin.com/in/joshua-edun">connect on linkedin</a> - joshuaolubori@gmail.com</p>
+<p>Live Demo: <a href="https://app.powerbi.com/view?r=eyJrIjoiYjIxNDMzNzQtMGNkYi00ZTQxLTgzMWQtZGJlYzBlY2FiNDZlIiwidCI6ImRmODY3OWNkLWE4MGUtNDVkOC05OWFjLWM4M2VkN2ZmOTVhMCJ9&amp;embedImagePlaceholder=true">here</a></p>
 
 
 </section>
-</main> 
-  <hr class="about-sep">
-   <div class="about-links">
-  <a href="https://instagram.com/joshua_olubori" class="about-link" rel="" target="">
-    <i class="bi bi-instagram"></i>
-     <span class="about-link-text">instagram</span>
-  </a>
-  <a href="https://github.com/JoshuaOlubori" class="about-link" rel="" target="">
-    <i class="bi bi-github"></i>
-     <span class="about-link-text">Github</span>
-  </a>
-  <a href="https://linkedin.com/in/joshua-edun" class="about-link" rel="" target="">
-    <i class="bi bi-linkedin"></i>
-     <span class="about-link-text">LinkedIn</span>
-  </a>
-  <a href="https://www.kaggle.com/joshuaolubori/code" class="about-link" rel="" target="">
-    <i class="bi bi-Kaggle"></i>
-     <span class="about-link-text">Kaggle</span>
-  </a>
-  <a href="https://www.medium.com/@joshuaolubori" class="about-link" rel="" target="">
-    <i class="bi bi-Medium"></i>
-     <span class="about-link-text">Medium</span>
-  </a>
-</div>
-</div>
- <!-- /main -->
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -172,6 +266,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
   toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
   const isCodeAnnotation = (el) => {
     for (const clz of el.classList) {
       if (clz.startsWith('code-annotation-')) {                     
@@ -565,6 +666,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<script src="https://giscus.app/client.js" data-repo="JoshuaOlubori/qblog" data-repo-id="R_kgDOKvhXew" data-category="General" data-category-id="DIC_kwDOKvhXe84CbFeH" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark">
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">

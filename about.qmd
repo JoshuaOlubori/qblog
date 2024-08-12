@@ -22,7 +22,7 @@ about:
       href: https://www.medium.com/@joshuaolubori
 ---
 
-Edun Joshua is a data enthusiast and an environmental engineering student. Data science is a reprieve from the existential crises that haunt him.
+Edun Joshua is a data engineer at EDMS — Dentallytics™ and an environmental engineering student. Data science is a reprieve from the existential crises that haunt him.
 
 
 ## Education
