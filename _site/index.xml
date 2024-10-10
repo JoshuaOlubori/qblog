@@ -14,8 +14,49 @@
 <title>Chamber of (data) secrets</title>
 <link>https://joshuaolubori.onrender.com/</link>
 </image>
-<generator>quarto-1.5.53</generator>
-<lastBuildDate>Wed, 10 Apr 2024 00:00:00 GMT</lastBuildDate>
+<generator>quarto-1.5.57</generator>
+<lastBuildDate>Thu, 10 Oct 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Starlight</title>
+  <dc:creator>Edun Joshua</dc:creator>
+  <link>https://joshuaolubori.onrender.com/posts/2024-10-10_starlight/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<div style="color: #25D366;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://joshuaolubori.onrender.com/posts/2024-10-10_starlight/image.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="cover image"></p>
+</figure>
+</div>
+<section id="intro" class="level2" style="color: #25D366;">
+<h2 style="color: #25D366;" class="anchored" data-anchor-id="intro">Intro</h2>
+</section>
+</div>
+<p>As part of a team of two other data enthusiast, I came up with a solution to address the abysmal performance of secondary school students in the UTME exams in recent years.</p>
+<p>You can read about the project here:</p>
+<iframe width="100%" height="500px" src="https://starlight-academy-landing.onrender.com"></iframe> <a href="https://www.canva.com/design/DAGTCJT5DYY/_9vyyZLnaiFYO5Ub3V7yug/view?utm_content=DAGTCJT5DYY&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link" target="_blank" rel="noopener">Starlight DataFest 24</a> by Edun Joshua, Makinde Kayode &amp; Mbuotidem Awak
+<hr>
+<p>I was in charge of designing a web app called Starlight, an school management system solution with a novel feature: a machine learning enabled pipeline that identifies at-risk student and displays it on the app for admins to view.</p>
+<p>You can view the app <a href="https://starlight-academy-landing.onrender.com/" title="Starlight">here</a></p>
+<p>Or read our report below:</p>
+<iframe loading="lazy" style="position: relative; width: 100%; height: 600px; max-height: 80vh; border: none; border-radius: 8px; padding: 0; margin: 0; overflow: hidden;" src="https://www.canva.com/design/DAGTCJT5DYY/_9vyyZLnaiFYO5Ub3V7yug/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+    </iframe>
+    <a href="https://www.canva.com/design/DAGTCJT5DYY/_9vyyZLnaiFYO5Ub3V7yug/view?utm_content=DAGTCJT5DYY&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link" target="_blank" rel="noopener">Starlight DataFest 24</a> by Edun Joshua, Makinde Kayode &amp; Mbuotidem Awak
+
+
+
+ ]]></description>
+  <category>data engineering</category>
+  <category>web development</category>
+  <category>tech for good</category>
+  <guid>https://joshuaolubori.onrender.com/posts/2024-10-10_starlight/</guid>
+  <pubDate>Thu, 10 Oct 2024 00:00:00 GMT</pubDate>
+  <media:content url="https://joshuaolubori.onrender.com/posts/2024-10-10_starlight/image.png" medium="image" type="image/png" height="43" width="144"/>
+</item>
 <item>
   <title>Healthcare Analysis with PowerBI</title>
   <dc:creator>Edun Joshua</dc:creator>
@@ -37224,234 +37265,6 @@ SUM('awdb fact_sales'[SalesAmount])</code></pre>
   <guid>https://joshuaolubori.onrender.com/posts/2022_05_28_COVID-NGA-analysis/</guid>
   <pubDate>Sat, 28 May 2022 00:00:00 GMT</pubDate>
   <media:content url="https://joshuaolubori.onrender.com/posts/2022_05_28_COVID-NGA-analysis/dashboard.png" medium="image" type="image/png" height="81" width="144"/>
-</item>
-<item>
-  <title>UK Road Accidents and Casualties Tracking Dashboard (2021 - 2022)</title>
-  <dc:creator>Edun Joshua</dc:creator>
-  <link>https://joshuaolubori.onrender.com/posts/2022_05_28_UK-accidents/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<section id="about-the-project" class="level2">
-<h2 class="anchored" data-anchor-id="about-the-project">About The Project 🍪</h2>
-<div>
-<iframe title="uk_accident_report" width="600" height="373.5" src="https://app.powerbi.com/
-view?
-r=eyJrIjoiYjZiNDYwMTctY2EwOC00NGQ2LWJmOGEtMzVlN2I2YTFlZTEwIiwidCI6ImRmODY3OWN
-kLWE4MGUtNDVkOC05OWFjLWM4M2VkN2ZmOTVhMCJ9&amp;embedImagePlaceholder=true" frameborder="0" allowfullscreen="true">
-</iframe>
-</div>
-</section>
-<section id="requirement-gathering" class="level2">
-<h2 class="anchored" data-anchor-id="requirement-gathering">Requirement Gathering</h2>
-<p>Client wants to create a dashboard on road accidents for the year 2021 and 2022.</p>
-<section id="a.-primary-kpis" class="level4">
-<h4 class="anchored" data-anchor-id="a.-primary-kpis">a. Primary KPIs</h4>
-<ul>
-<li>Total Casualties and Total Accident Values:
-<ul>
-<li>Current Year</li>
-<li>Year-over-Year (YoY) Growth</li>
-</ul></li>
-<li>Total Casualties by Accident Severity:
-<ul>
-<li>Current Year</li>
-<li>Year-over-Year (YoY) Growth</li>
-</ul></li>
-</ul>
-</section>
-<section id="b.-secondary-kpis" class="level4">
-<h4 class="anchored" data-anchor-id="b.-secondary-kpis">b. Secondary KPIs</h4>
-<ul>
-<li><p>Total Casualties with Respect to Vehicle Type:</p>
-<ul>
-<li>Current Year</li>
-</ul></li>
-<li><p>Monthly Trend Comparison of Casualties:</p>
-<ul>
-<li>Current Year vs.&nbsp;Previous Year</li>
-</ul></li>
-<li><p>Casualties by Road Type:</p>
-<ul>
-<li>Current Year</li>
-</ul></li>
-<li><p>Current Year Casualties by Area/Location &amp; Day/Night</p></li>
-<li><p>Total Casualties and Total Accidents by Location Total casualties and total accidents by location</p></li>
-</ul>
-</section>
-</section>
-<section id="identifying-stakeholders" class="level2">
-<h2 class="anchored" data-anchor-id="identifying-stakeholders">Identifying Stakeholders 🧑🏽‍💼</h2>
-<ul>
-<li>Emergency Services Departments</li>
-<li>Road Safety Corps</li>
-<li>Traffic Management Agencies</li>
-<li>Police Force</li>
-<li>General public</li>
-</ul>
-</section>
-<section id="understanding-raw-data" class="level2">
-<h2 class="anchored" data-anchor-id="understanding-raw-data">Understanding Raw Data 🥩</h2>
-<p>Data Grain: A single instance of a reported accident event in the UK in 2021 and 2022</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 31%">
-<col style="width: 68%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Fields</th>
-<th>description (datatype)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Accident_Index</td>
-<td>unique row identifier (string)</td>
-</tr>
-<tr class="even">
-<td>Accident Date</td>
-<td>date of accident event (date)</td>
-</tr>
-<tr class="odd">
-<td>Day_of_Week</td>
-<td>day of the week (string)</td>
-</tr>
-<tr class="even">
-<td>Junction_Control</td>
-<td>mechanism of traffic control at junction (string)</td>
-</tr>
-<tr class="odd">
-<td>Junction_Detail</td>
-<td>type of junction (string)</td>
-</tr>
-<tr class="even">
-<td>Accident_Severity</td>
-<td>severity of accident (string)</td>
-</tr>
-<tr class="odd">
-<td>Latitude</td>
-<td>latitude (float)</td>
-</tr>
-<tr class="even">
-<td>Light_Conditions</td>
-<td>light conditions at accident scene (string)</td>
-</tr>
-<tr class="odd">
-<td>Local_Authority_(District)</td>
-<td>name of district (string)</td>
-</tr>
-<tr class="even">
-<td>Carriageway_Hazards</td>
-<td>hazards on the road if any</td>
-</tr>
-<tr class="odd">
-<td>Number_of_Casualties</td>
-<td>number of causalities (integer)</td>
-</tr>
-<tr class="even">
-<td>Number_of_Vehicles</td>
-<td>number of vehicles involved in the accident (integer)</td>
-</tr>
-<tr class="odd">
-<td>Police_Force</td>
-<td>Police force jurisdiction (string)</td>
-</tr>
-<tr class="even">
-<td>Road_Surface_Conditions</td>
-<td>condition of road surface (string)</td>
-</tr>
-<tr class="odd">
-<td>Road_Type</td>
-<td>road type (string)</td>
-</tr>
-<tr class="even">
-<td>Speed_limit</td>
-<td>road speed limit in mph (string)</td>
-</tr>
-<tr class="odd">
-<td>Time</td>
-<td>time of day accident occurred (time)</td>
-</tr>
-<tr class="even">
-<td>Urban_or_Rural_Area</td>
-<td>Whether accident occurred in an urban or rural area (string)</td>
-</tr>
-<tr class="odd">
-<td>Weather_Conditions</td>
-<td>weather condition at time of accident (string)</td>
-</tr>
-<tr class="even">
-<td>Vehicle_Type</td>
-<td>type of vehicle involved in the accident</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="data-cleansing" class="level2">
-<h2 class="anchored" data-anchor-id="data-cleansing">Data cleansing 🧹</h2>
-<p>Issues - Junction_Control column has, among others, two values “Auto traffic sigl” and “Auto traffic signal” of which the former is a misspelling of the latter</p>
-<ul>
-<li><p>Instances where “Fatal” is misspelled as “Fetal” in Accident_Severity column</p></li>
-<li><p>“Time” column was represented as a datetime data type in Power BI</p></li>
-</ul>
-<p>Fixes - Used the Replace Values feature to correct the misspellings of Issues 1 &amp; 2 - Changed the data type to time accordingly - All fixes were done in Power Query.</p>
-<section id="data-processing" class="level3">
-<h3 class="anchored" data-anchor-id="data-processing">Data Processing ⚙️</h3>
-<ul>
-<li><p>The data needs a calendar table so as to use Time Intelligence functions further down the line.</p></li>
-<li><p>Using the CALENDAR function, a new table with calculated, dynamic columns of Date, Month and Year was generated.</p></li>
-</ul>
-</section>
-<section id="data-modeling" class="level3">
-<h3 class="anchored" data-anchor-id="data-modeling">Data Modeling 🏛</h3>
-<p>a one-to-many active relationship was established between the calendar table and the data table <img src="https://joshuaolubori.onrender.com/posts/2022_05_28_UK-accidents/data-model.png" class="img-fluid" alt="Schema"></p>
-</section>
-<section id="data-visualization" class="level3">
-<h3 class="anchored" data-anchor-id="data-visualization">Data Visualization 🎨</h3>
-<ul>
-<li>Power BI magic!✨ The report pbix file is available in this repo to explore design decisions The following DAX measures were used:</li>
-</ul>
-<pre><code>Count of Accidents = DISTINCTCOUNT(Data[Accident_Index])
-
-Current Year Accident Count = TOTALYTD(COUNT(Data[Accident_Index]),'Calendar'[Date])
-
-Current Year Casualties = TOTALYTD(SUM(Data[Number_of_Casualties]),'Calendar'[Date])
-
-Previous Year Accident Counts = CALCULATE(COUNT(Data[Accident_Index]), SAMEPERIODLASTYEAR('Calendar'[Date]))
-
-Previous Year Casualties = CALCULATE(SUM(Data[Number_of_Casualties]),
-SAMEPERIODLASTYEAR('Calendar'[Date]))
-
-YoY Accident Count = DIVIDE([Current Year Accident Count] - [Previous Year Accident Counts], [Previous Year Accident Counts])
-
-YoY Casualties = (DIVIDE([Current Year Casualties] - [Previous Year Casualties],[Previous Year Casualties]))</code></pre>
-</section>
-<section id="deriving-insights" class="level3">
-<h3 class="anchored" data-anchor-id="deriving-insights">Deriving Insights</h3>
-<ul>
-<li><p>The vehicle type most involved in accidents was cars. This can be explained by the fact that most vehicles plying UK roads are cars</p></li>
-<li><p>There is a general decrease in casualty counts in 2022 compared to 2021</p></li>
-</ul>
-</section>
-</section>
-<section id="contact" class="level2">
-<h2 class="anchored" data-anchor-id="contact">Contact</h2>
-<p>Edun Joshua Olubori - <a href="https://www.linkedin.com/in/joshua-edun">connect on linkedin</a> - joshuaolubori@gmail.com</p>
-<p>Live Demo: <a href="https://app.powerbi.com/view?r=eyJrIjoiYjZiNDYwMTctY2EwOC00NGQ2LWJmOGEtMzVlN2I2YTFlZTEwIiwidCI6ImRmODY3OWNkLWE4MGUtNDVkOC05OWFjLWM4M2VkN2ZmOTVhMCJ9&amp;embedImagePlaceholder=true">here</a></p>
-
-
-</section>
-
- ]]></description>
-  <category>power bi</category>
-  <category>data visualisation</category>
-  <guid>https://joshuaolubori.onrender.com/posts/2022_05_28_UK-accidents/</guid>
-  <pubDate>Sat, 28 May 2022 00:00:00 GMT</pubDate>
-  <media:content url="https://joshuaolubori.onrender.com/posts/2022_05_28_UK-accidents/report.png" medium="image" type="image/png" height="84" width="144"/>
 </item>
 </channel>
 </rss>
