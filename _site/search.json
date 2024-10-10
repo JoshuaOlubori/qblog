@@ -439,7 +439,6 @@
     "title": "Starlight",
     "section": "",
     "text": "As part of a team of two other data enthusiast, I came up with a solution to address the abysmal performance of secondary school students in the UTME exams in recent years.\nYou can read about the project in the iframe embedded below or view in another tab here:\nI was in charge of designing a web app called Starlight, an school management system solution with a novel feature: a machine learning enabled pipeline that identifies at-risk student and displays it on the app for admins to view.\nYou can login into the app with username: admin, password: admin here:\nOr read our report below:"
-
   },
   {
     "objectID": "posts/2022-09-23_go-ford-bike-share-analysis/index.html",
