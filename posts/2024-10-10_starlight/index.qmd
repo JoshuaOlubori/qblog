@@ -2,7 +2,7 @@
 title: "Starlight"
 subtitle: "DataFest '24 Hackathon Submission"
 author: "Edun Joshua"
-date: "2024-10-10"
+date: "2024-10-25"
 categories: [data engineering, web development, tech for good]
 image: "image.png"
 eval: false
