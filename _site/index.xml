@@ -15,7 +15,7 @@
 <link>https://joshuaolubori.onrender.com/</link>
 </image>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Thu, 10 Oct 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 25 Oct 2024 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Starlight</title>
   <dc:creator>Edun Joshua</dc:creator>
@@ -66,13 +66,13 @@
   <category>web development</category>
   <category>tech for good</category>
   <guid>https://joshuaolubori.onrender.com/posts/2024-10-10_starlight/</guid>
-  <pubDate>Thu, 10 Oct 2024 00:00:00 GMT</pubDate>
+  <pubDate>Fri, 25 Oct 2024 00:00:00 GMT</pubDate>
   <media:content url="https://joshuaolubori.onrender.com/posts/2024-10-10_starlight/image.png" medium="image" type="image/png" height="43" width="144"/>
 </item>
 <item>
-  <title>Flood Mapping Sept 18 Borno Floods.ipynb</title>
+  <title>Flood Mapping Sept 18 Borno Floods</title>
   <dc:creator>Edun Joshua</dc:creator>
-  <link>https://joshuaolubori.onrender.com/posts/2024-09-10_borno_floods/</link>
+  <link>https://joshuaolubori.onrender.com/posts/2024-10-25_borno_floods/</link>
   <description><![CDATA[ 
 
 
@@ -82,7 +82,7 @@
 <div style="color: #25D366;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://joshuaolubori.onrender.com/posts/2024-09-10_borno_floods/image.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="cover image"></p>
+<p><img src="https://joshuaolubori.onrender.com/posts/2024-10-25_borno_floods/image.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="cover image"></p>
 </figure>
 </div>
 <section id="intro" class="level2" style="color: #25D366;">
@@ -99,7 +99,7 @@
 <li><p><strong>Before Floods:</strong> August 15, 2024, to September 10, 2024</p></li>
 <li><p><strong>After Floods:</strong> September 10, 2024, to September 23, 2024</p></li>
 </ul>
-<p><img src="https://joshuaolubori.onrender.com/posts/2024-09-10_borno_floods/images/clipboard-4027095210.png" class="img-fluid"></p>
+<p><img src="https://joshuaolubori.onrender.com/posts/2024-10-25_borno_floods/images/clipboard-4027095210.png" class="img-fluid"></p>
 <p>The study area is defined by filtering administrative boundary data from the FAO GAUL dataset, isolating the two LGAs based on their names and the state they belong to. The combined geometry is used to center the map view and restrict the spatial extent of the analysis. The location of Alau Dam is marked with a red symbol.</p>
 <p>Images captured in Interferometric Wide (IW) mode with “VH” polarization and a 10-meter resolution are selected. Further, the script narrows the data to descending orbits and clips the images to the study area’s bounds. Two time periods are defined: a “before” period preceding the floods and an “after” period covering the post-flood phase. Radar backscatter images from these periods are mosaicked and clipped to the study area, creating two layers that allow for a temporal comparison of flood impacts. These layers, visualized with appropriate ranges, highlight changes in surface water or vegetation.</p>
 <pre class="{javascript}"><code>var s1 = ee.ImageCollection("COPERNICUS/S1_GRD"),
@@ -156,13 +156,13 @@ Map.addLayer(ee.FeatureCollection(damFeature), {
 }, 'Alau Dam Location');</code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://joshuaolubori.onrender.com/posts/2024-09-10_borno_floods/images/clipboard-3686794418.png" class="img-fluid figure-img" alt="Before the flood"></p>
+<p><img src="https://joshuaolubori.onrender.com/posts/2024-10-25_borno_floods/images/clipboard-3686794418.png" class="img-fluid figure-img" alt="Before the flood"></p>
 <figcaption>Before the flood</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://joshuaolubori.onrender.com/posts/2024-09-10_borno_floods/images/clipboard-1399918636.png" class="img-fluid figure-img" alt="After the flood"></p>
+<p><img src="https://joshuaolubori.onrender.com/posts/2024-10-25_borno_floods/images/clipboard-1399918636.png" class="img-fluid figure-img" alt="After the flood"></p>
 <figcaption>After the flood</figcaption>
 </figure>
 </div>
@@ -187,7 +187,7 @@ Map.addLayer(flooded, {min:0, max:1, palette: ['orange']}, 'Initial Flood Area',
 </code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://joshuaolubori.onrender.com/posts/2024-09-10_borno_floods/images/clipboard-4293039060.png" class="img-fluid figure-img"></p>
+<p><img src="https://joshuaolubori.onrender.com/posts/2024-10-25_borno_floods/images/clipboard-4293039060.png" class="img-fluid figure-img"></p>
 <figcaption>The area in yellow shows the area estimated as flooded. We will now improve on this estimate.</figcaption>
 </figure>
 </div>
@@ -218,7 +218,7 @@ Map.addLayer(connections.lte(connectedPixelThreshold).selfMask(), {min:0, max:1,
 <p>Finally, isolated pixels in the flooded layer are removed to enhance spatial coherence. This is achieved using the <code>connectedPixelCount</code> method, which identifies clusters of pixels based on connectivity within a specified neighborhood. Pixels in clusters smaller than the defined threshold of eight connected pixels are masked out, refining the flood map to show only significant and contiguous flooded areas. Disconnected areas are visualized in yellow for comparison.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://joshuaolubori.onrender.com/posts/2024-09-10_borno_floods/images/clipboard-1442945933.png" class="img-fluid figure-img"></p>
+<p><img src="https://joshuaolubori.onrender.com/posts/2024-10-25_borno_floods/images/clipboard-1442945933.png" class="img-fluid figure-img"></p>
 <figcaption>Area with permanent water shown in blue. Note mass of water behind the dam which is mostly inflow from the Ngadda River</figcaption>
 </figure>
 </div>
@@ -258,7 +258,7 @@ Results
 <p>Flooded area are shown in orange below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://joshuaolubori.onrender.com/posts/2024-09-10_borno_floods/images/clipboard-426810393.png" class="img-fluid figure-img"></p>
+<p><img src="https://joshuaolubori.onrender.com/posts/2024-10-25_borno_floods/images/clipboard-426810393.png" class="img-fluid figure-img"></p>
 <figcaption>Final estimate of flooded area</figcaption>
 </figure>
 </div>
@@ -286,9 +286,9 @@ Acknowledgements
  ]]></description>
   <category>GIS</category>
   <category>remote sensing</category>
-  <guid>https://joshuaolubori.onrender.com/posts/2024-09-10_borno_floods/</guid>
+  <guid>https://joshuaolubori.onrender.com/posts/2024-10-25_borno_floods/</guid>
   <pubDate>Tue, 10 Sep 2024 00:00:00 GMT</pubDate>
-  <media:content url="https://joshuaolubori.onrender.com/posts/2024-09-10_borno_floods/image.jpg" medium="image" type="image/jpeg"/>
+  <media:content url="https://joshuaolubori.onrender.com/posts/2024-10-25_borno_floods/image.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>Healthcare Analysis with PowerBI</title>
