@@ -18,6 +18,15 @@ As part of a team of two other data enthusiast, I came up with a solution to add
 
 You can read about the project in the iframe embedded below or view in another tab [here](https://starlight-academy-landing.onrender.com){target="_blank"}:
 
+## Update!
+
+We came in second!
+
+![](images/clipboard-1357928025.png)
+
+![](images/clipboard-3454791464.png)
+
+![The organisers made a typo on the cheque board: we are actually the first runner ups!](images/clipboard-1797427125.png)
 
 ```{=html}
 <iframe width="100%" height="500px" src="https://starlight-academy-landing.onrender.com"></iframe> <a href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAGTCJT5DYY&#x2F;_9vyyZLnaiFYO5Ub3V7yug&#x2F;view?utm_content=DAGTCJT5DYY&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link" target="_blank" rel="noopener">Starlight DataFest 24</a> by Edun Joshua, Makinde Kayode & Mbuotidem Awak
@@ -26,7 +35,6 @@ You can read about the project in the iframe embedded below or view in another t
 ------------------------------------------------------------------------
 
 I was in charge of designing a web app called Starlight, an school management system solution with a novel feature: a machine learning enabled pipeline that identifies at-risk student and displays it on the app for admins to view.
-
 
 You can login into the app with username: `admin`, password: `admin` [here](https://app-starlight.onrender.com/ "Starlight"){target="_blank"}:
 

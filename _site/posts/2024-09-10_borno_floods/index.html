@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Edun Joshua">
+<meta name="dcterms.date" content="2024-09-10">
+
+<title>Flood Mapping Sept 18 Borno Floods.ipynb – Chamber of (data) secrets</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-X2C4499YPY"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-X2C4499YPY', { 'anonymize_ip': true});
+</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Flood Mapping Sept 18 Borno Floods.ipynb – Chamber of (data) secrets">
+<meta property="og:description" content="Using Sentinel-1 data to map Sept 10 Borno flood impact">
+<meta property="og:image" content="https://joshuaolubori.onrender.com/posts/2024-09-10_borno_floods/image.jpg">
+<meta property="og:site_name" content="Chamber of (data) secrets">
+<meta name="twitter:title" content="Flood Mapping Sept 18 Borno Floods.ipynb – Chamber of (data) secrets">
+<meta name="twitter:description" content="Using Sentinel-1 data to map Sept 10 Borno flood impact">
+<meta name="twitter:image" content="https://joshuaolubori.onrender.com/posts/2024-09-10_borno_floods/image.jpg">
+<meta name="twitter:creator" content="@olubori_joshua">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../posts_index.html"> 
+<span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Flood Mapping Sept 18 Borno Floods.ipynb</h1>
+            <p class="subtitle lead">Using Sentinel-1 data to map Sept 10 Borno flood impact</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">GIS</div>
+                <div class="quarto-category">remote sensing</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Edun Joshua </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 10, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<div style="color: #25D366;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="image.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="cover image"></p>
+</figure>
+</div>
+<section id="intro" class="level2" style="color: #25D366;">
+<h2 style="color: #25D366;" class="anchored" data-anchor-id="intro">Intro</h2>
+</section>
+</div>
+<p>Flood mapping using remote sensing is useful for assessing the impact of extreme weather events on communities and infrastructure.</p>
+<p>In September 2024, parts of Borno State, Nigeria, experienced flooding following the collapse of the Alau Dam. Majorly affected were Maiduguri and Jere local government areas, with the National Emergency Management Agency reporting that over 70% of Maiduguri’s residents were forced to flee their homes. The tragedy resulted in the loss of at least 150 lives. According to the United Nations refugee agency in Nigeria, this was the worst flooding to hit the city in thirty years, affecting over one million people and causing widespread displacement.</p>
+<p>This report outlines a methodology for detecting and mapping flooded areas in Maiduguri and Jere Local Government Areas (LGAs) in Borno State, Nigeria, using Sentinel-1 SAR imagery and Google Earth Engine (GEE).</p>
+<section id="data-and-study-area" class="level2">
+<h2 class="anchored" data-anchor-id="data-and-study-area">Data and Study Area</h2>
+<p>The study utilized Sentinel-1 Synthetic Aperture Radar (SAR) data, processed for the VH polarization channel. The target area includes Maiduguri and Jere LGAs, centered on the <a href="https://en.wikipedia.org/wiki/Alau_Dam#:~:text=The%20Alau%20Dam%20was%20situated,tributaries%20of%20the%20Lake%20Chad.">Alau Dam</a>. The timeframes analyzed were:</p>
+<ul>
+<li><p><strong>Before Floods:</strong> August 15, 2024, to September 10, 2024</p></li>
+<li><p><strong>After Floods:</strong> September 10, 2024, to September 23, 2024</p></li>
+</ul>
+<p><img src="images/clipboard-4027095210.png" class="img-fluid"></p>
+<p>The study area is defined by filtering administrative boundary data from the FAO GAUL dataset, isolating the two LGAs based on their names and the state they belong to. The combined geometry is used to center the map view and restrict the spatial extent of the analysis. The location of Alau Dam is marked with a red symbol.</p>
+<p>Images captured in Interferometric Wide (IW) mode with “VH” polarization and a 10-meter resolution are selected. Further, the script narrows the data to descending orbits and clips the images to the study area’s bounds. Two time periods are defined: a “before” period preceding the floods and an “after” period covering the post-flood phase. Radar backscatter images from these periods are mosaicked and clipped to the study area, creating two layers that allow for a temporal comparison of flood impacts. These layers, visualized with appropriate ranges, highlight changes in surface water or vegetation.</p>
+<pre class="{javascript}"><code>var s1 = ee.ImageCollection("COPERNICUS/S1_GRD"),
+    gsw = ee.Image("JRC/GSW1_4/GlobalSurfaceWater"),
+    hydrosheds = ee.Image("WWF/HydroSHEDS/03DIR");
+
+// Select images by predefined dates
+var beforeStart = '2024-08-15'
+var beforeEnd = '2024-09-10'
+var afterStart = '2024-09-10'
+var afterEnd = '2024-09-23'
+
+
+var admin2 = ee.FeatureCollection("FAO/GAUL_SIMPLIFIED_500m/2015/level2");
+var maiduguriAndJere = admin2.filter(ee.Filter.and(
+  ee.Filter.inList('ADM2_NAME', ['Maiduguri', 'Jere']),  // Filter by the LGA names
+  ee.Filter.eq('ADM1_NAME', 'Borno')                     // Filter by the state name
+));
+
+var geometry = maiduguriAndJere.geometry();
+
+Map.centerObject(geometry);  // Center the map on the combined geometry
+Map.addLayer(geometry, {color: 'grey'}, 'Maiduguri and Jere LGAs');
+var damLocation = ee.Geometry.Point(13.28500, 11.72417);
+var damFeature = ee.Feature(damLocation, {
+  'name': 'Alau Dam'
+});
+
+
+var filtered = s1
+.filter(ee.Filter.eq('instrumentMode', 'IW'))
+.filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VH'))
+.filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VV'))
+.filter(ee.Filter.eq('orbitProperties_pass', 'DESCENDING'))
+.filter(ee.Filter.eq('resolution_meters', 10))
+.filter(ee.Filter.bounds(geometry))
+.select(['VH'])
+
+
+var beforeCollection = filtered.filter(ee.Filter.date(beforeStart, beforeEnd))
+var afterCollection = filtered.filter(ee.Filter.date(afterStart, afterEnd))
+
+var before = beforeCollection.mosaic().clip(geometry)
+var after = afterCollection.mosaic().clip(geometry)
+
+
+Map.addLayer(before, {min:-25,max:0}, 'Before Floods', false);
+Map.addLayer(after, {min:-25,max:0}, 'After Floods', false); 
+Map.addLayer(ee.FeatureCollection(damFeature), {
+  color: 'red',
+  width: 2,
+  pointSize: '10px',
+  pointShape: 'diamond'
+}, 'Alau Dam Location');</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-3686794418.png" class="img-fluid figure-img" alt="Before the flood"></p>
+<figcaption>Before the flood</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-1399918636.png" class="img-fluid figure-img" alt="After the flood"></p>
+<figcaption>After the flood</figcaption>
+</figure>
+</div>
+</section>
+<section id="image-processing" class="level2">
+<h2 class="anchored" data-anchor-id="image-processing">Image processing</h2>
+<p>The following code segment applies image processing to enhance the quality and accuracy of flood detection. The radar backscatter images for the “before” and “after” periods are refined using the Refined Lee filter, a method designed to reduce speckle noise inherent in radar data. This step ensures that meaningful variations in backscatter values are preserved while minimizing random noise. The processed images are then converted between decibel (dB) and natural scale as necessary for the filter application, followed by a final conversion back to the dB scale. The filtered images are added as new layers to the map.</p>
+<p>The script proceeds to compute the difference between the filtered “after” and “before” images to quantify changes in backscatter values that could indicate flooding. A threshold value of 0.8 is applied to this difference image to classify pixels as potentially flooded. Pixels exceeding this threshold are isolated using a self-masking operation, creating a binary flood layer. This initial estimate of flooded areas is visualized on the map in orange, providing a clear representation of flood impacts within the study area.</p>
+<pre class="{javascript}"><code>var beforeFiltered = ee.Image(toDB(RefinedLee(toNatural(before))))
+var afterFiltered = ee.Image(toDB(RefinedLee(toNatural(after))))
+
+Map.addLayer(beforeFiltered, {min:-25,max:0}, 'Before Floods Filtered', false);
+Map.addLayer(afterFiltered, {min:-25,max:0}, 'After Floods Filtered', false); 
+
+var difference = afterFiltered.subtract(beforeFiltered);
+
+// Define a threshold
+var diffThreshold = 0.8;
+// Initial estimate of flooded pixels
+var flooded = difference.gt(diffThreshold).rename('water').selfMask();
+Map.addLayer(flooded, {min:0, max:1, palette: ['orange']}, 'Initial Flood Area', false);
+</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-4293039060.png" class="img-fluid figure-img"></p>
+<figcaption>The area in yellow shows the area estimated as flooded. We will now improve on this estimate.</figcaption>
+</figure>
+</div>
+</section>
+<section id="masking-out-areas-with-permanentsemi-permanent-water-areas-with-more-than-30-percent-slope-and-isolated-pixels" class="level2">
+<h2 class="anchored" data-anchor-id="masking-out-areas-with-permanentsemi-permanent-water-areas-with-more-than-30-percent-slope-and-isolated-pixels">Masking out areas with permanent/semi-permanent water, areas with more than 30 percent slope, and isolated pixels</h2>
+<pre class="{javascript}"><code>// Mask out area with permanent/semi-permanent water
+var permanentWater = gsw.select('seasonality').gte(5).clip(geometry)
+var flooded = flooded.where(permanentWater, 0).selfMask()
+Map.addLayer(permanentWater.selfMask(), {min:0, max:1, palette: ['blue']}, 'Permanent Water')
+
+// Mask out areas with more than 30 percent slope using the HydroSHEDS DEM
+var slopeThreshold = 30;
+var terrain = ee.Algorithms.Terrain(hydrosheds);
+var slope = terrain.select('slope');
+var flooded = flooded.updateMask(slope.lt(slopeThreshold));
+Map.addLayer(slope.gte(slopeThreshold).selfMask(), {min:0, max:1, palette: ['cyan']}, 'Steep Areas', false)
+
+
+// Remove isolated pixels
+// connectedPixelCount is Zoom dependent, so visual result will vary
+var connectedPixelThreshold = 8;
+var connections = flooded.connectedPixelCount(25)
+var flooded = flooded.updateMask(connections.gt(connectedPixelThreshold))
+Map.addLayer(connections.lte(connectedPixelThreshold).selfMask(), {min:0, max:1, palette: ['yellow']}, 'Disconnected Areas', false)</code></pre>
+<p>In this portion of the code, further refinements are applied to the initial flood detection layer to improve its accuracy and exclude areas unlikely to be newly inundated. The first step removes permanent or semi-permanent water bodies from the flood classification. Using the “seasonality” band from the Global Surface Water dataset, areas with water present for at least five months of the year are identified as permanent water. These regions are clipped to the study area’s geometry and used to mask out such locations from the flooded layer. The resulting permanent water map is visualized in blue, while the updated flooded layer excludes these persistent water zones to focus solely on newly flooded areas.</p>
+<p>Next, areas with steep terrain are excluded from the flood analysis based on a slope threshold of 30 degrees, using the HydroSHEDS Digital Elevation Model (DEM). The script calculates terrain slope and masks regions exceeding this threshold, as steep slopes are less likely to experience surface flooding. These excluded regions are displayed on the map in cyan, while the filtered flood map retains only areas with slopes below the threshold.</p>
+<p>Finally, isolated pixels in the flooded layer are removed to enhance spatial coherence. This is achieved using the <code>connectedPixelCount</code> method, which identifies clusters of pixels based on connectivity within a specified neighborhood. Pixels in clusters smaller than the defined threshold of eight connected pixels are masked out, refining the flood map to show only significant and contiguous flooded areas. Disconnected areas are visualized in yellow for comparison.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-1442945933.png" class="img-fluid figure-img"></p>
+<figcaption>Area with permanent water shown in blue. Note mass of water behind the dam which is mostly inflow from the Ngadda River</figcaption>
+</figure>
+</div>
+</section>
+<section id="final-estimate-of-flooded-area" class="level2">
+<h2 class="anchored" data-anchor-id="final-estimate-of-flooded-area">Final estimate of flooded area</h2>
+<pre class="{javascript}"><code>Map.addLayer(flooded, {min:0, max:1, palette: ['orange']}, 'Flooded Areas');
+// Calculate Affected Area
+print('Total District Area (Ha)', geometry.area().divide(10000))
+
+var stats = flooded.multiply(ee.Image.pixelArea()).reduceRegion({
+  reducer: ee.Reducer.sum(),
+  geometry: geometry,
+  scale: 30,
+  maxPixels: 1e10,
+  tileScale: 16
+})
+print('Flooded Area (Ha)', ee.Number(stats.get('water')).divide(10000))
+var floodedPercentage = ee.Number(stats.get('water')).divide(geometry.area()).multiply(100);
+print('% flooded', floodedPercentage);</code></pre>
+<p>To calculate the affected area, the total area of the study region is computed using the geometry.area() function, which returns the area in square meters. This value is converted to hectares by dividing it by 10,000 and printed for reference. The script then calculates the area of the flooded pixels using the multiply method, where each flooded pixel is multiplied by its corresponding area (in square meters) from the pixelArea function. These values are aggregated over the geometry of the study region using the reduceRegion function with a summation reducer. The result is the total flooded area in square meters, which is converted to hectares, which gives:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Results
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Total District Area (Ha): 100578.00808153523</p>
+<p>Flooded Area (Ha): 36650.26144303433</p>
+<p>% Flooded: 36.439637394014795</p>
+</div>
+</div>
+<p>Flooded area are shown in orange below.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-426810393.png" class="img-fluid figure-img"></p>
+<figcaption>Final estimate of flooded area</figcaption>
+</figure>
+</div>
+</section>
+<section id="validation" class="level2">
+<h2 class="anchored" data-anchor-id="validation">Validation</h2>
+<p>This script estimates that 36.4% of the study area is flooded, which is a somewhat lower value reported by&nbsp;<a href="https://www.google.com/url?q=https%3A%2F%2Freliefweb.int%2Freport%2Fnigeria%2Facaps-briefing-note-nigeria-humanitarian-impact-floods-borno-state-24-september-2024">ACAPS</a>: 40%. It’s important to note that the two estimates may differ due to variations in data sources, processing methods, or temporal differences.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Acknowledgements
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This project was completed after taking the <a href="https://spatialthoughts.com/courses/gee-for-water-resources-management/">course</a> on Google Earth Engine for Water Resources Management led by Dr.&nbsp;Ujaval Gandhi</p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/joshuaolubori\.onrender\.com");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="JoshuaOlubori/qblog" data-repo-id="R_kgDOKvhXew" data-category="General" data-category-id="DIC_kwDOKvhXe84CbFeH" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark">
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Blog made with 💚 and <a href="https://quarto.org/">Quarto</a>, by Edun Joshua. License: <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
