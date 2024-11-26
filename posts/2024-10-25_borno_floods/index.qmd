@@ -1,5 +1,5 @@
 ---
-title: "Mapping Sept 18 Borno Floods"
+title: "Mapping September 18 Borno Floods"
 subtitle: "Using Sentinel-1 data to map Sept 10 Borno flood impact"
 author: "Edun Joshua"
 date: "2024-09-10"
