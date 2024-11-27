@@ -1,8 +1,8 @@
 ---
-title: "Mapping September 18 Borno Floods"
+title: "Mapping September 10 Borno Floods"
 subtitle: "Using Sentinel-1 data to map Sept 10 Borno flood impact"
 author: "Edun Joshua"
-date: "2024-09-10"
+date: "2024-09-30"
 categories: [GIS, remote sensing]
 image: "image.jpg"
 eval: false
@@ -32,7 +32,7 @@ The study utilized Sentinel-1 Synthetic Aperture Radar (SAR) data, processed for
 
 The study area is defined by filtering administrative boundary data from the FAO GAUL dataset, isolating the two LGAs based on their names and the state they belong to. The combined geometry is used to center the map view and restrict the spatial extent of the analysis. The location of Alau Dam is marked with a red symbol.
 
-Images captured in Interferometric Wide (IW) mode with "VH" polarization and a 10-meter resolution are selected. Further, the script narrows the data to descending orbits and clips the images to the study area's bounds. Two time periods are defined: a "before" period preceding the floods and an "after" period covering the post-flood phase. Radar backscatter images from these periods are mosaicked and clipped to the study area, creating two layers that allow for a temporal comparison of flood impacts. These layers, visualized with appropriate ranges, highlight changes in surface water or vegetation.
+Images captured in Interferometric Wide (IW) mode with "VH" polarization and a 10-meter resolution are selected. Further, the script narrows the data to descending orbits and clips the images to the study area's bounds. Two time periods are defined: a "before" period preceding the floods and an "after" period covering the post-flood phase. Radar backscatter images from these periods are mosaicked and clipped to the study area, creating two layers that allow for a temporal comparison of flood impacts. These layers, visualized with appropriate ranges, denote changes in surface water or vegetation.
 
 ```{javascript}
 var s1 = ee.ImageCollection("COPERNICUS/S1_GRD"),
